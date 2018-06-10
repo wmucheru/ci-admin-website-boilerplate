@@ -1,0 +1,262 @@
+*{
+	border-radius:0;
+	box-sizing:border-box!important;
+	margin:0;
+	padding:0;
+}
+
+html, body{
+	height:100%;
+}
+
+body{
+	background:#fff;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	font-weight:400;
+	line-height:1.6em;
+}
+a{
+	color:#FF7314!important;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	color:#333;
+}
+
+ol{
+    padding-left:1em;
+}
+
+ul.infolist{
+	list-style:none;
+	margin-left:0.5em;
+	margin-bottom:2em;
+	margin-top:2em;
+}
+ul.infolist li{
+	margin-bottom:0.3em;
+}
+
+i.icon.x4{
+	font-size:4em;
+}
+
+.form-control{
+	border-radius:0;
+	border:1px solid #ddd;
+	color:#333;
+}
+
+.booking-modal .modal-dialog{
+	width:60%;
+}
+.modal-backdrop{
+    z-index: 1000;
+}
+.page-header{
+	margin:0 0 1em;
+	padding:1em 0;
+}
+.page-header h1{
+	font-size:1.5em;
+	margin:0;
+}
+
+.container{
+	max-width:960px;
+}
+
+.page-wrapper{
+	padding-bottom:5em;
+}
+
+.accordion .panel-title, .accordion .panel-title a{
+	text-decoration:none;
+}
+
+.wrapper{
+	padding:0;
+	min-height:100%;
+}
+
+.navbar{
+	background:transparent;
+	border-radius:0;
+	box-shadow:none;
+	margin-bottom:0;
+    padding:0.8em 1em;
+}
+.navbar-brand{
+	padding-top:0.2em;
+}
+.navbar-brand img{
+	height:1.8em;
+}
+.navbar-custom{
+	z-index:999;
+}
+.bx-wrapper .bx-controls-direction a{
+	z-index:998;
+}
+
+.navbar-custom .navbar-brand{
+	opacity:1.0;
+	padding-left:0;
+}
+.nav > li > a{
+	background:transparent!important;
+	padding:10px;
+}
+.nav > li > a:hover,
+.about-bd .about-lnk,
+.contacts-bd .contacts-lnk{
+	color:#555!important;
+}
+
+.navbar-right{
+	margin-right:0.5em;
+}
+.nav > li > a.btn-nav{
+	background:#FF7314;
+	color:#fff!important;
+	border-radius:2px;
+	font-size:0.9em;
+	letter-spacing:1px;
+	margin-left:1em;
+	margin-top:0.4em;
+	padding:0.3em 1.5em;
+}
+.nav > li > a.btn-nav.btn-nav-active{
+    background:transparent;
+    border:1px solid #FF7314;
+	color:#FF7314!important;
+}
+.navbar-toggle{
+	background:#fff!important;
+	border:0;
+	margin-top:0;
+}
+.navbar-toggle .icon-bar{
+	background:#aaa;
+	height:3px;
+	width:35px;
+}
+.navbar-toggle .icon-bar+.icon-bar{
+	margin-top: 6px;
+}
+.docs-header{
+	padding-top:0;
+}
+.no-data{
+	background:#eee;
+	color:#888;
+	font-size:1.3em;
+	margin-top:2em;
+	padding:1em;
+}
+
+
+footer{
+    color:#777;
+    padding: 8px 0;
+	position:relative;
+    top:-3em;
+}
+
+.login-box{
+	box-shadow:0 2px 5px rgba(0,0,0,0.3);
+	margin-top:5%;
+	max-width:480px;
+	padding:2em 1em;
+}
+
+.modal-open .modal{
+	z-index:10000;
+}
+#booking-modal .modal-dialog{
+	min-width:50%;
+}
+#booking-modal .modal-footer{
+	padding:0;
+}
+
+.control-label{
+    font-weight: 500;
+}
+.form-control{
+    box-shadow:none;
+    cursor: pointer;
+}
+.form-control:hover{
+    border-color:#aaa;
+}
+
+.btn{
+    border-radius:2px;
+}
+.btn.learn-more{
+	background:transparent;
+	border:1px solid #FF7314;
+	font-weight:300;
+	transition:all 200s ease-in;
+}
+.btn.learn-more:hover{
+	background:#FF7314;
+	border:1px solid #FF7314;
+	color:#fff;
+}
+
+tr td.total-cell, .grand-totals{
+	color:#F9A30F;
+	font-weight:600;
+	font-size:1.2em;
+}
+
+label.toggle-switch{
+    cursor:pointer;
+    display:inline-block;
+    height:4em;
+    position:relative;
+    width:24%!important;
+}
+label.toggle-switch span,
+label.toggle-switch input[type=radio]{
+    display:block;
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+}
+label.toggle-switch input[type=radio]{
+    opacity:1;
+    position:relative;
+    top:1.1em;
+    z-index:10;
+}
+label.toggle-switch span{
+    background:#eee;
+    padding:1em 2em;
+    text-align:center;
+    z-index:9;
+}
+label.toggle-switch input[type=radio]:checked + span,
+label.toggle-switch span:hover{
+    background:#F9A30F;
+    color:#fff;
+}
+label.toggle-switch span:hover{
+    background:#F9A30F;
+}
+
+@media (max-width: 992px){
+	body{
+		padding-top:0;
+	}
+	.navbar-custom .navbar-brand {
+	    width:auto!important;
+	    overflow: hidden;
+	}
+}

@@ -5,144 +5,123 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | -------------------------------------------------------------------
 | Aauth Config
 | -------------------------------------------------------------------
-| A library Basic Authorization for CodeIgniter 2.x and 3.x
+| A library Basic Authorization for CodeIgniter 2+
 |
 | -------------------------------------------------------------------
 | EXPLANATION
 | -------------------------------------------------------------------
 |
-|   ['no_permission']                   If user don't have permisssion to see the page he will be redirected the page spesificed.
+|	See http://codeigniter-aauth-test.readthedocs.org/en/latest/
+|	for more details and explainations
 |
-|   ['admin_group']                     Name of admin group
-|   ['default_group']                   Name of default group, the new user is added in it
-|   ['public_group']                    Name of Public group , people who not logged in
 |
-|   ['db_profile']                      The configuration database profile (definied in config/database.php)
+| 	['no_permission']                  	If user don't have permisssion to see the page he will be redirected the page spesificed.
 |
-|   ['users']                           The table which contains users
-|   ['groups']                          The table which contains groups
-|   ['user_to_group']                   The table which contains join of users and groups
-|   ['perms']                           The table which contains permissions
-|   ['perm_to_group']                   The table which contains permissions for groups
-|   ['perm_to_user']                    The table which contains permissions for users
-|   ['pms']                             The table which contains private messages
-|   ['user_variables']                  The table which contains users variables
-|   ['login_attempts']                  The table which contains login attempts
+| 	['admin_group']                    	Name of admin group
+| 	['default_group']                  	Name of default group, the new user is added in it
+| 	['public_group']                   	Public group , people who not logged in
 |
-|   ['remember']                        Remember time (in relative format) elapsed after connecting and automatic LogOut for usage with Cookies
-|                                       Relative Format (e.g. '+ 1 week', '+ 1 month', '+ first day of next month') 
-|                                       for details see http://php.net/manual/de/datetime.formats.relative.php
+| 	['db_profile']                     	The configuration database profile (see config/database.php)
 |
-|   ['max']                             Maximum char long for Password
-|   ['min']                             Minimum char long for Password
+| 	['users']                          	The table which contains users
+| 	['groups']                         	The table which contains groups
+| 	['user_to_group']                  	The table which contains join of users and groups
+| 	['perms']                          	The table which contains permissions
+| 	['perm_to_group']                  	The table which contains permissions for groups
+| 	['perm_to_user']                   	The table which contains permissions for users
+| 	['pms']                            	The table which contains private messages
+| 	['system_variables']               	The table which contains Aauth system variables
+| 	['user_variables']                 	The table which contains users variables
 |
-|   ['additional_valid_chars']          Additional valid chars for username. Non alphanumeric characters that are allowed by default
+| 	['remember']                       	Remember time elapsed after connecting and automatic LogOut
 |
-|   ['ddos_protection']                 Enables the DDoS Protection, user will be banned temporary when he exceed the login 'try'
+| 	['max']                            	Maximum char long for Password
+| 	['min']                            	Minimum char long for Password
 |
-|   ['recaptcha_active']                Enables reCAPTCHA (for details see www.google.com/recaptcha/admin)
-|   ['recaptcha_login_attempts']        Login Attempts to display reCAPTCHA
-|   ['recaptcha_siteKey']               The reCAPTCHA siteKey
-|   ['recaptcha_secret']                The reCAPTCHA secretKey
+| 	['valid_chars']                    	Valid chars for username. Non alphanumeric characters that are allowed by default
 |
-|   ['totp_active']                     Enables the Time-based One-time Password Algorithm
-|   ['totp_only_on_ip_change']          TOTP only on IP Change
-|   ['totp_reset_over_reset_password']  TOTP reset over reset Password
-|   ['totp_two_step_login']             Enables TOTP two step login 
-|   ['totp_two_step_login_redirect']    Redirect path to TOTP Verification page used by control() & is_allowed()
+| 	['ddos_protection']                	If it is true, the user will be banned temporary when he exceed the login 'try'
 |
-|   ['max_login_attempt']               Login attempts time interval (default 10 times in one hour)
-|   ['max_login_attempt_time_period']   Period of time for max login attempts (default "5 minutes")
-|   ['remove_successful_attempts']      Enables removing login attempt after successful login
+| 	['recaptcha_active']               	Enable reCAPTCHA (see www.google.com/recaptcha/admin)
+| 	['recaptcha_login_attempts']       	:
+| 	['recaptcha_siteKey']              	The reCAPTCHA siteKey
+| 	['recaptcha_secret']               	The reCAPTCHA secretKey
 |
-|   ['login_with_name']                 Login Identificator, if TRUE username needed to login else email address.
+| 	['totp_active']                    	The Time-based One-time Password Algorithm
+| 	['totp_only_on_ip_change']         	TOTP only on IP Change
+| 	['totp_reset_over_reset_password'] 	TOTP reset over reset Password
 |
-|   ['email']                           Sender email address, used for remind_password, send_verification and reset_password
-|   ['name']                            Sender name, used for remind_password, send_verification and reset_password
-|   ['email_config']                    Array of Config for CI's Email Library
+| 	['max_login_attempt']              	Login attempts time interval (default 20 times in one hour)
 |
-|   ['verification']                    User Verification, if TRUE sends a verification email on account creation.
-|   ['verification_link']               Link for verification without site_url or base_url
-|   ['reset_password_link']             Link for reset_password without site_url or base_url
+| 	['login_with_name']                	Login Identificator, if TRUE username needed to login else email address.
 |
-|   ['hash']                            Name of selected hashing algorithm (e.g. "md5", "sha256", "haval160,4", etc..)
-|                                       Please, run hash_algos() for know your all supported algorithms
-|   ['use_password_hash']               Enables to use PHP's own password_hash() function with BCrypt, needs PHP5.5 or higher
-|   ['password_hash_algo']              password_hash algorithm (PASSWORD_DEFAULT, PASSWORD_BCRYPT) 
-|                                       for details see http://php.net/manual/de/password.constants.php
-|   ['password_hash_options']           password_hash options array 
-|                                       for details see http://php.net/manual/en/function.password-hash.php
+| 	['use_cookies']                    	FALSE only on CI3
 |
-|   ['pm_encryption']                   Enables PM Encryption, needs configured CI Encryption Class.
-|                                       for details see: http://www.codeigniter.com/userguide2/libraries/encryption.html
-|   ['pm_cleanup_max_age']              PM Cleanup max age (in relative format), PM's are older than max age get deleted with 'cleanup_pms()'
-|                                       Relative Format (e.g. '2 week', '1 month') 
-|                                       for details see http://php.net/manual/de/datetime.formats.relative.php
+| 	['email']                          	Sender email address, used for remind_password, send_verification and reset_password
+| 	['name']                           	Sender name, used for remind_password, send_verification and reset_password
+|
+| 	['verification']                   	User Verification, if TRUE sends a verification email on account creation.
+| 	['verification_link']              	Link for verification without site_url or base_url
+| 	['reset_password_link']            	Link for reset_password without site_url or base_url
+|
+|	['hash']							Name of selected hashing algorithm (e.g. "md5", "sha256", "haval160,4", etc..)
+|										Please, run hash_algos() for know your all supported algorithms
 |
 */
 $config_aauth = array();
 
 $config_aauth["default"] = array(
- 'no_permission'                  => FALSE,
+    
+	'no_permission'                  => FALSE,
 
- 'admin_group'                    => 'admin',
- 'default_group'                  => 'default',
- 'public_group'                   => 'public',
+	'admin_group'                    => 'admin',
+	'customers_group'                => 'customer',
+	'public_group'                   => 'public',
 
- 'db_profile'                     => 'default',
+	'db_profile'                     => 'default',
 
- 'users'                          => 'aauth_users',
- 'groups'                         => 'aauth_groups',
- 'group_to_group'                 => 'aauth_group_to_group',
- 'user_to_group'                  => 'aauth_user_to_group',
- 'perms'                          => 'aauth_perms',
- 'perm_to_group'                  => 'aauth_perm_to_group',
- 'perm_to_user'                   => 'aauth_perm_to_user',
- 'pms'                            => 'aauth_pms',
- 'user_variables'                 => 'aauth_user_variables',
- 'login_attempts'                 => 'aauth_login_attempts',
+	'users'                          => 'aauth_users',
+	'groups'                         => 'aauth_groups',
+	'user_to_group'                  => 'aauth_user_to_group',
+	'perms'                          => 'aauth_perms',
+	'perm_to_group'                  => 'aauth_perm_to_group',
+	'perm_to_user'                   => 'aauth_perm_to_user',
+	'pms'                            => 'aauth_pms',
+	'system_variables'               => 'aauth_system_variables',
+	'user_variables'                 => 'aauth_user_variables',
 
- 'remember'                       => ' +3 days',
+	'remember'                       => ' +365 days',
 
- 'max'                            => 13,
- 'min'                            => 5,
+	'max'                            => 13,
+	'min'                            => 5,
 
- 'additional_valid_chars'         => array(),
+	'valid_chars'                    => array(' ', '&', '%', '@'), # Allow spaces e.g. for names in user registration
 
- 'ddos_protection'                => true,
+	'ddos_protection'                => true,
 
- 'recaptcha_active'               => false,
- 'recaptcha_login_attempts'       => 4,
- 'recaptcha_siteKey'              => '',
- 'recaptcha_secret'               => '',
+	'recaptcha_active'               => false,
+	'recaptcha_login_attempts'       => 4,
+	'recaptcha_siteKey'              => '',
+	'recaptcha_secret'               => '',
 
- 'totp_active'                    => false,
- 'totp_only_on_ip_change'         => false,
- 'totp_reset_over_reset_password' => false,
- 'totp_two_step_login_active'     => false,
- 'totp_two_step_login_redirect'   => '/account/twofactor_verification/',
+	'totp_active'                    => false,
+	'totp_only_on_ip_change'         => false,
+	'totp_reset_over_reset_password' => false,
 
- 'max_login_attempt'              => 10,
- 'max_login_attempt_time_period'  => "5 minutes",
- 'remove_successful_attempts'     => true,
+	'max_login_attempt'              => 10,
 
- 'login_with_name'                => false,
+	'login_with_name'                => false,
 
- 'email'                          => 'admin@admin.com',
- 'name'                           => 'Emre Akay',
- 'email_config'                   => false,
+	'use_cookies'                    => true,
 
- 'verification'                   => false,
- 'verification_link'              => '/account/verification/',
- 'reset_password_link'            => '/account/reset_password/',
+	'email'                          => 'info@mikewill.co.ke',
+	'name'                           => 'Tickos LTD',
 
- 'hash'                           => 'sha256',
- 'use_password_hash'              => false,
- 'password_hash_algo'             => PASSWORD_DEFAULT,
- 'password_hash_options'          => array(),
+	'verification'                   => true,
+	'verification_link'              => '/account/verification/',
+	'reset_password_link'            => '/account/reset_password/',
 
- 'pm_encryption'                  => false,
- 'pm_cleanup_max_age'             => "3 months",
+	'hash'							 =>	'sha256'
 );
 
 $config['aauth'] = $config_aauth['default'];
