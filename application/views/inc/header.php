@@ -59,7 +59,7 @@ gtag('config', 'UA-112334654-1');
                     <ul class="nav navbar-nav navbar-right">
                         <li><a class="pricing-lnk" href="<?php echo site_url(''); ?>">Home</a></li>
                         <li><a class="events-lnk" href="<?php echo site_url('about'); ?>">About</a></li>
-                        <li><a class="contacts-lnk" href="<?php echo site_url('contact-us'); ?>">Contact Us</a></li>
+                        <li><a class="contacts-lnk" href="<?php echo site_url('contacts'); ?>">Contact Us</a></li>
                     </ul>
                 </div>
             </div>

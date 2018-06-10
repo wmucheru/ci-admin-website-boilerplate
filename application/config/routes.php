@@ -58,6 +58,13 @@ $route['translate_uri_dashes'] = FALSE;
  * CUSTOM ROUTES
  * 
 */
+
+# Site
+$route['home'] = 'site/index';
+$route['about'] = 'site/about';
+$route['contacts'] = 'site/contacts';
+
+# Admin
 $route['accounts/signup'] = 'auth/signup';
 $route['accounts/login'] = 'auth/index';
 $route['logout'] = 'auth/logout';
