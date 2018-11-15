@@ -8,26 +8,14 @@ class Site extends CI_Controller {
     }
     
     function index(){
-        $data['page_title'] = 'Home';
-        $data['page_content'] = 'home';
-        $data['body_class'] = 'home-bd';
-        
-        $this->load->view('inc/template', $data);
+        render_page('home', 'Home', 'home-bd');
     }
 
     function about(){
-        $data['page_title'] = 'About Us';
-        $data['page_content'] = 'about';
-        $data['body_class'] = 'about-bd';
-        
-        $this->load->view('inc/template', $data);
+        render_page('about', 'About Us', 'about-bd');
     }
 
     function contacts(){
-        $data['page_title'] = 'Contact Us';
-        $data['page_content'] = 'contacts';
-        $data['body_class'] = 'contacts';
-        
-        $this->load->view('inc/template', $data);
+        render_page('contacts', 'Contact Us', 'contacts-bd');
     }
 }

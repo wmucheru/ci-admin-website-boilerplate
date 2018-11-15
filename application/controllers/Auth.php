@@ -4,24 +4,24 @@ class Auth extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
+
+        // Create default user to test with
+        # var_dump($this->auth_model->create_user('admin@example.com', '123456', 'admin'));
     }
 
     public function index() {
-        $data['page_content'] = 'auth/login';
-        $data['page_title'] = 'Login';
-
-        $this->load->view('inc/template', $data);
+        render_page('auth/login', 'Login', 'login-bd');
     }
 
     function login_proc(){
         # redirect('dashboard');
 
-        $email = $this->input->post('email-address');
-        $password = $this->input->post('authkey');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
         $persist_login = 'true';
 
-        $this->form_validation->set_rules('email-address', 'Email Address', 'required|valid_email');
-        $this->form_validation->set_rules('authkey', 'Password', 'required');
+        $this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'required');
 
         if($this->form_validation->run() === FALSE){
             $this->index();
