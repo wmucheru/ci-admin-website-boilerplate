@@ -21,6 +21,17 @@ $env_ini = parse_ini_file("env.ini");
 
 $config['base_url'] = $env_ini['baseurl'];
 
+$config['site_name'] = $env_ini['sitename'];
+$config['site_tagname'] = $env_ini['sitetagname'];
+$config['site_theme'] = $env_ini['sitetheme'];
+$config['sms_shortcode'] = $env_ini['smsshortcode'];
+$config['ga_code'] = $env_ini['gacode'];
+
+$config['address'] = $env_ini['address'];
+$config['website'] = $env_ini['website'];
+$config['email'] = $env_ini['email'];
+$config['phone'] = $env_ini['phone'];
+
 /*
 |--------------------------------------------------------------------------
 | Index File

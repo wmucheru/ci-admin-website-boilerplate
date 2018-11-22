@@ -29,15 +29,20 @@
         <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
         <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 <![endif]-->
-<?php if(!$this->index_model->isLocalhost()){ ?>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112334654-1"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-112334654-1');
-</script>
-<?php } ?>
+<?php 
+    if(!$this->index_model->isLocalhost()){
+        $gaCode = $this->config->item('ga_code');
+        $gaCode = isset($gaCode) ? $gaCode : "";
+
+        echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=$gaCode\"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '$gaCode');
+        </script>";
+    }
+?>
 </head>
 <body class="<?php echo isset($body_class) ? $body_class : ''; ?>">
     <div class="clearfix wrapper">
