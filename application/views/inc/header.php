@@ -3,11 +3,52 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title><?php echo isset($page_title) ? $page_title : ''; ?></title>
-<meta name="description" content=""/>
-<meta name="author" content=""/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title><?php 
+    $pageTitle = isset($page_title) ? $page_title : '';
+    $pageDescription = isset($page_description) ? substr($page_description, 0, 200) : '';
+    $pageAuthor = isset($page_author) ? $page_author : '';
+    $pageKeywords = isset($page_keywords) ? $page_keywords : '';
+    $pageImage = isset($page_image) ? $page_image : '';
+
+    echo $pageTitle; 
+?></title>
 <?php
+    $metaTags = array(
+        'description' => $pageDescription,
+        'author' => $pageAuthor,
+        'viewport' => 'width=device-width, initial-scale=1', # For responsive layouts
+    );
+
+    # Default meta tags
+    echo meta($metaTags);
+
+    /**
+     * 
+     * SEO Meta Tags
+     * 
+     * See: https://css-tricks.com/essential-meta-tags-social-media/
+     * 
+     */
+    $seoMeta = array(
+
+        # Facebook
+        array(
+            array('property' => 'og:title', 'content' => $pageTitle),
+            array('property' => 'og:description', 'content' => $pageDescription),
+            array('property' => 'og:image', 'content' => $pageImage),
+            array('property' => 'og:url', 'content' => current_url()),
+        ),
+
+        # Twitter
+        array('name' => 'twitter:title', 'content' => $pageTitle),
+        array('name' => 'twitter:description', 'content' => $pageDescription),
+        array('name' => 'twitter:image', 'content' => $pageImage),
+        array('name' => 'twitter:card', 'content' => $pageImage)
+    );
+
+    echo meta($seoMeta);
+
+
     echo link_tag('favicon.png', 'shortcut icon', 'image/png');
 
     $styles = array(
