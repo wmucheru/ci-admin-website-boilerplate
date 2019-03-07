@@ -15,4 +15,4 @@ $autoload['config'] = array();
 
 $autoload['language'] = array();
 
-$autoload['model'] = array('index_model', 'auth_model');
+$autoload['model'] = array('index_model', 'auth_model', 'form_model');
