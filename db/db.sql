@@ -147,8 +147,8 @@ CREATE TABLE `aauth_users` (
 -- Dumping data for table `aauth_users`
 --
 
-INSERT INTO `aauth_users` (`id`, `email`, `pass`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
-(1, 'admin@example.com', '5711aa2253ac62088bf34f79f8ccd82e41bdbcf32e7670772d2a1e1746a9be9b', 'admin', 0, '2018-11-15 16:16:53', '2018-11-15 16:16:53', '2018-11-15 16:15:30', NULL, '2018-12-15 00:00:00', 'X3oyOUV5TmvSZMIQ', NULL, NULL, '::1');
+INSERT INTO `aauth_users` (`id`, `email`, `name`, `mobile`, `pass`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
+(1, 'admin@example.com', '5711aa2253ac62088bf34f79f8ccd82e41bdbcf32e7670772d2a1e1746a9be9b', `Admin Example`, `07200112233`, 'admin', 0, '2018-11-15 16:16:53', '2018-11-15 16:16:53', '2018-11-15 16:15:30', NULL, '2018-12-15 00:00:00', 'X3oyOUV5TmvSZMIQ', NULL, NULL, '::1');
 
 -- --------------------------------------------------------
 
