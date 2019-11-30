@@ -128,6 +128,7 @@ CREATE TABLE `aauth_users` (
   `id` int(11) UNSIGNED NOT NULL,
   `email` varchar(100) NOT NULL,
   `pass` varchar(64) NOT NULL,
+  `name` varchar(192) NOT NULL,
   `username` varchar(100) DEFAULT NULL,
   `banned` tinyint(1) DEFAULT '0',
   `last_login` datetime DEFAULT NULL,
