@@ -356,7 +356,7 @@ class Index_model extends CI_Model{
                     <table width="600" cellpadding="0" cellspacing="0" style="border-radius: 3px;border: 1px solid #e9e9e9;" bgcolor="#fff">
                     <tr>
                         <td style="padding: 20px;" align="center" valign="top" bgcolor="#fff">
-                            <img src="'. base_url('assets/img/tickos-logo.png') .'" alt="TICKOS"/>
+                            <img src="'. base_url('assets/img/site-logo.png') .'" alt=""/>
                         </td>
                     </tr>
                     <tr>
@@ -368,7 +368,7 @@ class Index_model extends CI_Model{
                     <table width="600" cellpadding="0" cellspacing="0">
                     <tr style=" margin: 0;">
                         <td style="font-size: 12px; color: #999; padding:20px;" align="center" valign="top">
-                            Questions? Email <a href="mailto:info@tickos.co.ke" style="color: #999; text-decoration: underline; margin: 0;">info@tickos.co.ke</a>
+                            Questions? Email <a href="mailto:info@example.com" style="color: #999; text-decoration: underline; margin: 0;">info@example.com</a>
                         </td>
                     </tr>
                     </table>
