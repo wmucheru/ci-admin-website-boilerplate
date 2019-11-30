@@ -13,23 +13,28 @@
     echo $pageTitle; 
 ?></title>
 <?php
-    $metaTags = array(
-        'description' => $pageDescription,
-        'author' => $pageAuthor,
-        'viewport' => 'width=device-width, initial-scale=1', # For responsive layouts
-    );
-
-    # Default meta tags
-    echo meta($metaTags);
 
     /**
      * 
      * SEO Meta Tags
      * 
-     * See: https://css-tricks.com/essential-meta-tags-social-media/
+     * - https://codeigniter.com/user_guide/helpers/html_helper.html#meta
+     * - https://css-tricks.com/essential-meta-tags-social-media/
      * 
      */
     $seoMeta = array(
+
+        # Basic Meta
+        array('name'=>'viewport', 'content'=>'width=device-width, initial-scale=1'), # For responsive layouts
+        array(
+            'name'=>'Content-type',
+            'content'=>'text/html; charset=utf-8', 
+            'type'=>'equiv'
+        ),
+
+        # Page Meta
+        array('name'=>'description', 'content'=>$pageDescription),
+        array('name'=>'author', 'content'=>$pageAuthor),
 
         # Facebook
         array(
