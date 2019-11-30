@@ -334,16 +334,42 @@ class Index_model extends CI_Model{
 
     /*
      * EMAILS
+     * 
+     * Send emails
      *
-     * Allowed templates: info, consignment, invoice
+     * @param: emailObj['subject, from, name, ......']
      * 
      */
-    function sendEmail($to, $subject, $message, $attachment=''){
+    function sendEmail($emailObj){
+        $this->load->library('email');
+
+        $obj = (object) $emailObj;
+
+        $email = !empty($obj->to) ? $obj->to : '';
+        $name = !empty($obj->name) ? $obj->name : '';
+        $subject = !empty($obj->subject) ? $obj->subject : '';
+        $message = !empty($obj->message) ? $obj->message : '';
 
         # var_dump($email_object);
+
         $body = $this->_emailTemplate($message);
 
-        $this->messaging_model->sendMailgunEmail($to, $subject, $body);
+        $config['mailtype'] = 'html';
+
+        $this->email->initialize($config);
+
+        $this->email->to('info@malahideparts.com');
+        $this->email->from($email, $name);
+        $this->email->reply_to($email, $name);
+        $this->email->subject($subject);
+        $this->email->message($body);
+
+        if(!$this->index_model->isLocalhost()){
+            $this->email->send();
+        }
+        else{
+            echo $body;
+        }
     }
 
     function _emailTemplate($message){
