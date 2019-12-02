@@ -166,8 +166,7 @@ CREATE TABLE `aauth_user_to_group` (
 --
 
 INSERT INTO `aauth_user_to_group` (`user_id`, `group_id`) VALUES
-(1, 1),
-(1, 3);
+(1, 1);
 
 -- --------------------------------------------------------
 
