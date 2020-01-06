@@ -129,7 +129,7 @@ CREATE TABLE `aauth_users` (
   `email` varchar(100) NOT NULL,
   `pass` varchar(64) NOT NULL,
   `name` varchar(192) NOT NULL,
-  `mobile` VARCHAR(32) NULL AFTER `name`,
+  `mobile` VARCHAR(32) NULL `name`,
   `username` varchar(100) DEFAULT NULL,
   `banned` tinyint(1) DEFAULT '0',
   `last_login` datetime DEFAULT NULL,
