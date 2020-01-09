@@ -15,6 +15,8 @@ $(document).ready(function(){
             : "password"
     })
 
+    const homeSlider = $('.home-slider')
+
     if (homeSlider.length > 0) {
         homeSlider.slick({
             dots: false,
