@@ -111,6 +111,14 @@ input.datepicker{
     padding:3px 1em;
 }
 
+.slick-slider{
+    max-height:95vh;
+    overflow:hidden;
+}
+.slick-slide img{
+    width:100%;
+}
+
 .container{
 	max-width:960px;
 }

@@ -59,9 +59,8 @@
     $styles = array(
         'assets/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
-        'assets/css/bootstrap-datepicker.min.css',
-        'assets/plugins/timepicker/jquery.timepicker.min.css',
-        'assets/plugins/bxslider/jquery.bxslider.css',
+        'assets/plugins/slick/slick.css',
+        'assets/plugins/slick/slick-theme.css',
         'assets/css/style.css'
     );
 
@@ -155,7 +154,7 @@
         $scripts = array(
             'assets/js/jquery.min.js',
             'assets/js/bootstrap.min.js',
-            'assets/plugins/bxslider/jquery.bxslider.min.js',
+            'assets/plugins/slick/slick.min.js',
             'assets/js/custom.js'
         );
         
