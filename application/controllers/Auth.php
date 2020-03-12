@@ -2,15 +2,23 @@
 
 class Auth extends CI_Controller {
 
-    public function __construct(){
+    function __construct(){
         parent::__construct();
 
         // Create default user to test with
         # var_dump($this->auth_model->create_user('admin@example.com', '123456', 'admin'));
     }
 
-    public function index() {
-        render_page('auth/login', 'Login', 'login-bd');
+    function index() {
+
+        if($this->auth_model->is_logged_in()){
+            redirect('admin/dashboard');
+        }
+        else{
+            $this->session->set_userdata('referrer', $this->agent->referrer());
+
+            render_auth('auth/login', 'Login', 'login-bd');
+        }
     }
 
     function login_proc(){
@@ -30,18 +38,21 @@ class Auth extends CI_Controller {
 
             $remember = $persist_login == 'true';
 
-            if($this->auth_model->is_account_verified($email)){
+            if(!$this->auth_model->is_account_verified($email)){
+                $this->session->set_flashdata('login_fail', 'Account is inactive');
+                $this->index();
+            }
+            else if($this->aauth->login($email, $password, $remember)){
 
-                if ($this->aauth->login($email, $password, $remember)){
-                    $this->dashboard();
-                }
-                else{
-                    $this->session->set_flashdata('login_fail', 'Please enter the correct login details');
-                    $this->index();
-                }
+                # Redirect to the page you were in before session expired
+                $referrer = $this->session->userdata('referrer');
+                $uri = !empty($referrer) ? $referrer : 'admin/dashboard';
+
+                $this->session->unset_userdata('referrer');
+                redirect($uri);
             }
             else{
-                $this->session->set_flashdata('login_fail', 'Your account is inactive or has been suspended');
+                $this->session->set_flashdata('login_fail', 'Please enter the correct login details');
                 $this->index();
             }
         }
