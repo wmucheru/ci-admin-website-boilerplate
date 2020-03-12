@@ -10,8 +10,8 @@ class Auth_model extends CI_Model{
      * USER FUNCTIONS
      *
      */
-    function login_fast(){
-        $this->aauth->login_fast(1);
+    function login_fast($userId){
+        $this->aauth->login_fast($userId);
     }
     
     function is_logged_in(){
