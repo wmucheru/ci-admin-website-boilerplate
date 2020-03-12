@@ -18,15 +18,18 @@ class Auth_model extends CI_Model{
         return $this->aauth->is_loggedin();
     }
 
-    function set_login_redirect(){
-        # Save referrer to redirect back to
-        # $this->session->set_userdata('rdr', $this->agent->referrer());
+    function set_redirect_referrer(){
+        $this->session->set_userdata('referrer', $this->agent->referrer());
+    }
 
-        !$this->is_logged_in() ? redirect('accounts/login') : null;
+    function set_login_redirect(){
+        if(!$this->is_logged_in()){
+            $this->set_redirect_referrer();
+            redirect('accounts/login');
+        }
     }
 
     function is_account_verified($email){
-
         $this->db->select('banned');
         $this->db->from('aauth_users');
         $this->db->where(array('email' => $email, 'banned' => '0'));

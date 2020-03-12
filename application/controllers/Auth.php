@@ -15,8 +15,6 @@ class Auth extends CI_Controller {
             redirect('admin/dashboard');
         }
         else{
-            $this->session->set_userdata('referrer', $this->agent->referrer());
-
             render_auth('auth/login', 'Login', 'login-bd');
         }
     }
@@ -69,6 +67,8 @@ class Auth extends CI_Controller {
 
     function logout(){
         $this->aauth->logout();
-        redirect('accounts/login');
+        $this->auth_model->set_redirect_referrer();
+
+        $this->index();
     }
 }
