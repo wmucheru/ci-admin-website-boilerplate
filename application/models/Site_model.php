@@ -358,7 +358,7 @@ class Site_model extends CI_Model{
 
         $this->email->initialize($config);
 
-        $this->email->to('info@malahideparts.com');
+        $this->email->to('info@example.com');
         $this->email->from($email, $name);
         $this->email->reply_to($email, $name);
         $this->email->subject($subject);
