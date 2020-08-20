@@ -7,7 +7,7 @@
             <?php 
                 echo form_open('auth/login_proc', array('class'=>'form-horizontal'));
 
-                $this->index_model->setFlashdataMessages('login');
+                $this->site_model->setFlashdataMessages('login');
             ?>
             <fieldset>
                 <h4>Log In</h4>

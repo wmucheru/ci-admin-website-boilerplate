@@ -23,7 +23,7 @@ $autoload['config'] = array();
 $autoload['language'] = array();
 
 $autoload['model'] = array(
-    'index_model', 
+    'site_model', 
     'auth_model', 
     'form_model'
 );

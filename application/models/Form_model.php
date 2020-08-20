@@ -248,7 +248,7 @@ class Form_model extends CI_Model{
 
                 if(!empty($_FILES[$u->field]['name'])){
                     $fieldName = $u->field;
-                    $fileName = !empty($u->fileName) ? $u->fileName : $this->index_model->generateRef();
+                    $fileName = !empty($u->fileName) ? $u->fileName : $this->site_model->generateRef();
                     $uploadType = isset($u->uploadType) ? $u->uploadType : 'image';
                     $dimensions = isset($u->dimensions) ? explode(',', $u->dimensions) : array();
 
@@ -259,7 +259,7 @@ class Form_model extends CI_Model{
                         );
                     }
 
-                    $status = $this->index_model->uploadDocument($fieldName, $fileName, $uploadType, $dimensions);
+                    $status = $this->site_model->uploadDocument($fieldName, $fileName, $uploadType, $dimensions);
 
                     if(!isset($status['error'])){
                         $uploadedFiles[] = $status['full_path'];
@@ -312,7 +312,7 @@ class Form_model extends CI_Model{
 
                 # var_dump($tableObj); exit();
 
-                $this->index_model->updateTable($formObj->table, $tableObj, array('id'=>$updateId));
+                $this->site_model->updateTable($formObj->table, $tableObj, array('id'=>$updateId));
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
                 return (object) array(
@@ -321,7 +321,7 @@ class Form_model extends CI_Model{
             }
 
             # Save new entry
-            else if($this->index_model->addToTable($formObj->table, $tableObj)){
+            else if($this->site_model->addToTable($formObj->table, $tableObj)){
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
                 return (object) array(

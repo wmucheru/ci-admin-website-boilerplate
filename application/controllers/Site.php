@@ -48,7 +48,7 @@ class Site extends CI_Controller {
             $message = $this->input->post('message');
 
             # Send email
-            $body = $this->index_model->emailTemplate(
+            $body = $this->site_model->emailTemplate(
                 "From: $name ($email) <br><br>$message"
             );
             

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Index_model extends CI_Model{
+class Site_model extends CI_Model{
 
 	var $gallery_path;
 	var $gallery_path_url;
@@ -364,7 +364,7 @@ class Index_model extends CI_Model{
         $this->email->subject($subject);
         $this->email->message($body);
 
-        if(!$this->index_model->isLocalhost()){
+        if(!$this->site_model->isLocalhost()){
             $this->email->send();
         }
         else{

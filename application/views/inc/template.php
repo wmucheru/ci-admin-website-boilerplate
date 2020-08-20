@@ -77,7 +77,7 @@
 <?php 
     $gaCode = $this->config->item('ga_code');
     
-    if(!$this->index_model->isLocalhost() && !empty($gaCode)){
+    if(!$this->site_model->isLocalhost() && !empty($gaCode)){
         echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=$gaCode\"></script>
         <script>
         window.dataLayer = window.dataLayer || [];

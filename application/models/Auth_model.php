@@ -75,7 +75,7 @@ class Auth_model extends CI_Model{
             'timestamp' => date('Y-m-d H:i:s')
         );
 
-        return $this->index_model->addToTable($activity);
+        return $this->site_model->addToTable($activity);
     }
     
     function settings() {
@@ -278,7 +278,7 @@ class Auth_model extends CI_Model{
             $edit_array['name'] = $name;
         }
 
-        return $this->index_model->updateTable('aauth_users', $edit_array, array('id' => $user_id));
+        return $this->site_model->updateTable('aauth_users', $edit_array, array('id' => $user_id));
     }
 
     function update_activity() {
@@ -318,7 +318,7 @@ class Auth_model extends CI_Model{
 
     # Remove member from current group, add to new group
     function update_member_group($user_id, $group_par){
-        return $this->index_model->updateTable(
+        return $this->site_model->updateTable(
             'aauth_user_to_group', 
             array('group_id' => $group_par),
             array('user_id' => $user_id));

@@ -7,7 +7,7 @@
     <?php 
         echo form_open('accounts/new-signup', array('class'=>'col-md-8 form-horizontal'));
 
-        $this->index_model->setFlashdataMessages('signup');
+        $this->site_model->setFlashdataMessages('signup');
     ?>
     <div class="form-group">
         <div class="col-sm-offset-4 col-sm-8">

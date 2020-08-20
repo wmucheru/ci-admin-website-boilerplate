@@ -98,7 +98,7 @@
     <?php
         echo '<script>const siteURL = "'. site_url() .'"</script>';
 
-        if($this->index_model->isLocalhost()){
+        if($this->site_model->isLocalhost()){
             $this->output->enable_profiler(TRUE);
         }
         

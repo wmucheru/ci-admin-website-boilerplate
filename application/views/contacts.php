@@ -12,7 +12,7 @@
                 echo form_hidden('other');
             ?>
             <div class="form-group">
-                <?php $this->index_model->setFlashdataMessages('contact'); ?>
+                <?php $this->site_model->setFlashdataMessages('contact'); ?>
             </div>
 
             <div class="form-group">
