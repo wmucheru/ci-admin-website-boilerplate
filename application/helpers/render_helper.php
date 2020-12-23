@@ -33,7 +33,7 @@ if(!function_exists('render_page')){
 if(!function_exists('render_auth')){
 
     function render_auth($pageContent, $pageTitle='', $bodyClass='', $pageData=array()){
-        render_base('inc/template-auth', $pageContent, $pageTitle, $bodyClass, $pageData);
+        render_base('inc/template', $pageContent, $pageTitle, $bodyClass, $pageData);
     }
 }
 
