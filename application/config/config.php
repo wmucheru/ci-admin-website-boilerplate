@@ -17,20 +17,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$env_ini = parse_ini_file("env.ini");
+function env_var($key){
+    $env_ini = parse_ini_file('env.ini');
+    return isset($env_ini[$key]) ? $env_ini[$key] : '';
+}
+$config['base_url'] = env_var('baseurl');
+$config['socket_url'] = env_var('socketurl');
 
-$config['base_url'] = $env_ini['baseurl'];
+$config['site_name'] = env_var('sitename');
+$config['site_tagname'] = env_var('sitetagname');
+$config['site_logo'] = env_var('sitelogo');
+$config['site_theme'] = env_var('sitetheme');
+$config['sms_shortcode'] = env_var('smsshortcode');
+$config['ga_code'] = env_var('gacode');
 
-$config['site_name'] = $env_ini['sitename'];
-$config['site_tagname'] = $env_ini['sitetagname'];
-$config['site_theme'] = $env_ini['sitetheme'];
-$config['sms_shortcode'] = $env_ini['smsshortcode'];
-$config['ga_code'] = $env_ini['gacode'];
+# 0 = Production, 1 = Dedbug
+$config['debug'] = env_var('debug');
 
-$config['address'] = $env_ini['address'];
-$config['website'] = $env_ini['website'];
-$config['email'] = $env_ini['email'];
-$config['phone'] = $env_ini['phone'];
+$config['address'] = env_var('address');
+$config['website'] = env_var('website');
+$config['email'] = env_var('email');
+$config['phone'] = env_var('phone');
 
 /*
 |--------------------------------------------------------------------------

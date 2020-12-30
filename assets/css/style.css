@@ -16,9 +16,6 @@ body{
 	font-weight:400;
 	line-height:1.6em;
 }
-a{
-	color:#FF7314!important;
-}
 
 h1, h2, h3, h4, h5, h6{
 	font-family: "Helvetica Neue", Helvetica, Arial,sans-serif;
@@ -137,14 +134,20 @@ input.datepicker{
 }
 
 .navbar{
-	background:transparent;
+    border:0;
 	border-radius:0;
-	box-shadow:none;
-	margin-bottom:0;
-    padding:0.8em 1em;
+    box-shadow:none;
+    height:auto;
+    margin-bottom:0;
+    min-height:auto;
+}
+.navbar-default{
+    background:transparent;
 }
 .navbar-brand{
-	padding-top:0.2em;
+    height:auto;
+    margin-right:20px;
+	padding:6px 15px;
 }
 .navbar-brand img{
 	height:1.8em;
@@ -160,11 +163,10 @@ input.datepicker{
 	opacity:1.0;
 	padding-left:0;
 }
-.nav > li > a{
-	background:transparent!important;
-	padding:10px;
+.navbar-nav > li > a{
+	background:transparent;
 }
-.nav > li > a:hover,
+.navbar-nav > li > a:hover,
 .about-bd .about-lnk,
 .contacts-bd .contacts-lnk{
 	color:#555!important;
@@ -174,7 +176,7 @@ input.datepicker{
 	margin-right:0.5em;
 }
 .nav > li > a.btn-nav{
-	background:#FF7314;
+	background:#000;
 	color:#fff!important;
 	border-radius:2px;
 	font-size:0.9em;
@@ -185,8 +187,8 @@ input.datepicker{
 }
 .nav > li > a.btn-nav.btn-nav-active{
     background:transparent;
-    border:1px solid #FF7314;
-	color:#FF7314!important;
+    border:1px solid #000;
+	color:#000!important;
 }
 .navbar-toggle{
 	background:#fff!important;

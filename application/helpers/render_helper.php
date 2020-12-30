@@ -44,6 +44,18 @@ if(!function_exists('render_admin')){
     }
 }
 
+if(!function_exists('nav_brand')){
+
+    function nav_brand($uri='/'){
+        $CI =& get_instance();
+
+        $siteName = $CI->config->item('site_name');
+        $logo = $CI->config->item('site_logo');
+        $img = img("assets/img/$logo", $siteName, 'class="img-responsive"');
+        echo anchor($uri, $img, 'class="navbar-brand"');
+    }
+}
+
 if(!function_exists('nav_link')){
 
     /**
@@ -106,6 +118,54 @@ if (!function_exists('build_link')){
     }
 }
 
+if(!function_exists('quick_filter')){
+
+    /**
+     * 
+     * Generate inline filter form to render on pages with data. Pass the 
+     * variables to be filtered and form will submit a get request using the
+     * current url as the action
+     * 
+     * @param filters
+     * @param includeDates: By default show date filters (to & from)
+     * 
+    */
+    function quick_filter($filters=array(), $includeDates=TRUE){
+        $CI =& get_instance();
+
+        echo form_open('', 'class="form-inline" method="get"');
+
+        if($includeDates){
+            $from = $CI->input->get('from');
+            $to = $CI->input->get('to');
+
+            $filters['from'] = today();
+            $filters['to'] = today();
+        }
+
+        foreach($filters as $k => $v){
+            
+            echo '<div class="form-group">';
+
+            if(is_array($v)){
+                echo form_dropdown($k, $v);
+            }
+            else{
+                echo '<label class="control-label">'. ucwords($k) .'</label>';
+                echo form_input($k, $v, 'class="form-control" style="margin:0 5px;"');    
+            }
+
+            echo '</div>';
+        }
+
+        echo '<button class="btn btn-primary">Filter</button>';
+
+        echo form_close();
+
+        echo '<hr style="border:0; margin-bottom:0;" />';
+    }
+}
+
 if(!function_exists('quick_form')){
 
     /**
@@ -149,16 +209,182 @@ if(!function_exists('form_box')){
      * 
      * Generate form box with input & validation. Contained in form-group
      * 
+     * 
     */
-    function form_box($name, $value, $attrs='class="form-control"'){
+    function form_box($name, $value, $type='text', $attrs=''){
+        $attrs .= " type=\"$type\" ";
+        $attrs .= ' class="form-control" ';
+
         echo '<div class="form-group">';
 
-        echo form_input($name, $value, $attrs);
-        echo form_error('name');
+        switch($type){
+            case 'password':
+                echo form_password($name, $value, $attrs);
+                break;
+
+            case 'text':
+            case 'email':
+            default:
+                echo form_input($name, $value, $attrs);
+                break;
+        }
+        echo form_error($name);
 
         echo '</div>';
     }
+}
 
+if(!function_exists('form_box_label')){
+
+    /**
+    * 
+    * Generate labeled form box with input & validation. Contained in form-group
+    * 
+    * @param obj: Array of type, name, label, value, class, attr 
+    *
+    */
+    function form_box_label($obj=array()){
+        $obj = (object) $obj;
+
+        $name = isset($obj->name) ? $obj->name : '';
+        $label = isset($obj->label) ? $obj->label : '';
+        $type = isset($obj->type) ? $obj->type : '';
+        $value = isset($obj->value) ? $obj->value : '';
+
+        $str = '';
+        $str .= !empty($name) ? " name=\"$name\" " : '';
+        $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') . '" ';
+        $str .= isset($obj->attrs) ? " $obj->attrs " : '';
+        $str = trim($str);
+
+        echo '<div class="form-group">';
+        echo "<label class=\"control-label col-sm-4\">$label</label>";
+
+        echo '<div class="col-sm-8">';
+
+        switch($type){
+            case 'textarea':
+                echo "<textarea $str>$value</textarea>";
+                break;
+
+            default:
+                $str .= isset($obj->value) ? " value=\"$obj->value\" " : '';
+                $str .= !empty($type) ? " type=\"$type\" " : '';
+                echo "<input $str />";
+                break;
+        }
+        echo form_error($name);
+
+        echo '</div>';
+
+        echo '</div>';
+    }
+}
+
+if(!function_exists('form_box_large')){
+
+    /**
+     * 
+     * Generate form box with textarea
+     * 
+    */
+    function form_box_large($name, $value, $attrs=''){
+        $attrs .= ' class="form-control" rows="3"';
+
+        echo '<div class="form-group">';
+
+        echo form_textarea($name, $value, $attrs);
+        echo form_error($name);
+
+        echo '</div>';
+    }
+}
+
+
+if(!function_exists('form_radio_inline')){
+
+    /**
+    * 
+    * Generate inline radio button
+    * 
+    */
+    function form_radio_inline($name, $value, $label, $checked=FALSE){
+        echo '<label class="radio-inline">';
+
+        echo form_radio($name, $value, $checked);
+        echo " $label";
+
+        echo '</label>';
+    }
+}
+
+if(!function_exists('form_box_button')){
+
+    /**
+     * 
+     * Return form submit button markup in form box
+     * 
+    */
+    function form_box_button($text, $attrs='class="btn btn-lg btn-block btn-primary"'){
+        echo '<div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">';
+        echo "<hr/><button $attrs >$text</button>";
+        echo '</div>
+            </div>';
+    }
+}
+
+if(!function_exists('stat_box')){
+
+    /**
+     * 
+     * Return stat box
+     * 
+     * 
+    */
+    function stat_box($number, $label, $perm=TRUE){
+        $number = empty($number) ? 0 : $number;
+
+        if($perm){
+            # TODO: Consider plural function in https://stackoverflow.com/a/11546930/3310235
+            $label = ucwords($number > 1 || $number == 0 ? $label . 's' : $label);
+
+            echo "<div class=\"col-sm-2 col-xs-4 stat-box\">
+                    <div>
+                        <h3>$number</h3>
+                        <p>$label</p>
+                    </div>
+                </div>";
+        }
+    }
+}
+
+if(!function_exists('quick_validate')){
+
+    /**
+     * 
+     * Check data object whether required variables are empty
+     * 
+     * Return FALSE if any is empty
+     * 
+    */
+    function quick_validate($vars, $keys){
+        $vars = (object) $vars;
+        $errors = array();
+
+        foreach($vars as $key => $value){
+            $value = $vars->$key;
+
+            if(in_array($key, $keys) && empty($value)){
+                array_push($errors, $key);
+            }
+        }
+
+        return empty($errors) ? TRUE : (object) array(
+            'error'=>true,
+            'errorStr'=>join(', ', $errors)
+        );
+    }
 }
 
 ?>

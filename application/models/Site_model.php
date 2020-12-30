@@ -17,6 +17,54 @@ class Site_model extends CI_Model{
 		$this->gallery_path_url = base_url().'../content/';
     }
 
+    function getSystemLogs($limit=500){
+        return $this->db
+            ->select('id, tag, description, ipaddress, reference, status, createdon')
+            ->limit($limit)
+            ->order_by('id', 'DESC')
+            ->get('sys_logs')
+            ->result();
+    }
+
+    function getSettings($id=''){
+        $this->db
+            ->select('id, setting, description, value, tag')
+            ->from('sys_settings');
+
+        if($id != ''){
+            $this->db->where('id', $id);
+        }
+
+        $q = $this->db->get();
+
+        return $id != '' ? $q->row() : $q->result();
+    }
+
+    function isProduction(){
+        return $this->config->item('debug') == '0';
+    }
+
+    function writeLog($string){
+        $file = realpath(FCPATH .'/logs/log.txt');
+        $current = file_get_contents($file);
+
+        file_put_contents($file, $current . $string);
+    }
+
+    function setGoogleAnalytics(){
+        $gaCode = $this->config->item('ga_code');
+        
+        if(!$this->site_model->isLocalhost() && !empty($gaCode)){
+            echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=$gaCode\"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '$gaCode');
+            </script>";
+        }
+    }
+
     function generateRef(){
         return bin2hex(openssl_random_pseudo_bytes(8));
     }

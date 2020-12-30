@@ -281,3 +281,29 @@ ALTER TABLE `aauth_users`
 --
 ALTER TABLE `aauth_user_variables`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `sys_settings` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `setting` varchar(45) NOT NULL,
+  `description` text NOT NULL,
+  `value` text NOT NULL,
+  `tag` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `sys_settings` 
+VALUES (1,'SMS Username','Username used for SMS API calls','','sms'),
+(2,'SMS API Key','API Key used SMS API Calls','','sms'),
+(3,'SMS Shortcode','Shortcode is the name of the sender e.g. senderID','','sms');
+
+CREATE TABLE `sys_logs` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `tag` varchar(64) DEFAULT NULL,
+  `description` text NOT NULL,
+  `ipaddress` varchar(16) DEFAULT NULL,
+  `reference` varchar(32) DEFAULT NULL,
+  `status` varchar(32) DEFAULT NULL,
+  `createdon` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdby` int unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

@@ -17,7 +17,7 @@
         'https://fonts.googleapis.com/css?family=Lato:400,900&display=swap',
         'assets/plugins/leaflet/leaflet.css',
         'assets/plugins/datatables/datatables.min.css',
-        'assets/css/style.css?t='.date('YmdH')
+        'assets/css/style.css?t='.date('His')
     );
 
     foreach($styles as $stl){
@@ -43,9 +43,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo site_url('admin/dashboard') ?>">
-                        <?php echo img('assets/img/site-logo.png', '', 'class="img-responsive"'); ?>
-                    </a>
+                    <?php nav_brand('admin/dashboard') ?>
                 </div>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">

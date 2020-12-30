@@ -61,7 +61,7 @@
         'assets/css/ionicons.min.css',
         'assets/plugins/slick/slick.css',
         'assets/plugins/slick/slick-theme.css',
-        'assets/css/style.css'
+        'assets/css/style.css?t='.date('His')
     );
 
     foreach($styles as $stl){
@@ -100,9 +100,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo site_url(); ?>">
-                        <?php echo img('assets/img/site-logo.png', 'Site Logo'); ?>
-                    </a>
+                    <?php nav_brand() ?>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
