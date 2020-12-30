@@ -1,4 +1,4 @@
-<div class="container">
+<div class="clearfix">
     <div class="page-header">
         <h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
         <div class="top-navigation">
