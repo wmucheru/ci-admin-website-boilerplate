@@ -14,9 +14,7 @@
     $styles = array(
         'assets/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
-        'https://fonts.googleapis.com/css?family=Lato:400,900&display=swap',
-        'assets/plugins/leaflet/leaflet.css',
-        'assets/plugins/datatables/datatables.min.css',
+        'assets/plugins/DataTables/datatables.min.css',
         'assets/css/style.css?t='.date('His')
     );
 
@@ -102,10 +100,9 @@
         
         $scripts = array(
             'assets/js/bootstrap.min.js',
-            'assets/plugins/bxslider/jquery.bxslider.min.js',
             
             # Datatables
-            'assets/plugins/datatables/datatables.min.js',
+            'assets/plugins/DataTables/datatables.min.js',
             'assets/js/custom.js'
         );
         
