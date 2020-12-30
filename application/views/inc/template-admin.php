@@ -15,7 +15,8 @@
         'assets/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
         'assets/plugins/DataTables/datatables.min.css',
-        'assets/css/style.css?t='.date('His')
+        'assets/css/style.css?t='.date('His'),
+        'assets/css/admin.css?t='.date('His')
     );
 
     foreach($styles as $stl){

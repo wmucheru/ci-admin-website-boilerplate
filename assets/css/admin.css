@@ -1,1 +1,14 @@
 /* admin.css */
+body{
+    background:#fff;
+}
+
+.action-bar{
+    padding-bottom:1em;
+}
+
+.navbar-nav > li > a:hover,
+.dash-bd .dash-lnk, .user-bd .user-lnk{
+    background:#333;
+	color:#fff;
+}
