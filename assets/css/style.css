@@ -22,8 +22,9 @@ h1, h2, h3, h4, h5, h6{
 	color:#333;
 }
 
-ol, ul{
-    padding-left:1em;
+ul, ol {
+    margin-top: 1em;
+    padding-left: 2em;
 }
 
 ul.infolist, ol.infolist{
@@ -33,6 +34,24 @@ ul.infolist, ol.infolist{
 }
 ul.infolist li, ol.infolist li{
 	margin-bottom:0.3em;
+}
+
+table tr th, table tr td{
+    font-size:11px;
+}
+table tr th{
+    background:#ddd;
+    border-bottom:0!important;
+    border-color:#ccc!important;
+    padding:4px 6px 6px!important;
+}
+table tr td{
+    padding:8px 8px 4px!important;
+}
+table tr td .btn{
+    font-size:0.85em;
+    position:relative;
+    top:-2px;
 }
 
 .form-control{
