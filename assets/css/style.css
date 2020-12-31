@@ -89,12 +89,11 @@ table tr td .btn{
 	margin:0;
 }
 
-table tr th, table tr td{
-    font-size:11px;
-}
-table tr th{
-    background:#ccc;
-    border-bottom:0!important;
+.tab-pane {
+    background: #fff;
+    border:1px solid #ddd;
+    border-top:0;
+    padding: 1em;
 }
 
 .panel, .input-group-addon{

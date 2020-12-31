@@ -372,13 +372,6 @@ class Site_model extends CI_Model{
         }
         return date($fmt, $date_str);
     }
-    
-    
-    # Lastid
-    function get_lastid($table){
-    	$query = $this->db->query("select max(id) as maxid from $table");
-    	return $query->row();
-    }
 
     /*
      * EMAILS
