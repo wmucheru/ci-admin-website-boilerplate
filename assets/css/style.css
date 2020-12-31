@@ -227,7 +227,8 @@ input.datepicker{
 }
 
 footer{
-    color:#777;
+    color:#aaa;
+    font-size:11px;
     padding: 8px 0;
 	position:relative;
     top:-3em;
@@ -238,7 +239,7 @@ footer{
 		padding-top:0;
 	}
 	.navbar-custom .navbar-brand {
-	    width:auto!important;
-	    overflow: hidden;
+        width:auto!important;
+        overflow: hidden;
 	}
 }
