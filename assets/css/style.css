@@ -116,7 +116,14 @@ input.datepicker{
 
 .alert{
     border-radius:0;
-    padding:0.5em 1em;
+    margin-bottom: 10px;
+    padding: 4px 15px;
+}
+
+p.error {
+    color: red;
+    font-style: italic;
+    padding: 0.6em 0;
 }
 
 .breadcrumb{
