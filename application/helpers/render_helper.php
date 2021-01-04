@@ -46,11 +46,11 @@ if(!function_exists('render_admin')){
 
 if(!function_exists('nav_brand')){
 
-    function nav_brand($uri='/'){
+    function nav_brand($uri='/', $logo=''){
         $CI =& get_instance();
 
         $siteName = $CI->config->item('site_name');
-        $logo = $CI->config->item('site_logo');
+        $logo = empty($logo) ? $CI->config->item('site_logo') : $logo;
         $img = img("assets/img/$logo", $siteName, 'class="img-responsive"');
         echo anchor($uri, $img, 'class="navbar-brand"');
     }
