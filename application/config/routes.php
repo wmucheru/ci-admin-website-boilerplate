@@ -62,12 +62,10 @@ $route['translate_uri_dashes'] = FALSE;
 # Site
 $route['home'] = 'site/index';
 $route['about'] = 'site/about';
-$route['contact-us'] = 'site/contact-us';
+$route['contact'] = 'site/contact';
 $route['contact/message'] = 'site/sendMessage';
 
 # Admin
 $route['accounts/signup'] = 'auth/signup';
 $route['accounts/login'] = 'auth/index';
 $route['logout'] = 'auth/logout';
-
-

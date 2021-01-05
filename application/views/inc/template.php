@@ -106,7 +106,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="<?php echo site_url(); ?>">Home</a></li>
                         <li><a href="<?php echo site_url('about'); ?>">About</a></li>
-                        <li><a href="<?php echo site_url('contact-us'); ?>">Contact Us</a></li>
+                        <li><a href="<?php echo site_url('contact'); ?>">Contact</a></li>
                     </ul>
 
                     <?php
