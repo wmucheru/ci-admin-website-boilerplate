@@ -25,5 +25,6 @@ $autoload['language'] = array();
 $autoload['model'] = array(
     'site_model', 
     'auth_model', 
-    'form_model'
+    'form_model',
+    'reports_model'
 );

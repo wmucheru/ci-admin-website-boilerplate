@@ -10,6 +10,12 @@
     </div>
 
     <div class="page-content clearfix">
-        <h4 style="margin-top:0;">All Data</h4>
+        <div class="row">
+            <?php
+                # var_dump($stats);
+
+                stat_box($stats->users, 'Properties');
+            ?>
+        </div>
     </div>
 </div>

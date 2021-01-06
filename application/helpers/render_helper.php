@@ -346,9 +346,6 @@ if(!function_exists('stat_box')){
         $number = empty($number) ? 0 : $number;
 
         if($perm){
-            # TODO: Consider plural function in https://stackoverflow.com/a/11546930/3310235
-            $label = ucwords($number > 1 || $number == 0 ? $label . 's' : $label);
-
             echo "<div class=\"col-sm-2 col-xs-4 stat-box\">
                     <div>
                         <h3>$number</h3>
