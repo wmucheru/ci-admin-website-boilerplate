@@ -9,7 +9,7 @@
     $siteKeywords = '';
 
     $pageTitle = isset($page_title) ? $page_title : '';
-    $pageDescription = isset($page_description) ? substr($page_description, 0, 200) : $siteDescription;
+    $pageDescription = isset($page_description) ? substr(strip_tags($page_description), 0, 200) : $siteDescription;
     $pageAuthor = isset($page_author) ? $page_author : $siteName;
     $pageKeywords = isset($page_keywords) ? $page_keywords : $siteKeywords;
     $pageImage = isset($page_image) ? $page_image : $siteLogo;
