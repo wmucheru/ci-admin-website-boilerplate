@@ -2,6 +2,18 @@
 
 /**
  * 
+ * Output Open Graph meta tags for Facebook
+ * 
+*/
+if(!function_exists('og_tag')){
+
+    function og_tag($property, $content){
+        echo "<meta property=\"$property\" content=\"$content\">";
+    }
+}
+
+/**
+ * 
  * Render helper: Helps simplify page rendering process
  * 
  */

@@ -34,14 +34,6 @@
         array('name'=>'description', 'content'=>$pageDescription),
         array('name'=>'author', 'content'=>$pageAuthor),
 
-        # Facebook
-        array(
-            array('property' => 'og:title', 'content' => $pageTitle),
-            array('property' => 'og:description', 'content' => $pageDescription),
-            array('property' => 'og:image', 'content' => $pageImage),
-            array('property' => 'og:url', 'content' => current_url()),
-        ),
-
         # Twitter
         array('name' => 'twitter:title', 'content' => $pageTitle),
         array('name' => 'twitter:description', 'content' => $pageDescription),
@@ -50,6 +42,12 @@
     );
 
     echo meta($seoMeta);
+
+    # Facebook Open Graph tags
+    og_tag('og:title', $pageTitle);
+    og_tag('og:description', $pageDescription);
+    og_tag('og:image', $pageImage);
+    og_tag('og:url', current_url());
 
     echo link_tag('favicon.png', 'shortcut icon', 'image/png');
 
@@ -61,10 +59,9 @@
         'assets/css/style.css?t='.date('His')
     );
 
-    foreach($styles as $stl){
-        echo link_tag($stl);
+    foreach($styles as $s){
+        echo link_tag($s);
     }
-
 ?>
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
