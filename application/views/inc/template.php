@@ -2,17 +2,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title><?php 
-    $pageTitle = isset($page_title) ? $page_title : '';
-    $pageDescription = isset($page_description) ? substr($page_description, 0, 200) : '';
-    $pageAuthor = isset($page_author) ? $page_author : '';
-    $pageKeywords = isset($page_keywords) ? $page_keywords : '';
-    $pageImage = isset($page_image) ? $page_image : '';
-
-    echo $pageTitle; 
-?></title>
 <?php
+    $siteName = $this->config->item('site_name');
+    $siteLogo = base_url('assets/img/'. $this->config->item('site_logo'));
+    $siteDescription = '';
+    $siteKeywords = '';
+
+    $pageTitle = isset($page_title) ? $page_title : '';
+    $pageDescription = isset($page_description) ? substr($page_description, 0, 200) : $siteDescription;
+    $pageAuthor = isset($page_author) ? $page_author : $siteName;
+    $pageKeywords = isset($page_keywords) ? $page_keywords : $siteKeywords;
+    $pageImage = isset($page_image) ? $page_image : $siteLogo;
+
+    echo "<title>$pageTitle</title>";
 
     /**
      * 
@@ -26,11 +28,7 @@
 
         # Basic Meta
         array('name'=>'viewport', 'content'=>'width=device-width, initial-scale=1'), # For responsive layouts
-        array(
-            'name'=>'Content-type',
-            'content'=>'text/html; charset=utf-8', 
-            'type'=>'equiv'
-        ),
+        array('name'=>'Content-type', 'content'=>'text/html; charset=utf-8', 'type'=>'equiv'),
 
         # Page Meta
         array('name'=>'description', 'content'=>$pageDescription),
@@ -53,7 +51,6 @@
 
     echo meta($seoMeta);
 
-
     echo link_tag('favicon.png', 'shortcut icon', 'image/png');
 
     $styles = array(
@@ -74,19 +71,7 @@
         <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
         <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 <![endif]-->
-<?php 
-    $gaCode = $this->config->item('ga_code');
-    
-    if(!$this->site_model->isLocalhost() && !empty($gaCode)){
-        echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=$gaCode\"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '$gaCode');
-        </script>";
-    }
-?>
+<?php $this->site_model->setGoogleAnalytics() ?>
 </head>
 <body class="<?php echo isset($body_class) ? $body_class : ''; ?>">
     <div class="clearfix wrapper">
