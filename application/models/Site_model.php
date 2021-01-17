@@ -373,58 +373,82 @@ class Site_model extends CI_Model{
         return date($fmt, $date_str);
     }
 
-    /*
-     * EMAILS
+    /**
      * 
-     * Send emails
+     * Send email
      *
-     * @param: emailObj['subject, from, name, ......']
+     * @param emailObj: [email, name, subject, message]
      * 
      */
     function sendEmail($emailObj){
+        # var_dump($emailObj);
         $this->load->library('email');
 
         $obj = (object) $emailObj;
 
-        $email = !empty($obj->to) ? $obj->to : '';
+        $email = !empty($obj->email) ? $obj->email : '';
         $name = !empty($obj->name) ? $obj->name : '';
         $subject = !empty($obj->subject) ? $obj->subject : '';
         $message = !empty($obj->message) ? $obj->message : '';
 
-        # var_dump($email_object);
+        # Site email info
+        $siteName = $this->config->item('site_name');
+        $siteEmail = $this->config->item('site_email');
 
-        $body = $this->_emailTemplate($message);
-
-        $config['mailtype'] = 'html';
-
-        $this->email->initialize($config);
-
-        $this->email->to('info@example.com');
-        $this->email->from($email, $name);
-        $this->email->reply_to($email, $name);
-        $this->email->subject($subject);
-        $this->email->message($body);
-
-        if(!$this->site_model->isLocalhost()){
-            $this->email->send();
+        if(empty($email)){
+            echo 'Specify email';
+        }
+        elseif(empty($name)){
+            echo 'Specify name';
+        }
+        elseif(empty($subject)){
+            echo 'Specify subject';
+        }
+        elseif(empty($message)){
+            echo 'Specify message';
+        }
+        elseif(empty($siteName)){
+            echo 'Specify siteName';
+        }
+        elseif(empty($siteEmail)){
+            echo 'Specify siteEmail';
         }
         else{
-            echo $body;
+            $body = $this->_emailTemplate($message);
+
+            $config['mailtype'] = 'html';
+
+            $this->email->initialize($config);
+
+            $this->email->from($siteEmail, $siteName);
+            $this->email->reply_to($siteEmail, $siteName);
+            $this->email->to($email);
+            $this->email->subject($subject);
+            $this->email->message($body);
+
+            if(!$this->site_model->isLocalhost()){
+                $this->email->send();
+            }
+            else{
+                echo $body;
+            }
         }
     }
 
     function _emailTemplate($message){
+        $siteName = $this->config->item('site_name');
+        $siteEmail = $this->config->item('site_email');
+        $siteLogo = $this->config->item('site_logo');
+
+        $logo = img('assets/img/'. $siteLogo, $siteName, 'style="width:220px;"');
 
         return '
-
             <table style="font-family:Arial;font-size:14px;width:100%;" bgcolor="#f6f6f6">
             <tr>
                 <td valign="top" align="center">
                     <table width="600" cellpadding="0" cellspacing="0" style="border-radius: 3px;border: 1px solid #e9e9e9;" bgcolor="#fff">
                     <tr>
-                        <td style="padding: 20px;" align="center" valign="top" bgcolor="#fff">
-                            <img src="'. base_url('assets/img/site-logo.png') .'" alt=""/>
-                        </td>
+                        <td style="padding: 20px;" align="center" valign="top" bgcolor="#fff">'. $logo .'</td>
                     </tr>
                     <tr>
                         <td colspan="2" style="margin: 0; padding: 20px; line-height:26px;" align="left" valign="top">
@@ -435,7 +459,8 @@ class Site_model extends CI_Model{
                     <table width="600" cellpadding="0" cellspacing="0">
                     <tr style=" margin: 0;">
                         <td style="font-size: 12px; color: #999; padding:20px;" align="center" valign="top">
-                            Questions? Email <a href="mailto:info@example.com" style="color: #999; text-decoration: underline; margin: 0;">info@example.com</a>
+                            Questions? Email <a href="mailto:'. $siteEmail .'" 
+                                style="color: #999; text-decoration: underline; margin: 0;">'. $siteEmail .'</a>
                         </td>
                     </tr>
                     </table>
