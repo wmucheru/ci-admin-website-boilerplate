@@ -138,7 +138,7 @@ CREATE TABLE `aauth_users` (
   `banned` tinyint(1) DEFAULT '0',
   `last_login` datetime DEFAULT NULL,
   `last_activity` datetime DEFAULT NULL,
-  `date_created` `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forgot_exp` text,
   `remember_time` datetime DEFAULT NULL,
   `remember_exp` text,
