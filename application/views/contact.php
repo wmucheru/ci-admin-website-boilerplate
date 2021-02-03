@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="page-header">
-		<h1>Contact Us</h1>
+		<h1>Contact</h1>
 	</div>
 
 	<div class="clearfix">

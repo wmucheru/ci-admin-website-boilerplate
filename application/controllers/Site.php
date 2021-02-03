@@ -15,8 +15,8 @@ class Site extends CI_Controller {
         render_page('about', 'About Us', 'about-bd');
     }
 
-    function contacts(){
-        render_page('contacts', 'Contact Us', 'contacts-bd');
+    function contact(){
+        render_page('contact', 'Contact Us', 'contact-bd');
     }
 
     function sendMessage(){
@@ -27,13 +27,13 @@ class Site extends CI_Controller {
         $this->form_validation->set_rules('message', 'Message', 'trim|required');
         
         if(!$this->form_validation->run()){
-            $this->contacts();
+            $this->contact();
         }
 
         # Check other field for misleading bots
         else if(!empty($other)){
             $this->session->set_flashdata('contact_fail', 'Could not verify sender');
-            $this->contacts();
+            $this->contact();
         }
         
         else{
@@ -68,7 +68,7 @@ class Site extends CI_Controller {
                 $this->session->set_flashdata('contact_fail', 'Could not send message');
             }
 
-            redirect('contacts');
+            redirect('contact');
         }
     }
 }
