@@ -1,10 +1,15 @@
-/* admin.css */
+/*.admin-bdadmin.css */
 body{
     background:#fff;
 }
 
 .action-bar{
     padding-bottom:1em;
+}
+
+.page-content{
+    background:#fff;
+    padding:1em;
 }
 
 .navbar-nav > li > a:hover,
@@ -19,7 +24,7 @@ body{
 }
 .stat-box > div{
     background:#fff;
-    margin-bottom:1em;
+    border:1px solid #ddd;
     padding:1em 1em 0.34em;
     text-align:center;
 }

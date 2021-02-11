@@ -15,7 +15,7 @@ class Auth extends CI_Controller {
             redirect('admin/dashboard');
         }
         else{
-            render_auth('auth/login', 'Login', 'login-bd');
+            render_auth('auth/login', 'Login', 'auth-bd');
         }
     }
 
