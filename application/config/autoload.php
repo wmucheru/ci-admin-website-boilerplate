@@ -26,5 +26,6 @@ $autoload['model'] = array(
     'site_model', 
     'auth_model', 
     'form_model',
-    'reports_model'
+    'reports_model',
+    'users_model'
 );
