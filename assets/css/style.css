@@ -54,6 +54,25 @@ table tr td .btn{
     top:-2px;
 }
 
+/* Datatables */
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: right;
+    float: right;
+}
+
+div.dataTables_wrapper table.datatable {
+    margin-top: 2em !important;
+}
+
+.dataTables_paginate,
+.dataTables_info {
+    display: inline-block;
+}
+
+.dataTables_paginate {
+    float: right;
+}
+
 .form-control{
 	border-radius:0;
     border:1px solid #ddd;
