@@ -78,6 +78,9 @@ CREATE TABLE `aauth_perms` (
   `definition` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `aauth_perms` (`name`, `definition`) VALUES ('Administrator', 'Administrator permission');
+INSERT INTO `aauth_perms` (`name`, `definition`) VALUES ('User Management', 'User management');
+
 -- --------------------------------------------------------
 
 --

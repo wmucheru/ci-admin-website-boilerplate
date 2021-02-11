@@ -16,7 +16,7 @@ $autoload['libraries'] = array(
 
 $autoload['drivers'] = array();
 
-$autoload['helper'] = array('cookie', 'file', 'form', 'html', 'url', 'render', 'settings');
+$autoload['helper'] = array('cookie', 'file', 'form', 'html', 'url', 'render', 'settings', 'permissions');
 
 $autoload['config'] = array();
 

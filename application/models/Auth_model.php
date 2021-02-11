@@ -398,6 +398,10 @@ class Auth_model extends CI_Model{
         return $this->aauth->is_allowed($perm_par, $user_id=FALSE);
     }
 
+    function is_group_allowed($perm_par, $user_id=FALSE){
+        return $this->aauth->is_group_allowed($perm_par, $user_id=FALSE);
+    }
+
     /*
      *  Return an array of permission id
      */

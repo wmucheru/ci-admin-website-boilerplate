@@ -93,8 +93,33 @@ div.dataTables_wrapper table.datatable {
 }
 
 .btn{
-    border-radius:2px;
+    border-radius: 2px !important;
+    font-size: 11px;
+    font-weight:bold;
+    text-transform:uppercase;
 }
+.btn + .btn{
+    margin-left:3px!important;
+}
+
+.btn-warning{
+    background:#FBAC2B;
+}
+
+.btn-social{
+    display:block;
+    margin:0 auto;
+    max-width:240px;
+}
+
+.btn-group .btn + .btn{
+    margin-left:0!important;
+}
+
+.dt-buttons .btn{
+    margin-right:5px;
+}
+
 .modal-backdrop{
     z-index: 1000;
 }
