@@ -77,7 +77,7 @@ if(!function_exists('nav_link')){
     */
     function nav_link($url, $text, $class=''){
         $class = !empty($class) ? "class=\"$class\"" : '';
-        echo '<li>'. anchor($url, $text, $class) .'<li>';
+        echo '<li>'. anchor($url, $text, $class) .'</li>';
     }
 }
 
