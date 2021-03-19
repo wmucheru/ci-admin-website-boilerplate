@@ -32,6 +32,7 @@
 
         # Page Meta
         array('name'=>'description', 'content'=>$pageDescription),
+        array('name'=>'keywords', 'content'=>$pageKeywords),
         array('name'=>'author', 'content'=>$pageAuthor),
 
         # Twitter
