@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     if (dt.length > 0) {
         $('.dt').dataTable({
-            bSort: false, // Prevent autosort
+            sort: [], // Prevent autosort
             dom: 'Bfrtip',
             //lengthChange: false,
             lengthMenu: [
