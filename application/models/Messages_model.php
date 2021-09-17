@@ -1,9 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
 class Messages_model extends CI_Model{
     var $username;
     var $apikey;
@@ -23,61 +19,48 @@ class Messages_model extends CI_Model{
      * 
      * Send emails using the service api
      *
-     * @param params: Email object containing details: 
+     * @param emailObj: Email object containing details: 
      * - email
      * - name
      * - subject
      * - message
      * 
     */
-    function sendEmail($params){
-        /*
-        $url = '';
+    function sendEmail($emailObj){
+        $this->load->library('email');
 
-        $body = isset($params['body']) ? $this->_emailTemplate($params['body']) : '';
-        $params['body'] = $body;
+        $obj = (object) $emailObj;
 
-        return $this->site_model->makeCURLRequest('POST', $url, $params);
-        */
+        $email = !empty($obj->email) ? $obj->email : '';
+        $subject = !empty($obj->subject) ? $obj->subject : '';
+        $message = !empty($obj->message) ? $obj->message : '';
 
-        $siteEmail = 'info@invoicer.co.ke';
+        # Contact
+        $fromName = !empty($obj->fromName) ? $obj->fromName : $this->config->item('site_name');
+        $fromEmail = !empty($obj->fromEmail) ? $obj->fromEmail : 'info@mullardfire.co.ke';
+        $replyToName = !empty($obj->replyToName) ? $obj->replyToName : $fromName;
+        $replyToEmail = !empty($obj->replyToEmail) ? $obj->replyToEmail : $fromEmail;
 
-        $mail = new PHPMailer(true);
+        # Is admin-bound email?
+        $isAdmin = !empty($obj->isAdmin) ? $obj->isAdmin : FALSE;
 
-        try {
+        $body = $this->_emailTemplate($message);
 
-            # Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.invoicer.co.ke';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $siteEmail;
-            $mail->Password   = 'JFV4Q2_73A';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = 465;
+        $config['mailtype'] = 'html';
 
-            # Recipients
-            $mail->setFrom($siteEmail, 'Invoicer');
-            $mail->addReplyTo($siteEmail, 'Invoicer');
-            $mail->addAddress('willyk99@gmail.com');
-            # $mail->addAddress('ellen@example.com');
-            # $mail->addCC('cc@example.com');
+        $this->email
+            ->initialize($config)
+            ->to($email)
+            ->from($fromEmail, $fromName)
+            ->reply_to($replyToName, $replyToEmail)
+            ->subject($subject)
+            ->message($body);
 
-            # Attachments
-            # $mail->addAttachment('/var/tmp/file.tar.gz');
-            # $mail->addAttachment('/tmp/image.jpg', 'new.jpg');
-
-            # Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Here is the subject';
-            $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            $mail->send();
-            echo 'Message has been sent';
-
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        if(!$this->site_model->isLocalhost()){
+            return $this->email->send();
+        }
+        else{
+            echo $body;
         }
     }
 
