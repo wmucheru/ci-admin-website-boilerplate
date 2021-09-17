@@ -8,19 +8,14 @@ define('UPLOAD_TYPES_DOCUMENT', 'pdf|doc|docx|xls|xlsx');
 
 class Site_model extends CI_Model{
 
-	var $gallery_path;
-	var $gallery_path_url;
-
 	public function __construct(){
         parent::__construct();
 
         date_default_timezone_set('Africa/Nairobi');
 
+        # Validation config
         $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
-		
-		$this->gallery_path = realpath(FCPATH . '/content/');
-		$this->gallery_path_resize = realpath(FCPATH . '/content/');
-		$this->gallery_path_url = base_url().'../content/';
+        $this->form_validation->set_message('required', '{field} field is required');
     }
 
     function getSystemLogs($limit=500){

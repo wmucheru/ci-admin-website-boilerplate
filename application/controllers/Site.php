@@ -3,10 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Site extends CI_Controller {
 
-	public function __construct(){
+	function __construct(){
         parent::__construct();
     }
-    
+
+    function test(){
+        $this->messages_model->sendEmail(array());
+    }
+
     function index(){
         render_page('home', 'Home', 'home-bd');
     }

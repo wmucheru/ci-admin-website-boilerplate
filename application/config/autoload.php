@@ -27,5 +27,6 @@ $autoload['model'] = array(
     'auth_model', 
     'form_model',
     'reports_model',
-    'users_model'
+    'users_model',
+    'messages_model'
 );
