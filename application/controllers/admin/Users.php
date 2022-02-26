@@ -4,27 +4,32 @@ class Users extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->auth_model->setLoginRedirect();
 
-        $this->auth_model->set_login_redirect();
+        $this->auth_model->control(PERM_USER_MANAGEMENT);
     }
 
     /**
      * 
      * Users
      * 
-     * @param id: User ID
+     * @param userId
      *
      */
-    function index($id=''){
+    function index(){
+        $data['users'] = $this->auth_model->getSystemUsers();
+        render_admin('admin/users/users', 'Users', 'user-bd', $data);
+    }
+
+    function userForm($userId=''){
         $data['groups'] = $this->auth_model->getSystemGroups();
 
-        if($id != ''){
-            $data['user'] = $this->users_model->getUserInfo($id);
-            render_admin('admin/users/edit-user', 'Edit User', 'user-bd', $data);
+        if($userId != ''){
+            $data['user'] = $this->users_model->getUserInfo($userId);
+            render_admin('admin/users/user-form', 'Edit User', 'user-bd', $data);
         }
         else{
-            $data['users'] = $this->auth_model->getSystemUsers();
-            render_admin('admin/users/users', 'Users', 'user-bd', $data);
+            render_admin('admin/users/user-form', 'New User', 'user-bd', $data);
         }
     }
 
@@ -35,53 +40,54 @@ class Users extends CI_Controller {
         $name = $this->input->post('fname');
         $email = $this->input->post('email');
         $mobile = $this->input->post('mobile');
-        $groupId = $this->input->post('group');
-        $password = $this->input->post('pwd');
-        $cPassword = $this->input->post('cpwd');
+        $groupId = $this->input->post('groupid');
+        $password = $this->input->post('password');
 
         $this->form_validation->set_rules('fname', 'Full Name', 'required');
         $this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
         $this->form_validation->set_rules('mobile', 'Mobile', 'required');
-        $this->form_validation->set_rules('group', 'User Group', 'required');
+        $this->form_validation->set_rules('groupid', 'User Group', 'required');
 
         if($this->form_validation->run() == FALSE){
-            $this->index($userId);
+            $this->userForm($userId);
         }
         else{
 
-            if(!empty($userId)){
-                $password = empty($cPassword) ? FALSE : $cPassword;
+            if(empty($userId)){
+                if($this->auth_model->check_email($email)){
+                    $this->session->set_flashdata('users_fail', 'Email already in use');
+                    $this->userForm();
+                }
+                else{
+                    $userId = $this->auth_model->create_user($email, $password);
+                    $update = array(
+                        'name'=>$name,
+                        'mobile'=>$mobile,
+
+                        # Automatically activate users added by ADMIN
+                        'banned'=>'0',
+                        'mobile_verified'=>'1'
+                    );
+
+                    $this->db->update('aauth_users', $update, ['id'=>$userId]);
+
+                    $this->auth_model->update_member_group($userId, $groupId);
+
+                    $this->session->set_flashdata('users_success', 'User account created');
+                    redirect('admin/users');
+                }
+            }
+            else{
+                $password = !empty($password) ? $password : FALSE;
 
                 $this->auth_model->update_user($userId, $email, $password, $name);
-                $this->db->update(
-                    'aauth_users', 
-                    array('mobile' => $mobile), 
-                    array('id' => $userId)
-                );
+                $this->db->update('aauth_users', ['mobile'=>$mobile], ['id'=>$userId]);
 
                 # Update member group
                 $this->auth_model->update_member_group($userId, $groupId);
 
                 $this->session->set_flashdata('users_success', 'User updated');
-                redirect('admin/users/'. $userId);
-            }
-            else{
-                $userId = $this->auth_model->create_user($email, $password);
-                $update = array(
-                    'name'=>$name,
-                    'mobile'=>$mobile,
-
-                    # Automatically activate users added by ADMIN
-                    'banned'=>'0',
-                    'mobile_verified'=>'1'
-                );
-
-                $this->db->update('aauth_users', $update, array('id'=>$userId));
-
-                $this->auth_model->update_member_group($userId, $groupId);
-
-                $this->session->set_flashdata('users_success', 'User account created');
-                redirect('admin/users');
+                redirect('admin/users/edit/'. $userId);
             }
         }
     }
@@ -181,7 +187,7 @@ class Users extends CI_Controller {
         $data['body_class'] = 'user-bd';
 
         $pageTitle = 'Group Permissions';
-        $pageContent = 'users/permissions/permissions';
+        $pageContent = 'admin/users/permissions/permissions';
 
         # Include corporates in the groups list
         $data['groups'] = $this->auth_model->list_groups();
@@ -225,7 +231,7 @@ class Users extends CI_Controller {
             $group_name = $this->auth_model->get_group_name($groupId);
 
             $pageTitle = 'Group Permissions: ' . $group_name;
-            $pageContent = 'users/permissions/group-permissions';
+            $pageContent = 'admin/users/permissions/group-permissions';
 
             $data['gid'] = $groupId;
             $data['group_perms'] = $this->auth_model->getGroupPerms($groupId);
@@ -352,52 +358,33 @@ class Users extends CI_Controller {
     }
 
     function delete_group($groupId){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        $group = $this->auth_model->delete_group($groupId);
-
-        if($group == false){
+        if(!$this->auth_model->delete_group($groupId)){
             $this->session->set_flashdata('group_fail', 'Group could not be deleted');
         }
         else{
-            $this->session->set_flashdata('group_success', 'Group deleted successfully');
+            $this->session->set_flashdata('group_success', 'Group deleted');
         }
 
         redirect('admin/users/groups');
     }
 
     function suspended(){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        $data['suspended_users'] = $this->auth_model->get_banned_users();
-
+        $data['suspended'] = $this->auth_model->get_banned_users();
         render_admin('admin/users/suspended-users', 'Suspended Accounts', 'user-bd', $data);
     }
 
     function suspend_user($userId){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
         if($this->aauth->ban_user($userId)){
             $this->session->set_flashdata('users_success', 'User has been suspended');
         }
         else{
-            $this->session->set_flashdata('users_fail', 'Suspension could not be processed');
+            $this->session->set_flashdata('users_fail', 'Could not suspend user');
         }
 
-        redirect('users');
+        redirect('admin/users');
     }
 
     function revoke_suspension($userId){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
         if($this->aauth->unban_user($userId)){
             $this->session->set_flashdata('users_fail', 'Suspension was successfully revoked');
         }
@@ -406,15 +393,5 @@ class Users extends CI_Controller {
         }
 
         redirect('admin/users/suspended/' . $userId);
-    }
-
-    function activity(){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        $data['activity'] = $this->auth_model->get_user_activity();
-
-        render_admin('admin/users/activity', 'User Activity', 'user-bd', $data);
     }
 }

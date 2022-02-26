@@ -4,8 +4,7 @@ class Dashboard extends CI_Controller {
 
     function __construct(){
 		parent::__construct();
-
-        $this->auth_model->set_login_redirect();
+        $this->auth_model->setLoginRedirect();
 	}
 
     function index(){

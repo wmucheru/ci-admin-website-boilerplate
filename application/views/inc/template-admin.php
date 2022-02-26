@@ -19,8 +19,8 @@
         'assets/css/admin.css?t='.date('His')
     );
 
-    foreach($styles as $stl){
-        echo link_tag($stl);
+    foreach($styles as $s){
+        echo link_tag($s);
     }
 ?>
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,20 +46,28 @@
                 </div>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <?php 
-                            $menu = array(
-                                array('url'=>'admin/dashboard', 'title'=>'Dashboard'),
-                                array('url'=>'admin/users', 'title'=>'Users')
-                            );
+                        <?php
+                            $mainMenu = [
+                                [
+                                    'url'=>'admin/dashboard', 
+                                    'title'=>'Dashboard', 
+                                    'lclass'=>'dash-lnk', 
+                                    'perm'=>true
+                                ],
+                                [
+                                    'url'=>'',
+                                    'title'=>'Users',
+                                    'lclass'=>'user-lnk',
+                                    'sublinks'=>array(
+                                        array('url'=>'admin/users', 'title'=>'Users'),
+                                        array('url'=>'admin/users/permissions', 'title'=>'Groups & Permissions'),
+                                        array('url'=>'admin/users/suspended-users', 'title'=>'Suspended Accounts')
+                                    ),
+                                    'perm'=>PERM_USER_MANAGEMENT
+                                ]
+                            ];
 
-                            foreach($menu as $m){
-                                $m = (object) $m;
-                                $active = uri_string() == $m->url ? 'active' : '';
-
-                                echo '<li class="'.$active.'">';
-                                echo anchor($m->url, $m->title);
-                                echo '</li>';
-                            }
+                            nav_menu($mainMenu)
                         ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -70,11 +78,11 @@
                                     # var_dump($user);
 
                                     echo isset($user->name) ? $user->name : '-'; 
-                                    
+
                                 ?> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo site_url('logout'); ?>">Log Out</a></li>
+                                <?php echo nav_link('logout', 'Log Out') ?>
                             </ul>
                         </li>
                     </ul>
@@ -82,14 +90,12 @@
             </div>
         </nav>
         <div class="page-wrapper clearfix container">
-            <?php 
-                $this->load->view($page_content);
-            ?>
+            <?php $this->load->view($page_content) ?>
         </div>
     </div>
     <footer>
         <div class="container clearfix">
-            <p>&copy; <?php echo date('Y') .'. ' . $this->config->item('site_name'). '.'; ?></p>
+            <p>&copy; <?php echo date('Y') .'. ' . $this->config->item('site_name') ?>.</p>
         </div>
     </footer>
     <?php
@@ -101,14 +107,14 @@
         
         $scripts = array(
             'assets/js/bootstrap.min.js',
-            
+
             # Datatables
             'assets/plugins/DataTables/datatables.min.js',
             'assets/js/custom.js'
         );
         
-        foreach($scripts as $script){
-            echo '<script src="' . base_url($script) . '"></script>';
+        foreach($scripts as $s){
+            echo '<script src="' . base_url($s) . '"></script>';
         }
     ?>
 </body>

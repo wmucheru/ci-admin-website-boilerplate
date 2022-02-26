@@ -23,7 +23,7 @@ class Auth_model extends CI_Model{
         $this->session->set_userdata('referrer', $this->agent->referrer());
     }
 
-    function set_login_redirect(){
+    function setLoginRedirect(){
         if(!$this->isLoggedIn()){
             $this->setRedirectReferrer();
             redirect('accounts/login');
@@ -61,8 +61,8 @@ class Auth_model extends CI_Model{
         return $this->aauth->get_user($userId);
     }
 
-    function create_user($email, $password, $fullname){
-        return $this->aauth->create_user($email, $password, $fullname);
+    function create_user($email, $password, $username=FALSE){
+        return $this->aauth->create_user($email, $password, $username);
     }
 
     function store_user_activity($userId, $action){
@@ -80,13 +80,13 @@ class Auth_model extends CI_Model{
      * Get the user type based on user_id; ie. is corporate, default, rider etc.
      * 
      */
-    function get_user_type($user_id){
+    function get_user_type($userId){
         $q = $this->db
             ->select('au.id, ag.id, ag.name')
             ->from('aauth_users au')
             ->join('aauth_user_to_group autg', 'autg.user_id = au.id', 'left')
             ->join('aauth_groups ag', 'autg.group_id = ag.id', 'left')
-            ->where('au.id', $user_id)
+            ->where('au.id', $userId)
             ->get();
 
         return $q->num_rows() > 0 ? $q->row()->name : null;
@@ -121,6 +121,32 @@ class Auth_model extends CI_Model{
 
     function list_users($groupParam = FALSE, $limit = FALSE, $offset = FALSE, $include_banneds = FALSE){
         return $this->aauth->list_users($groupParam, $limit, $offset, $include_banneds);
+    }
+
+    function getSystemUsers(){
+        return $this->db
+            ->select('au.*, autg.*, g.name AS group')
+            ->from('aauth_users au')
+            ->join('aauth_user_to_group autg', 'autg.user_id = au.id', 'left')
+            ->join('aauth_groups g', 'g.id = autg.group_id', 'left')
+
+            # List only system users
+            // ->where('autg.group_id !=', USER_GROUP_CUSTOMER)
+
+            ->get()
+            ->result();
+    }
+
+    function getSystemGroups(){
+        return $this->db
+            ->select('*')
+            ->from('aauth_groups')
+
+            # List only system users
+            // ->where('id !=', USER_GROUP_CUSTOMER)
+
+            ->get()
+            ->result();
     }
 
     /**
@@ -213,13 +239,12 @@ class Auth_model extends CI_Model{
     */
     function update_member_group($userId, $groupId){
         $this->db
-            ->delete('aauth_user_to_group')
-            ->where(['userId'=>$userId, 'group_id'=>$groupId]);
+            ->where(['user_id'=>$userId])
+            ->delete('aauth_user_to_group');
 
-        return $this->db->update(
+        return $this->db->insert(
             'aauth_user_to_group', 
-            ['group_id'=>$groupId],
-            ['user_id'=>$userId]
+            ['user_id'=>$userId, 'group_id'=>$groupId]
         );
     }
 
@@ -231,7 +256,7 @@ class Auth_model extends CI_Model{
      * @param redirect: Redirect to 404 page when perm not allowed, otherwise return boolean
      *
      */
-    function control($permParam, $redirect=FALSE){
+    function control($permParam, $redirect=TRUE){
         $permId = $this->aauth->get_perm_id($permParam);
         $this->aauth->update_activity();
 

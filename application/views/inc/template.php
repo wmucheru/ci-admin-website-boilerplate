@@ -55,8 +55,6 @@
     $styles = array(
         'assets/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
-        'assets/plugins/slick/slick.css',
-        'assets/plugins/slick/slick-theme.css',
         'assets/css/style.css?t='.date('His')
     );
 
@@ -87,11 +85,12 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?php echo site_url(); ?>">Home</a></li>
-                        <li><a href="<?php echo site_url('about'); ?>">About</a></li>
-                        <li><a href="<?php echo site_url('contact'); ?>">Contact</a></li>
+                        <?php
+                            nav_link('', 'Home', 'home-lnk');
+                            nav_link('about', 'About', 'about-lnk');
+                            nav_link('contact', 'Contact', 'contact-lnk');
+                        ?>
                     </ul>
-
                     <?php
                         $user = $this->auth_model->get_user_data();
                         # var_dump($user);
@@ -103,24 +102,21 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <?php
                                     echo isset($user->name) ? $user->name : '-'; 
-                                    
                                 ?> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo site_url('logout'); ?>">Log Out</a></li>
+                                <?php
+                                    nav_link('logout', 'Log Out');
+                                ?>
                             </ul>
                         </li>
                     </ul>
-                    <?php
-                        }
-                    ?>
+                    <?php } ?>
                 </div>
             </div>
         </nav>
         <div class="page-wrapper clearfix">
-        <?php
-            $this->load->view($page_content);
-        ?>
+            <?php $this->load->view($page_content) ?>
         </div>
     </div>
 
@@ -131,16 +127,15 @@
     </footer>
     <?php
         # $this->output->enable_profiler(TRUE);
-        
+
         $scripts = array(
             'assets/js/jquery.min.js',
             'assets/js/bootstrap.min.js',
-            'assets/plugins/slick/slick.min.js',
             'assets/js/custom.js'
         );
-        
-        foreach($scripts as $script){
-            echo '<script src="' . base_url($script) . '"></script>';
+
+        foreach($scripts as $s){
+            echo '<script src="' . base_url($s) . '"></script>';
         }
     ?>
 </body>

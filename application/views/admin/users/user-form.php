@@ -1,110 +1,98 @@
 <div class="clearfix">
-    <?php
-        # var_dump($user);
+    <div class="page-header">
+		<h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
+		<ol class="breadcrumb">
+            <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
+            <li><a href="<?php echo site_url('admin/users') ?>">Users</a></li>
+			<li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
+		</ol>
+	</div>
 
-        $id = '';
-        $name = '';
-        $email = '';
-        $mobile = '';
-        $groupId = '';
+    <div class="clearfix page-content">
+        <?php
+            # var_dump($user);
 
-        if(!empty($user->id)){
-            $id = $user->id;
-            $name = $user->name;
-            $email = $user->email;
-            $mobile = $user->mobile;
-            $groupId = $user->group_id;
-        }
+            $id = '';
+            $name = '';
+            $email = '';
+            $mobile = '';
+            $groupId = '';
 
-        $editMode = !empty($id);
+            if(!empty($user->id)){
+                $id = $user->id;
+                $name = $user->name;
+                $email = $user->email;
+                $mobile = $user->mobile;
+                $groupId = $user->group_id;
+            }
 
-        echo form_open('admin/user/save', 'class="form-horizontal"');
+            $editMode = !empty($id);
 
-        $this->site_model->setFlashdataMessages('users');
+            echo form_open('admin/user/save', 'class="form-horizontal col-sm-8 col-md-6"');
 
-        echo form_hidden('id', $id);
-    ?>
-    <div class="form-group">
-        <label class="col-sm-4 control-label">Full Name</label>
-        <div class="col-sm-8">
-            <input type="text" name="fname" class="form-control" required
-                value="<?php echo set_value('fname', $name); ?>">
-            <?php echo form_error('fname'); ?>
-        </div>
-    </div>
+            $this->site_model->setFlashdataMessages('users');
 
-    <div class="form-group">
-        <label class="col-sm-4 control-label">Email Address</label>
-        <div class="col-sm-8">
-            <input type="email" name="email" class="form-control" required
-                value="<?php echo set_value('email', $email); ?>">
-            <?php echo form_error('email'); ?>
-        </div>
-    </div>
+            echo form_hidden('id', $id);
 
-    <div class="form-group">
-        <label class="col-sm-4 control-label">Mobile</label>
-        <div class="col-sm-8">
-            <input type="text" name="mobile" class="form-control" required
-                value="<?php echo set_value('mobile', $mobile); ?>">
-            <?php echo form_error('mobile'); ?>
-        </div>
-    </div>
+            form_box_label([
+                'name'=>'fname',
+                'label'=>'Full Name',
+                'type'=>'text',
+                'value'=>$name,
+                'required'=>true
+            ]);
 
-    <div class="form-group">
-        <label class="col-sm-4 control-label">User Group</label>
-        <div class="col-sm-8">
-            <select class="form-control" name="group" required>
-                <option value="">Select a Group</option>
-                <?php
-                    $defaultGroup = USER_GROUP_EDITOR;
+            form_box_label([
+                'name'=>'email',
+                'label'=>'Email Address',
+                'type'=>'email',
+                'value'=>$email,
+                'required'=>true
+            ]);
 
-                    foreach($groups as $g){
+            form_box_label([
+                'name'=>'mobile',
+                'label'=>'Mobile',
+                'type'=>'text',
+                'value'=>$mobile,
+                'required'=>true
+            ]);
+        ?>
 
-                        if(empty($id)){
-                            $selected = $g->id == $defaultGroup ? ' selected' : '';
-                        }
-                        else{
+        <div class="form-group">
+            <label class="col-sm-4 control-label">User Group</label>
+            <div class="col-sm-8">
+                <select class="form-control" name="groupid" required>
+                    <option value="">Select a Group</option>
+                    <?php
+                        foreach($groups as $g){
                             $selected = $g->id == $groupId ? ' selected' : '';
+                            echo "<option value=\"$g->id\" $selected>$g->name</option>";
                         }
+                    ?>
+                </select>
+                <?php echo form_error('groupid'); ?>
+            </div>
+        </div>
 
-                        echo "<option value=\"$g->id\" $selected>$g->name</option>";
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Password </label>
+            <div class="col-sm-8">
+                <input type="password" name="password" class="form-control" 
+                    minlength="6" autocomplete="new-password" />
+                <?php
+                    echo form_error('password');
+
+                    if($editMode){
+                        echo '<em class="text-info">Leave password fields blank to retain old password(s)</em>';
                     }
                 ?>
-            </select>
-            <?php echo form_error('group'); ?>
+            </div>
         </div>
+        <?php
+            form_box_button('Save');
+
+            echo form_close()
+        ?>
     </div>
-
-    <div class="form-group">
-        <label class="col-sm-4 control-label">Password </label>
-        <div class="col-sm-8">
-            <input type="password" name="pwd" class="form-control" 
-                minlength="6" autocomplete="off" />
-            <?php
-                echo form_error('pwd');
-
-                if(isset($edit_mode) && $edit_mode == true){
-                    echo '<div class="text-info">Leave password fields blank to retain old password(s)</div>';
-                }
-            ?>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-4 control-label">Confirm Password</label>
-        <div class="col-sm-8">
-            <input type="password" class="form-control" id="con-passwd" 
-                name="cpwd" autocomplete="off" />
-            <?php echo form_error('cpwd'); ?>
-        </div>
-    </div>
-    <hr/>
-
-    <div class="col-sm-offset-4 col-sm-8">
-        <input type="submit" class="btn btn-primary" value="Submit" />
-        <input type="reset" class="btn btn-default" value="Reset" />
-    </div>
-
-    <?php echo form_close(); ?>
 </div>

@@ -1,5 +1,14 @@
 /*.admin-bdadmin.css */
 body{
+    background:#eee;
+}
+
+.container{
+    max-width:1200px;
+    width:100%;
+}
+
+.breadcrumb{
     background:#fff;
 }
 
@@ -9,13 +18,22 @@ body{
 
 .page-content{
     background:#fff;
+    min-height:50vh;
     padding:1em;
 }
 
-.navbar-nav > li > a:hover,
+.navbar-nav>li>a:active,
+.navbar-nav>li>a:focus,
+.navbar-nav>li>a:hover,
+.navbar-nav>li:hover>a,
+.navbar-inverse .navbar-nav>.open>a,
 .dash-bd .dash-lnk, .user-bd .user-lnk{
-    background:#333;
-	color:#fff;
+    background:#aaa!important;
+	color:#fff!important;
+}
+
+.dropdown:hover .dropdown-menu{
+    display:block;
 }
 
 /* Stats */
@@ -24,7 +42,6 @@ body{
 }
 .stat-box > div{
     background:#fff;
-    border:1px solid #ddd;
     padding:1em 1em 0.34em;
     text-align:center;
 }

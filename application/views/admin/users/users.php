@@ -2,17 +2,17 @@
     <div class="page-header">
 		<h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
 		<ol class="breadcrumb">
-            <li><a href="<?php echo site_url('admin/dashboard'); ?>">Home</a></li>
-			<li class="active"><?php echo isset($page_title) ? $page_title : ''; ?></li>
+            <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
+			<li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
 		</ol>
 	</div>
 
     <div class="page-content">
 		<div class="action-bar">
-			<?php $this->load->view('admin/users/add-user'); ?>
+			<?php echo anchor('admin/users/new', '<i class="fa fa-plus"></i> Add User', 'class="btn btn-success btn-sm"') ?>
 		</div>
 
-		<div class="col-sm-8" style="padding-left:0;">
+		<div class="col-md-8" style="padding-left:0;">
 			<?php
 				$this->site_model->setFlashdataMessages('users');
 
@@ -34,20 +34,21 @@
 				<tbody>
                 <?php 
                     foreach($users as $u){
-                        $status = $u->banned == '0' ? '<span class="label label-success">ACTIVE</span>'
-							: '<span class="label label-warning">SUSPENDED</span>'
+                        $status = $u->banned == '0' ? 
+							'<span class="label label-success">ACTIVE</span>' :
+							'<span class="label label-warning">SUSPENDED</span>'
                 ?>
 				<tr>
-					<td><?php echo $u->id; ?></td>
-					<td><?php echo $u->name; ?></td>
-					<td><?php echo $u->email; ?></td>
-					<td><?php echo $u->mobile; ?></td>
-					<td><?php echo $u->group; ?></td>
-					<td><?php echo $status; ?></td>
+					<td><?php echo $u->id ?></td>
+					<td><?php echo $u->name ?></td>
+					<td><?php echo $u->email ?></td>
+					<td><?php echo $u->mobile ?></td>
+					<td><?php echo $u->group ?></td>
+					<td><?php echo $status ?></td>
 					<td>
                         <?php 
                             if(PERM_USER_MANAGEMENT){
-                                echo anchor("admin/users/$u->id", 'Edit User', 'class="btn btn-xs btn-warning"');
+                                echo anchor("admin/users/edit/$u->id", 'Edit User', 'class="btn btn-xs btn-warning"');
 
 								if($u->banned == '0'){
                                     echo anchor("admin/user/suspend/$u->id", 'Suspend', 'class="btn btn-xs btn-danger"');

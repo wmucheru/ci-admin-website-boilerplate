@@ -56,6 +56,14 @@ if(!function_exists('render_admin')){
     }
 }
 
+if(!function_exists('blank_state')){
+
+    function blank_state($text, $class=''){
+        $class = !empty($class) ? $class : 'alert-warning';
+        echo "<div class=\"alert $class\">$text</div>";
+    }
+}
+
 if(!function_exists('nav_brand')){
 
     function nav_brand($uri='/', $logo=''){
@@ -90,6 +98,49 @@ if(!function_exists('nav_divider')){
     */
     function nav_divider($text=''){
         echo "<li class=\"divider\">$text</li>";
+    }
+}
+
+if(!function_exists('nav_menu')){
+
+    /**
+     * 
+     * Return nav menu items
+     * 
+    */
+    function nav_menu($menu){
+        foreach($menu as $m){
+            $m = (object) $m;
+            $active = uri_string() == $m->url ? 'active' : '';
+            $perm = isset($m->perm) ? $m->perm : false;
+            $class = isset($m->lclass) ? $m->lclass : '';
+
+            if($perm == false){
+                # Do not show anything
+            }
+            else if(isset($m->sublinks)){
+                echo "<li class=\"dropdown\">
+                    <a href=\"#\" class=\"dropdown-toggle $class\" 
+                        data-toggle=\"dropdown\">$m->title <b class=\"caret\"></b>
+                    </a><ul class=\"dropdown-menu\">";
+
+                foreach($m->sublinks as $s){
+                    $s = (object) $s;
+
+                    if(isset($s->divider)){
+                        nav_divider($s->divider);
+                    }
+                    else{
+                        nav_link($s->url, $s->title);
+                    }
+                }
+
+                echo '</ul></li>';
+            }
+            else{
+                nav_link($m->url, $m->title, $class .' '. $active);
+            }
+        }
     }
 }
 
@@ -151,12 +202,11 @@ if(!function_exists('quick_filter')){
             $from = $CI->input->get('from');
             $to = $CI->input->get('to');
 
-            $filters['from'] = today();
-            $filters['to'] = today();
+            $filters['from'] = !empty($from) ? $from : today();
+            $filters['to'] =  !empty($to) ? $to : today();
         }
 
         foreach($filters as $k => $v){
-            
             echo '<div class="form-group">';
 
             if(is_array($v)){
@@ -189,14 +239,14 @@ if(!function_exists('quick_form')){
         echo form_open($url, 'class="form-horizontal"');
 
         foreach($obj as $k => $v){
-            
+
             if($k == 'id'){
                 echo form_hidden($k, $v);
             }
             else{
                 echo '<div class="form-group">';
                 echo '<label class="control-label col-sm-3">'. ucwords($k) .'</label>';
-                
+
                 echo '<div class="col-sm-9">';
 
                 echo form_input($k, $v, 'class="form-control"');
@@ -260,23 +310,40 @@ if(!function_exists('form_box_label')){
 
         $name = isset($obj->name) ? $obj->name : '';
         $label = isset($obj->label) ? $obj->label : '';
-        $type = isset($obj->type) ? $obj->type : '';
+        $type = isset($obj->type) ? $obj->type : 'text';
         $value = isset($obj->value) ? $obj->value : '';
+
+        $required = isset($obj->required) ? $obj->required : FALSE;
+        $requiredStr = $required ? 'required' : '';
 
         $str = '';
         $str .= !empty($name) ? " name=\"$name\" " : '';
-        $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') . '" ';
+        $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
         $str .= isset($obj->attrs) ? " $obj->attrs " : '';
+        $str .= $requiredStr;
         $str = trim($str);
 
         echo '<div class="form-group">';
-        echo "<label class=\"control-label col-sm-4\">$label</label>";
+        echo "<label class=\"control-label col-sm-4 $requiredStr\">$label</label>";
 
         echo '<div class="col-sm-8">';
 
         switch($type){
             case 'textarea':
                 echo "<textarea $str>$value</textarea>";
+                break;
+
+            case 'file':
+                $accept = isset($obj->accept) ? $obj->accept : '';
+                $fileUrl = isset($obj->fileUrl) ? $obj->fileUrl : '';
+                $uploadType = isset($obj->uploadType) ? $obj->uploadType : '';
+
+                if($uploadType == 'image'){
+                    echo img($fileUrl, $label, 'class="img-responsive" 
+                        style="margin-bottom:10px; max-width:150px;"');
+                }
+
+                echo "<input type=\"file\" name=\"name\" accept=\"$accept\" />";
                 break;
 
             default:

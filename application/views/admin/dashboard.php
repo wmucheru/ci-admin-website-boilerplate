@@ -7,11 +7,10 @@
         </ol>
     </div>
 
-    <div class="page-content clearfix">
-        <div class="row">
+    <div class="clearfix">
+        <div class="row stat-row">
             <?php
                 # var_dump($stats);
-
                 stat_box($stats->users, 'Users');
             ?>
         </div>
