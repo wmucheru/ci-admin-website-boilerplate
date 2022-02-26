@@ -11,26 +11,26 @@ class Auth_model extends CI_Model{
      * User Functions
      *
      */
-    function login_fast($userId){
-        $this->aauth->login_fast($userId);
+    function loginFast($userId){
+        $this->aauth->loginFast($userId);
     }
-    
-    function is_logged_in(){
+
+    function isLoggedIn(){
         return $this->aauth->is_loggedin();
     }
 
-    function set_redirect_referrer(){
+    function setRedirectReferrer(){
         $this->session->set_userdata('referrer', $this->agent->referrer());
     }
 
     function set_login_redirect(){
-        if(!$this->is_logged_in()){
-            $this->set_redirect_referrer();
+        if(!$this->isLoggedIn()){
+            $this->setRedirectReferrer();
             redirect('accounts/login');
         }
     }
 
-    function is_account_verified($email){
+    function isAccountVerified($email){
         return $this->db
             ->select('banned')
             ->from('aauth_users')

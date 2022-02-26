@@ -126,7 +126,7 @@
 
     <footer>
         <div class="container clearfix">
-            <p>&copy; <?php echo date('Y') .' '. $this->config->item('site_name'); ?>. All Rights Reserved.</p>
+            <p>&copy; <?php echo date('Y') .' '. $this->config->item('site_name') ?>.</p>
         </div>
     </footer>
     <?php

@@ -11,7 +11,7 @@ class Auth extends CI_Controller {
 
     function index() {
 
-        if($this->auth_model->is_logged_in()){
+        if($this->auth_model->isLoggedIn()){
             redirect('admin/dashboard');
         }
         else{
@@ -20,11 +20,9 @@ class Auth extends CI_Controller {
     }
 
     function login_proc(){
-        # redirect('dashboard');
-
         $email = $this->input->post('email');
         $password = $this->input->post('password');
-        $persist_login = 'true';
+        $remember = $this->input->post('remember') === 'on';
 
         $this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
         $this->form_validation->set_rules('password', 'Password', 'required');
@@ -33,9 +31,8 @@ class Auth extends CI_Controller {
             $this->index();
         }
         else{
-            $remember = $persist_login == 'true';
 
-            if(!$this->auth_model->is_account_verified($email)){
+            if(!$this->auth_model->isAccountVerified($email)){
                 $this->session->set_flashdata('login_fail', 'Account is inactive');
                 $this->index();
             }
@@ -66,8 +63,7 @@ class Auth extends CI_Controller {
 
     function logout(){
         $this->aauth->logout();
-        $this->auth_model->set_redirect_referrer();
-
+        $this->auth_model->setRedirectReferrer();
         $this->index();
     }
 }

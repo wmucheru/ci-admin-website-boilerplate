@@ -5,8 +5,8 @@
 	padding:0;
 }
 
-html, body{
-	height:100%;
+html, body {
+    height:98%;
 }
 
 body{
@@ -217,6 +217,7 @@ p.error {
 }
 
 .navbar{
+    background:#fff;
     border:0;
 	border-radius:0;
     box-shadow:none;
@@ -294,19 +295,24 @@ p.error {
 	padding:1em;
 }
 
-/* Login */
-.login-box{
+/* Auth */
+.auth-bd{
+    background:#FAFAFA;
+}
+.login-form{
+    background:#fff;
 	box-shadow:0 2px 5px rgba(0,0,0,0.3);
-	margin-top:5%;
+	margin:5% auto;
+	padding:1em 3em;
+    width:25em;
 }
-.login-box > div{
-    min-height:30em;
-	padding:2em;
+.login-form h4{
+    border-bottom:1px solid #ddd;
+    padding-bottom:1em;
+    text-transform: uppercase;
 }
-.login-banner{
-    background:url(../img/login-banner.jpg) no-repeat;
-    background-size:cover;
-    padding:0;
+.login-form .checkbox-inline{
+    color:#555;
 }
 
 footer{
