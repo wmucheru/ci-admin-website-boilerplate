@@ -1,14 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.9.7
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 15, 2018 at 02:38 PM
--- Server version: 5.6.35
--- PHP Version: 7.0.15
+-- Generation Time: Feb 26, 2022 at 09:43 AM
+-- Server version: 5.7.32
+-- PHP Version: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET time_zone = "+03:00";
 
 --
 -- Database: `ci_admin`
@@ -26,9 +26,11 @@ CREATE TABLE `aauth_groups` (
   `definition` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `aauth_groups`
---
+ALTER TABLE `aauth_groups`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `aauth_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 INSERT INTO `aauth_groups` (`id`, `name`, `definition`) VALUES
 (1, 'Admin', 'Super Admin Group'),
@@ -46,6 +48,9 @@ CREATE TABLE `aauth_group_to_group` (
   `subgroup_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `aauth_group_to_group`
+  ADD PRIMARY KEY (`group_id`,`subgroup_id`);
+
 -- --------------------------------------------------------
 
 --
@@ -59,12 +64,11 @@ CREATE TABLE `aauth_login_attempts` (
   `login_attempts` tinyint(2) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `aauth_login_attempts`
---
+ALTER TABLE `aauth_login_attempts`
+  ADD PRIMARY KEY (`id`);
 
-INSERT INTO `aauth_login_attempts` (`id`, `ip_address`, `timestamp`, `login_attempts`) VALUES
-(4, '::1', '2018-11-15 16:01:42', 2);
+ALTER TABLE `aauth_login_attempts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 -- --------------------------------------------------------
 
@@ -78,8 +82,15 @@ CREATE TABLE `aauth_perms` (
   `definition` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `aauth_perms` (`name`, `definition`) VALUES ('Administrator', 'Administrator permission');
-INSERT INTO `aauth_perms` (`name`, `definition`) VALUES ('User Management', 'User management');
+ALTER TABLE `aauth_perms`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `aauth_perms`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+INSERT INTO `aauth_perms` (`id`, `name`, `definition`) VALUES
+(1, 'Administrator', 'Administrator permission'),
+(2, 'User Management', 'User management');
 
 -- --------------------------------------------------------
 
@@ -121,6 +132,12 @@ CREATE TABLE `aauth_pms` (
   `pm_deleted_receiver` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `aauth_pms`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `aauth_pms`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 -- --------------------------------------------------------
 
 --
@@ -132,16 +149,16 @@ CREATE TABLE `aauth_users` (
   `email` varchar(100) NOT NULL,
   `pass` varchar(64) NOT NULL,
   `name` varchar(192) NOT NULL,
-  `mobile` VARCHAR(32) NULL,
-  `mobile_verified` ENUM('1', '0') NOT NULL DEFAULT '0',
-  `address` TEXT NULL,
-  `photo` VARCHAR(32) NULL,
-  `fcm_token` TEXT NULL,
+  `mobile` varchar(32) DEFAULT NULL,
+  `mobile_verified` enum('1','0') NOT NULL DEFAULT '0',
+  `address` text,
+  `photo` varchar(32) DEFAULT NULL,
+  `fcm_token` text,
   `username` varchar(100) DEFAULT NULL,
   `banned` tinyint(1) DEFAULT '0',
   `last_login` datetime DEFAULT NULL,
   `last_activity` datetime DEFAULT NULL,
-  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forgot_exp` text,
   `remember_time` datetime DEFAULT NULL,
   `remember_exp` text,
@@ -150,12 +167,14 @@ CREATE TABLE `aauth_users` (
   `ip_address` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `aauth_users`
---
+ALTER TABLE `aauth_users`
+  ADD PRIMARY KEY (`id`);
 
-INSERT INTO `aauth_users` (`id`, `email`, `pass`, `name`, `mobile`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
-(1, 'admin@example.com', '5711aa2253ac62088bf34f79f8ccd82e41bdbcf32e7670772d2a1e1746a9be9b', 'Admin Example', '07200112233', 'admin', 0, '2018-11-15 16:16:53', '2018-11-15 16:16:53', '2018-11-15 16:15:30', NULL, '2018-12-15 00:00:00', 'X3oyOUV5TmvSZMIQ', NULL, NULL, '::1');
+ALTER TABLE `aauth_users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+INSERT INTO `aauth_users` (`id`, `email`, `pass`, `name`, `mobile`, `mobile_verified`, `address`, `photo`, `fcm_token`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
+(1, 'admin@example.com', '5711aa2253ac62088bf34f79f8ccd82e41bdbcf32e7670772d2a1e1746a9be9b', 'Admin', '0720000000', '0', NULL, NULL, NULL, 'admin', 0, '2021-11-03 18:56:44', '2021-11-03 18:56:44', '2018-11-15 16:15:30', NULL, '2021-12-03 00:00:00', 'irZX3leqavgQSFBH', NULL, NULL, '::1');
 
 -- --------------------------------------------------------
 
@@ -173,7 +192,8 @@ CREATE TABLE `aauth_user_to_group` (
 --
 
 INSERT INTO `aauth_user_to_group` (`user_id`, `group_id`) VALUES
-(1, 1);
+(1, 1),
+(2, 3);
 
 -- --------------------------------------------------------
 
@@ -188,129 +208,44 @@ CREATE TABLE `aauth_user_variables` (
   `value` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `aauth_groups`
---
-ALTER TABLE `aauth_groups`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `aauth_group_to_group`
---
-ALTER TABLE `aauth_group_to_group`
-  ADD PRIMARY KEY (`group_id`,`subgroup_id`);
-
---
--- Indexes for table `aauth_login_attempts`
---
-ALTER TABLE `aauth_login_attempts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `aauth_perms`
---
-ALTER TABLE `aauth_perms`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `aauth_perm_to_group`
---
-ALTER TABLE `aauth_perm_to_group`
-  ADD PRIMARY KEY (`perm_id`,`group_id`);
-
---
--- Indexes for table `aauth_perm_to_user`
---
-ALTER TABLE `aauth_perm_to_user`
-  ADD PRIMARY KEY (`perm_id`,`user_id`);
-
---
--- Indexes for table `aauth_pms`
---
-ALTER TABLE `aauth_pms`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `full_index` (`id`,`sender_id`,`receiver_id`,`date_read`);
-
---
--- Indexes for table `aauth_users`
---
-ALTER TABLE `aauth_users`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `aauth_user_to_group`
---
-ALTER TABLE `aauth_user_to_group`
-  ADD PRIMARY KEY (`user_id`,`group_id`);
-
---
--- Indexes for table `aauth_user_variables`
---
 ALTER TABLE `aauth_user_variables`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id_index` (`user_id`);
+  ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `aauth_groups`
---
-ALTER TABLE `aauth_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `aauth_login_attempts`
---
-ALTER TABLE `aauth_login_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `aauth_perms`
---
-ALTER TABLE `aauth_perms`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `aauth_pms`
---
-ALTER TABLE `aauth_pms`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `aauth_users`
---
-ALTER TABLE `aauth_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `aauth_user_variables`
---
 ALTER TABLE `aauth_user_variables`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
-CREATE TABLE `sys_settings` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `setting` varchar(45) NOT NULL,
-  `description` text NOT NULL,
-  `value` text NOT NULL,
-  `tag` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
-INSERT INTO `sys_settings` 
-VALUES (1,'SMS Username','Username used for SMS API calls','','sms'),
-(2,'SMS API Key','API Key used SMS API Calls','','sms'),
-(3,'SMS Shortcode','Shortcode is the name of the sender e.g. senderID','','sms');
+--
+-- Table structure for table `sys_logs`
+--
 
 CREATE TABLE `sys_logs` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) UNSIGNED NOT NULL,
   `tag` varchar(64) DEFAULT NULL,
   `description` text NOT NULL,
   `ipaddress` varchar(16) DEFAULT NULL,
   `reference` varchar(32) DEFAULT NULL,
   `status` varchar(32) DEFAULT NULL,
   `createdon` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `createdby` int unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  `createdby` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `sys_logs`
+  ADD PRIMARY KEY (`id`);
+
+CREATE TABLE `sys_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `setting` varchar(45) NOT NULL,
+  `description` text NOT NULL,
+  `value` text NOT NULL,
+  `tag` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `sys_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+INSERT INTO `sys_settings` (`id`, `setting`, `description`, `value`, `tag`) VALUES
+(1, 'SMS Username', 'Username used for SMS API calls', '', 'sms'),
+(2, 'SMS API Key', 'API Key used SMS API Calls', '', 'sms'),
+(3, 'SMS Shortcode', 'Shortcode is the name of the sender e.g. senderID', '', 'sms');
