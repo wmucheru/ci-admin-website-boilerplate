@@ -9,35 +9,6 @@ class Form_model extends CI_Model{
         $this->load->library('form_validation');
     }
 
-    function setFlashdataMessages($flashdataKey){
-        $success = $this->session->flashdata($flashdataKey . '_success');
-        $fail = $this->session->flashdata($flashdataKey . '_fail');
-        $status = $this->session->flashdata($flashdataKey . '_status');
-
-        $message = '';
-        $msgClass = '';
-
-        if($success != ''){
-            $message = $success;
-            $msgClass = '-success';
-        }
-        else if($fail != ''){
-            $message = $fail;
-            $msgClass = '-danger';
-        }
-        else if($status != ''){
-            $message = $status;
-            $msgClass = '-info';
-        }
-
-        $div = "<div class=\"alert alert-$msgClass\">";
-        $div .= '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
-        $div .= $message;
-        $div .= '</div>';
-
-        return $msg;
-    }
-
     /**
      * 
      * Build a form using form object. The form object is as below:
@@ -312,7 +283,7 @@ class Form_model extends CI_Model{
 
                 # var_dump($tableObj); exit();
 
-                $this->site_model->updateTable($formObj->table, $tableObj, array('id'=>$updateId));
+                $this->db->update($formObj->table, $tableObj, ['id'=>$updateId]);
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
                 return (object) array(
@@ -321,7 +292,7 @@ class Form_model extends CI_Model{
             }
 
             # Save new entry
-            else if($this->site_model->addToTable($formObj->table, $tableObj)){
+            else if($this->db->insert($formObj->table, $tableObj)){
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
                 return (object) array(

@@ -76,21 +76,21 @@ class Aauth {
 	 * @access public
 	 * @var object
 	 */
-	 public $aauth_db;
+	public $aauth_db;
 
 	/**
 	 * Array to cache permission-ids.
 	 * @access private
 	 * @var array
 	 */
-	 private $cache_perm_id;
+	private $cache_perm_id;
 
 	/**
 	 * Array to cache group-ids.
 	 * @access private
 	 * @var array
 	 */
-	 private $cache_group_id;
+	private $cache_group_id;
 
 	########################
 	# Base Functions
@@ -194,7 +194,7 @@ class Aauth {
 				return FALSE;
 			}
 		}
- 		if( $this->config_vars['login_with_name'] == TRUE){
+		if( $this->config_vars['login_with_name'] == TRUE){
 
 			if( !$identifier OR strlen($pass) < $this->config_vars['min'] OR strlen($pass) > $this->config_vars['max'] )
 			{
@@ -202,15 +202,15 @@ class Aauth {
 				return FALSE;
 			}
 			$db_identifier = 'username';
- 		}else{
+		}else{
 			$this->CI->load->helper('email');
-			if( !valid_email($identifier) OR strlen($pass) < $this->config_vars['min'] OR strlen($pass) > $this->config_vars['max'] )
+			if( !filter_var($identifier, FILTER_VALIDATE_EMAIL) OR strlen($pass) < $this->config_vars['min'] OR strlen($pass) > $this->config_vars['max'] )
 			{
 				$this->error($this->CI->lang->line('aauth_error_login_failed_email'));
 				return FALSE;
 			}
 			$db_identifier = 'email';
- 		}
+		}
 
 		// if user is not verified
 		$query = null;
@@ -255,9 +255,9 @@ class Aauth {
 					}
 				}
 			}
-	 	}
+		}
 
-	 	if($this->config_vars['totp_active'] == TRUE AND $this->config_vars['totp_only_on_ip_change'] == TRUE){
+		if($this->config_vars['totp_active'] == TRUE AND $this->config_vars['totp_only_on_ip_change'] == TRUE){
 			$query = null;
 			$query = $this->aauth_db->where($db_identifier, $identifier);
 			$query = $this->aauth_db->get($this->config_vars['users']);
@@ -287,7 +287,7 @@ class Aauth {
 					}
 				}
 			}
-	 	}
+		}
 
 		$query = null;
 		$query = $this->aauth_db->where($db_identifier, $identifier);
@@ -1784,7 +1784,7 @@ class Aauth {
 		$query = $this->aauth_db->get( $this->config_vars['perm_to_user'] );
 
 		if( $query->num_rows() > 0){
-		    return TRUE;
+			return TRUE;
 		} else {
 			$g_allowed=FALSE;
 			foreach( $this->get_user_groups($user_id) as $group ){
@@ -2485,7 +2485,7 @@ class Aauth {
 		}
 
 		// if var not set, set
-		 if ($this->get_user_var($key,$user_id) ===FALSE) {
+		if ($this->get_user_var($key,$user_id) ===FALSE) {
 
 			$data = array(
 				'data_key' => $key,

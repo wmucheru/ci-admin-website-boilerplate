@@ -35,7 +35,7 @@ class Users extends CI_Controller {
         $name = $this->input->post('fname');
         $email = $this->input->post('email');
         $mobile = $this->input->post('mobile');
-        $group = $this->input->post('group');
+        $groupId = $this->input->post('group');
         $password = $this->input->post('pwd');
         $cPassword = $this->input->post('cpwd');
 
@@ -60,7 +60,7 @@ class Users extends CI_Controller {
                 );
 
                 # Update member group
-                $this->auth_model->update_member_group($userId, $group);
+                $this->auth_model->update_member_group($userId, $groupId);
 
                 $this->session->set_flashdata('users_success', 'User updated');
                 redirect('admin/users/'. $userId);
@@ -78,7 +78,7 @@ class Users extends CI_Controller {
 
                 $this->db->update('aauth_users', $update, array('id'=>$userId));
 
-                $this->auth_model->update_member_group($userId, $group);
+                $this->auth_model->update_member_group($userId, $groupId);
 
                 $this->session->set_flashdata('users_success', 'User account created');
                 redirect('admin/users');
@@ -228,7 +228,7 @@ class Users extends CI_Controller {
             $pageContent = 'users/permissions/group-permissions';
 
             $data['gid'] = $groupId;
-            $data['group_perms'] = $this->auth_model->get_group_perms($groupId);
+            $data['group_perms'] = $this->auth_model->getGroupPerms($groupId);
         }
 
         if($method == 'delete'){

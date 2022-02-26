@@ -33,7 +33,6 @@ class Auth extends CI_Controller {
             $this->index();
         }
         else{
-
             $remember = $persist_login == 'true';
 
             if(!$this->auth_model->is_account_verified($email)){

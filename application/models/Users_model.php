@@ -3,6 +3,7 @@
 define('USER_GROUP_ADMIN', 1);
 define('USER_GROUP_PUBLIC', 2);
 define('USER_GROUP_DEFAULT', 3);
+define('USER_GROUP_CUSTOMER', 4);
 
 class Users_model extends CI_Model{
 
@@ -163,7 +164,7 @@ class Users_model extends CI_Model{
             $emailObj = array(
                 'email'=>$email,
                 'name'=>$name,
-                'subject'=>'Welcome to JCExpress',
+                'subject'=>'Welcome to '. $this->config->item('site_name'),
                 'body'=>"<p>Your account has been successfully created</p>" .
                     "<p>Your can now login $loginLink to create your first consignment</p>"
             );
@@ -333,7 +334,7 @@ class Users_model extends CI_Model{
             array('id'=>$userId)
         );
 
-        $user = $this->auth_model->get_user_info($userId);
+        $user = $this->auth_model->get_user_data($userId);
 
         # Send via SMS
         if(!empty($user->mobile)){
@@ -408,16 +409,5 @@ class Users_model extends CI_Model{
             ->result();
 
         return !empty($user->fcm_token) ? $user->fcm_token : '';
-    }
-
-    /**
-     * 
-     * Is rider?
-     * 
-    */
-    function isRider($userId){
-        return 
-            $this->auth_model->is_member(USER_GROUP_RIDER, $userId) || 
-            $this->auth_model->is_member(USER_GROUP_FOOT_COURIER, $userId);
     }
 }

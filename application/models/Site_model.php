@@ -71,7 +71,6 @@ class Site_model extends CI_Model{
     }
 
     function setFlashdataMessages($flashdataKey){
-
         $success = $this->session->flashdata($flashdataKey . '_success');
         $fail = $this->session->flashdata($flashdataKey . '_fail');
         $status = $this->session->flashdata($flashdataKey . '_status');
@@ -105,8 +104,6 @@ class Site_model extends CI_Model{
      * This module is responsible for handling file uploads and/or processing of files. Any 
      * module making use of this function can set the options required.
      * 
-     * @param obj: Key value object with upload options
-     * 
      * GENERAL
      * - upload_path: Path to upload file (required)
      * - allowed_types: Pipe-separated types of files allowed e.g. jpg|png|gif (required)
@@ -127,6 +124,9 @@ class Site_model extends CI_Model{
      * WATERMARK
      * - watermark: Boolean to allow watermarking. Default FALSE
      * - watermark_image: Path to watermark image from `assets/img` folder (for images)
+     * 
+     * 
+     * @param obj: Key value object with upload options
      * 
     */
     function uploadFile($obj){
@@ -288,47 +288,48 @@ class Site_model extends CI_Model{
      *
      * CURL REQUESTS
      * http://hayageek.com/php-curl-post-get/
+     * 
      */
     function makeCURLRequest($method, $url, $array_params='', $headers=FALSE){
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        
-        $array_params = (empty($array_params)) ? array() : $array_params;
-        $post_fields = json_encode($array_params);
-        
+
+        $params = empty($params) ? array() : $params;
+        $postFields = json_encode($params);
+
         switch($method){
 
-            case "POST":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_fields);
-                curl_setopt($curl, CURLOPT_HTTPHEADER, 
-                    array(
+            case 'POST':
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+                curl_setopt(
+                    $curl, 
+                    CURLOPT_HTTPHEADER, 
+                    [
                         'Content-Type:text/plain',
-                        'Content-Length:' . strlen($post_fields)
-                    )
+                        'Content-Length:' . strlen($postFields)
+                    ]
                 );
-                
                 break;
-                
-            case "POST_JSON":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode((object) $array_params));
-                curl_setopt($curl, CURLOPT_HTTPHEADER, 
-                    array('Content-Type: application/json')
+
+            case 'POST_JSON':
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode((object) $params));
+                curl_setopt(
+                    $curl, 
+                    CURLOPT_HTTPHEADER, 
+                    ['Content-Type: application/json']
                 );
-                
                 break;
-            
-            case "PUT":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_fields);
-                
+
+            case 'PUT':
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
                 break;
-            
+
             default: # GET
-                $url = $url . '?' . http_build_query($array_params, '', '&');
+                $url = $url . '?' . http_build_query($params, '', '&');
                 curl_setopt($curl, CURLOPT_URL, $url);
-            
                 break;
         }
 
@@ -362,64 +363,6 @@ class Site_model extends CI_Model{
         return $result;
     }
 
-	/*
-     * BASIC CRUD
-     * 
-     * */
-    function addToTable($table, $array, $dataname=''){
-        $query = $this->db->insert($table,$array);
-        
-        if($query){
-            # Saved successfully?
-            $this->session->set_userdata('successMsg', $dataname.' successfully added.');
-            return true;
-        }
-        else {
-            $this->session->set_userdata('errorMsg', $dataname.'could not be saved. Try again later.');
-            return false;
-        }
-    }
-
-    function addBatchToTable($table, $batch_array){
-        $query = $this->db->insert_batch($table, $batch_array);
-        
-        return $query;
-    }
-	
-	function updateTable($table, $array, $edit_array, $dataname=''){
-        $this->output->enable_profiler(TRUE);
-		$qry = $this->db->update($table, $array, $edit_array);
-		
-		if($qry){
-			$this->session->set_userdata('successMsg', $dataname.' successfully updated.');
-			return true;
-		}
-		else{
-			$this->session->set_userdata('errorMsg', $dataname.' could not be updated. Try again later.');
-			return false;
-		}
-	}
-
-    function updateBatchTable($table, $batchUpdateArray, $where_key){
-        $query = $this->db->update_batch($table, $batchUpdateArray, $where_key);
-
-        return $query;
-    }
-	
-    # Delte row(s) of data. Optional Soft delete by updating `deleted` column to 1
-	function deleteFromTable($table, $array, $dataname=''){
-		$qry = $this->db->delete($table, $array);
-		
-		if($qry){
-			$this->session->set_userdata('successMsg', $dataname.' successfully deleted.');
-			return true;
-		}
-		else{
-			$this->session->set_userdata('errorMsg', $dataname.' could not be deleted. Try again later.');
-			return false;
-		}
-	}
-    
     /*
      * Create a long/short format
      * Ref: http://www.w3schools.com/php/func_date_date.asp
