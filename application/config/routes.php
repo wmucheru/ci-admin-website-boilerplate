@@ -72,6 +72,7 @@ $route['contact/message'] = 'site/sendMessage';
 */
 
 # Admin
+$route['admin'] = 'auth';
 $route['accounts/signup'] = 'auth/signup';
 $route['accounts/login'] = 'auth/index';
 $route['logout'] = 'auth/logout';
