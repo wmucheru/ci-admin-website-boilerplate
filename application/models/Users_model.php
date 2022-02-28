@@ -65,7 +65,7 @@ class Users_model extends CI_Model{
 
     function userExists($email){
         return $this->db
-            ->get_where('aauth_users', array('email' => $email))
+            ->get_where('aauth_users', ['email'=>$email])
             ->num_rows() > 0;
     }
 
@@ -79,7 +79,7 @@ class Users_model extends CI_Model{
 
         return $this->db
             ->select('id')
-            ->get_where('aauth_users', array('id'=>$userId, 'pass'=>$hash))
+            ->get_where('aauth_users', ['id'=>$userId, 'pass'=>$hash])
             ->num_rows() > 0;
     }
 
@@ -89,7 +89,7 @@ class Users_model extends CI_Model{
      * 
     */
     function registerUser($user){
-        $response = array('error'=>true);
+        $response = ['error'=>true];
 
         $user = (object) $user;
 
@@ -109,10 +109,10 @@ class Users_model extends CI_Model{
         /*
         # We can allow a user to have multple accounts with the same phone number
         else if($this->users_model->phoneExists($phone)){
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'This mobile no. has already been used'
-            );
+            ];
         }
         */
 
@@ -130,7 +130,7 @@ class Users_model extends CI_Model{
      * 
     */
     function createUser($user, $groupId=USER_GROUP_CUSTOMER){
-        $response = array('error'=>true);
+        $response = ['error'=>true];
 
         $user = (object) $user;
 
@@ -142,14 +142,16 @@ class Users_model extends CI_Model{
         if($userId = $this->auth_model->create_user($email, $password)){
             $this->db->update(
                 'aauth_users',
-                array(
+                [
                     'name'=>$name,
                     'mobile'=>$phone,
                     'banned' => '0', # Activate by default
                     'ip_address'=>$this->input->ip_address(),
                     'agent'=>$this->agent->agent_string()
-                ),
-                array('id'=>$userId)
+                ],
+                [
+                    'id'=>$userId
+                ]
             );
 
             # Update user group
@@ -161,13 +163,13 @@ class Users_model extends CI_Model{
             # Send email to the user
             $loginLink = anchor('login', 'here');
 
-            $emailObj = array(
+            $emailObj = [
                 'email'=>$email,
                 'name'=>$name,
                 'subject'=>'Welcome to '. $this->config->item('site_name'),
                 'body'=>"<p>Your account has been successfully created</p>" .
                     "<p>Your can now login $loginLink to create your first consignment</p>"
-            );
+            ];
 
             $this->messages_model->sendEmail($emailObj);
 
@@ -189,18 +191,18 @@ class Users_model extends CI_Model{
     function loginUser($email, $password=''){
 
         if(empty($email) || empty($password)){
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'Enter the required login details'
-            );
+            ];
         }
         
         /*
         else if(!$this->auth_model->is_account_banned($email)){
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'Your account is inactive. Contact admin'
-            );
+            ];
         }
         */
 
@@ -211,15 +213,13 @@ class Users_model extends CI_Model{
                 $this->sendVerificationCode($user->id);
             }
 
-            $response = array(
-                'user'=>$user
-            );
+            $response = ['user'=>$user];
         }
         else{
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'Could not login with the details provided'
-            );
+            ];
         }
         
         return $response;
@@ -231,22 +231,20 @@ class Users_model extends CI_Model{
      * 
     */
     function loginSocial($name, $email){
-        $response = array();
+        $response = ['error'=>true];
 
         # Check for social login
         if(empty($name) && empty($email)){
-            $response = array(
-                'error'=>true,
+            $response = [
                 'message'=>'Name & email required for social login'
-            );
+            ];
         }
 
         /*
         else if(!$this->auth_model->is_account_banned($email)){
-            $response = array(
-                'error'=>true,
+            $response = [
                 'message'=>'Your account is inactive. Contact admin'
-            );
+            ];
         }
         */
 
@@ -255,19 +253,17 @@ class Users_model extends CI_Model{
 
             # Register user if they do not exist and activate them
             if(empty($user->id)){
-                $userObj = array(
+                $userObj = [
                     'name'=>$name,
                     'email'=>$email,
                     'phone'=>'',
                     'password'=>$this->site_model->generateRef(4)
-                );
+                ];
 
                 $user = $this->users_model->createUser($userObj);
             }
 
-            $response = array(
-                'user'=>$user
-            );
+            $response = ['user'=>$user];
         }
 
         return (object) $response;
@@ -283,37 +279,35 @@ class Users_model extends CI_Model{
 
         # Does user exist?
         if(empty($user->id)){
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'We could not find any account with that email'
-            );
+            ];
         }
         else{
             $resetCode = $this->site_model->generateRef(16);
 
             $this->db->update('aauth_users', 
-                array('forgot_exp'=>$resetCode),
-                array('id'=>$user->id)
+                ['forgot_exp'=>$resetCode],
+                ['id'=>$user->id]
             );
 
             $resetLink = anchor('reset/'. $resetCode);
             $supportEmail = $this->config->item('email');
             $supportEmailLink = mailto($supportEmail, $supportEmail);
 
-            $emailObj = array(
+            $emailObj = [
                 'email'=>$email,
                 'name'=>$user->name,
                 'subject'=>'Reset your password',
                 'body'=>"<p>To reset your password please click on the link below:</p>" .
                     "<p>$resetLink</p>
                     <p>If you did not request this, please contact us on $supportEmailLink</p>"
-            );
+            ];
 
             $this->messages_model->sendEmail($emailObj);
 
-            $response = array(
-                'message'=>'Check your email for reset instructions'
-            );
+            $response = ['message'=>'Check your email for reset instructions'];
         }
 
         return (object) $response;
@@ -330,8 +324,8 @@ class Users_model extends CI_Model{
 
         $this->db->update(
             'aauth_users',
-            array('verification_code'=>$code),
-            array('id'=>$userId)
+            ['verification_code'=>$code],
+            ['id'=>$userId]
         );
 
         $user = $this->auth_model->get_user_data($userId);
@@ -342,19 +336,19 @@ class Users_model extends CI_Model{
         }
 
         # Send via email
-        $emailObj = array(
+        $emailObj = [
             'email'=>$user->email,
             'name'=>$user->name,
             'subject'=>'Your account verification code',
             'body'=>"<p>$message</p>"
-        );
+        ];
 
         $this->messages_model->sendEmail($emailObj);
 
-        return (object) array(
+        return (object) [
             'success'=>true,
             'message'=>'You will receive a verification code shortly'
-        );
+        ];
     }
 
     /**
@@ -363,34 +357,31 @@ class Users_model extends CI_Model{
      * 
     */
     function verifyAccount($userId, $verificationCode){
-        $v = $this->db->get_where(
+        $q = $this->db->get_where(
             'aauth_users',
-            array(
+            [
                 'id'=>$userId,
                 'verification_code'=>$verificationCode
-            )
+            ]
         );
 
-        if($v->num_rows() > 0){
+        if($q->num_rows() > 0){
             $this->db->update(
                 'aauth_users', 
-                array(
+                [
                     'mobile_verified'=>'1',
                     'verification_code'=>''
-                ), 
-                array('id'=>$userId)
+                ], 
+                ['id'=>$userId]
             );
 
-            $response = array(
-                'success'=>true,
-                'message'=>'Account verified'
-            );
+            $response = ['message'=>'Account verified'];
         }
         else{
-            $response = array(
+            $response = [
                 'error'=>true,
                 'message'=>'Could not verify account'
-            );
+            ];
         }
 
         return $response;
@@ -405,7 +396,7 @@ class Users_model extends CI_Model{
     function getUserRegistrationID($userId){
         $user = $this->db
             ->select('fcm_token')
-            ->get_where('aauth_users', array('id'=>$userId))
+            ->get_where('aauth_users', ['id'=>$userId])
             ->result();
 
         return !empty($user->fcm_token) ? $user->fcm_token : '';
