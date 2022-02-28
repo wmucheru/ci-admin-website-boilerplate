@@ -22,14 +22,24 @@ body{
     padding:1em;
 }
 
+.navbar-brand img{
+    max-height:1.5em;
+}
+
+.navbar-nav>li>a{
+    color:#dedede!important;
+    font-size:0.95em;
+    padding:10px 12px;
+}
+
 .navbar-nav>li>a:active,
 .navbar-nav>li>a:focus,
 .navbar-nav>li>a:hover,
 .navbar-nav>li:hover>a,
-.navbar-inverse .navbar-nav>.open>a,
+.navbar-nav>.open>a,
 .dash-bd .dash-lnk, .user-bd .user-lnk, 
 .tools-bd .tools-lnk {
-    background:#aaa!important;
+    background:#555!important;
 	color:#fff!important;
 }
 

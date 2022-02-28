@@ -203,6 +203,10 @@ p.error {
 	max-width:960px;
 }
 
+.container .jumbotron {
+    border-radius: 0;
+}
+
 .page-wrapper{
 	padding-bottom:5em;
 }
@@ -217,7 +221,6 @@ p.error {
 }
 
 .navbar{
-    background:#fff;
     border:0;
 	border-radius:0;
     box-shadow:none;
@@ -226,7 +229,7 @@ p.error {
     min-height:auto;
 }
 .navbar-default{
-    background:transparent;
+    background:#fff;
 }
 .navbar-brand{
     height:auto;
@@ -234,7 +237,7 @@ p.error {
 	padding:6px 15px;
 }
 .navbar-brand img{
-	height:1.8em;
+	max-height:1.8em;
 }
 .navbar-toggle {
     background: #fff !important;

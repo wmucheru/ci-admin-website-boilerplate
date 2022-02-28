@@ -49,6 +49,11 @@
                         <?php
                             $mainMenu = [
                                 [
+                                    'url'=>'/', 
+                                    'title'=>'<i class="ion-md-home"></i> Home',
+                                    'perm'=>true
+                                ],
+                                [
                                     'url'=>'admin/dashboard', 
                                     'title'=>'Dashboard', 
                                     'lclass'=>'dash-lnk', 
