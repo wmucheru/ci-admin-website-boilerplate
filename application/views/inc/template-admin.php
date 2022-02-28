@@ -28,7 +28,7 @@
     <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
     <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 <![endif]-->
-<script src="<?php echo base_url('assets/js/jquery.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/jquery.min.js') ?>"></script>
 </head>
 <body class="admin-bd <?php echo isset($body_class) ? $body_class : ''; ?>">
     <div class="clearfix wrapper">
@@ -65,10 +65,19 @@
                                         ['url'=>'admin/users/suspended', 'title'=>'Suspended Accounts']
                                     ],
                                     'perm'=>PERM_USER_MANAGEMENT
+                                ],
+                                [
+                                    'url'=>'',
+                                    'title'=>'Tools',
+                                    'lclass'=>'tools-lnk',
+                                    'sublinks'=>[
+                                        ['url'=>'admin/tools/settings', 'title'=>'Settings']
+                                    ],
+                                    'perm'=>PERM_IS_ADMIN
                                 ]
                             ];
 
-                            nav_menu($mainMenu)
+                            nav_menu($mainMenu);
                         ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

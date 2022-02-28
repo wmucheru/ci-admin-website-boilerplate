@@ -37,36 +37,127 @@ class Messages_model extends CI_Model{
 
         # Contact
         $fromName = !empty($obj->fromName) ? $obj->fromName : $this->config->item('site_name');
-        $fromEmail = !empty($obj->fromEmail) ? $obj->fromEmail : 'info@mullardfire.co.ke';
+        $fromEmail = !empty($obj->fromEmail) ? $obj->fromEmail : $this->config->item('email');
         $replyToName = !empty($obj->replyToName) ? $obj->replyToName : $fromName;
         $replyToEmail = !empty($obj->replyToEmail) ? $obj->replyToEmail : $fromEmail;
+
+        # Meta
+        $protocol = isset($obj->protocol) ? $obj->protocol : 'mail';
 
         # Is admin-bound email?
         $isAdmin = !empty($obj->isAdmin) ? $obj->isAdmin : FALSE;
 
+        # SMTP vars
+        $SMTPHost = isset($obj->smtp_host) ? $obj->smtp_host : SETTING_EMAIL_SMTP_HOST;
+        $SMTPUser = isset($obj->smtp_user) ? $obj->smtp_user : SETTING_EMAIL_SMTP_USER;
+        $SMTPPassword = isset($obj->smtp_pass) ? $obj->smtp_pass : SETTING_EMAIL_SMTP_PWD;
+        $SMTPPort = isset($obj->smtp_port) ? $obj->smtp_port : SETTING_EMAIL_SMTP_PORT;
+        $SMTPCrypto = isset($obj->smtp_crypto) ? $obj->smtp_crypto : SETTING_EMAIL_SMTP_CRYPTO;
+
         $body = $this->_emailTemplate($message);
 
-        $config['mailtype'] = 'html';
-
-        $this->email
-            ->initialize($config)
-            ->to($email)
-            ->from($fromEmail, $fromName)
-            ->reply_to($replyToName, $replyToEmail)
-            ->subject($subject)
-            ->message($body);
-
-        if(!$this->site_model->isLocalhost()){
-            return $this->email->send();
+        if(!$email){
+            $response['message'] = 'Specify email';
+        }
+        elseif(!$subject){
+            $response['message'] = 'Specify subject';
+        }
+        elseif(!$body){
+            $response['message'] = 'Specify body';
         }
         else{
-            echo $body;
+            $this->load->library('email');
+
+            $config['mailtype'] = 'html';
+
+            if($protocol == 'smtp'){
+                $config['protocol'] = $protocol; # mail, sendmail or smtp
+                $config['smtp_host'] = $SMTPHost;
+                $config['smtp_user'] = $SMTPUser;
+                $config['smtp_pass'] = $SMTPPassword;
+                $config['smtp_port'] = $SMTPPort;
+                $config['smtp_crypto'] = $SMTPCrypto; # tls or ssl
+            }
+
+            $this->email->initialize($config);
+            $this->email->set_newline("\r\n");
+
+            $this->email->from($fromEmail, $fromName);
+            $this->email->to($email);
+            $this->email->subject($subject);
+            $this->email->message($body);
+            $this->email->reply_to($replyToEmail, $replyToName);
+
+            if($this->email->send()){
+                $response['message'] = 'E-mail sent to '. $email; 
+            }
+            else{
+                $response = array(
+                    'error'=>true,
+                    'message'=>$this->email->print_debugger(),
+                ); 
+            }
         }
+
+        return (object) $response;
+    }
+
+    /**
+     * 
+     * Send emails using Mailgun
+     * 
+     * https://documentation.mailgun.com/en/latest/quickstart-sending.html#send-via-api
+     * 
+     * @param params: params[email, subject, body]
+     * 
+    */
+    function sendMailgunEmail($params){
+        $params = (object) $params;
+
+        $email = isset($params->email) ? $params->email : '-';
+        $subject = isset($params->subject) ? $params->subject : '-';
+        $body = isset($params->body) ? $this->_emailTemplate($params->body) : '';
+        $attachments = isset($params->attachments) ? $params->attachments : array();
+
+        $url = SETTING_EMAIL_MG_URL .'/messages';
+        $post = array(
+            'from'=>SETTING_EMAIL_SENDER_NAME. ' <'. SETTING_EMAIL_SENDER_EMAIL .'>',
+            'to'=>$email,
+            'subject'=>$subject,
+            'html'=>$body,
+
+            # Tracking
+            'o:tracking'=>true
+        );
+
+        $curl = curl_init();
+
+        if(!empty($attachments)){
+            foreach($attachments as $index => $a){
+                $index = $index + 1;
+                $post["attachment[$index]"] = $a;
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_USERPWD, SETTING_EMAIL_MG_API_KEY);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return json_decode($response);
     }
 
     function _emailTemplate($message){
         $siteName = $this->config->item('site_name');
         $siteLogo = $this->config->item('site_logo');
+        $siteEmail = $this->config->item('email');
 
         return '
             <table style="font-family:Arial;font-size:14px;width:100%;" bgcolor="#f6f6f6">
@@ -81,8 +172,7 @@ class Messages_model extends CI_Model{
                     <tr>
                         <td colspan="2" style="margin: 0; padding: 20px; line-height:26px;" align="left" valign="top">
                             ' . $message . '
-                            <br/>
-                            <br/>
+                            <br/><br/>
                             <i>'. $siteName .'</i>
                         </td>
                     </tr>
@@ -90,7 +180,8 @@ class Messages_model extends CI_Model{
                     <table width="600" cellpadding="0" cellspacing="0">
                     <tr style=" margin: 0;">
                         <td style="font-size: 12px; color: #999; padding:20px;" align="center" valign="top">
-                            Questions? Email <a href="mailto:info@hamisha.me" style="color: #999; text-decoration: underline; margin: 0;">info@hamisha.me</a>
+                            Questions? Email 
+                            <a href="mailto:'. $siteEmail .'" style="color: #999; text-decoration: underline; margin: 0;">'. $siteEmail .'</a>
                         </td>
                     </tr>
                     </table>

@@ -27,7 +27,8 @@ body{
 .navbar-nav>li>a:hover,
 .navbar-nav>li:hover>a,
 .navbar-inverse .navbar-nav>.open>a,
-.dash-bd .dash-lnk, .user-bd .user-lnk{
+.dash-bd .dash-lnk, .user-bd .user-lnk, 
+.tools-bd .tools-lnk {
     background:#aaa!important;
 	color:#fff!important;
 }
