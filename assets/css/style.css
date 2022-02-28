@@ -236,6 +236,21 @@ p.error {
 .navbar-brand img{
 	height:1.8em;
 }
+.navbar-toggle {
+    background: #fff !important;
+    border: 0;
+    margin-top: 0;
+}
+
+.navbar-toggle .icon-bar {
+    background: #aaa;
+    height: 3px;
+    width: 35px;
+}
+
+.navbar-toggle .icon-bar+.icon-bar {
+    margin-top: 6px;
+}
 .navbar-custom{
 	z-index:999;
 }
@@ -251,8 +266,11 @@ p.error {
 	background:transparent;
 }
 .navbar-nav > li > a:hover,
+.navbar-nav>li:hover>a,
+.navbar-nav>.open>a,
 .about-bd .about-lnk,
 .contact-bd .contact-lnk{
+    background:#eee;
 	color:#555!important;
 }
 
@@ -271,19 +289,18 @@ p.error {
     border:1px solid #000;
 	color:#000!important;
 }
-.navbar-toggle{
-	background:#fff!important;
-	border:0;
-	margin-top:0;
+
+.dropdown-menu{
+    border-radius: 0;
+    padding:0;
 }
-.navbar-toggle .icon-bar{
-	background:#aaa;
-	height:3px;
-	width:35px;
+.dropdown:hover .dropdown-menu {
+    display: block;
 }
-.navbar-toggle .icon-bar+.icon-bar{
-	margin-top: 6px;
+.dropdown-menu>li>a{
+    padding:7px 20px;
 }
+
 .docs-header{
 	padding-top:0;
 }

@@ -133,7 +133,6 @@ $(document).ready(function(){
     $('.btn-group-update').click(function(){
         const gId = $(this).data('id');
         const g = getGroup(gId);
-        console.log(g);
 
         $('input[name=id]').val(g.id);
         $('input[name=name]').val(g.name);

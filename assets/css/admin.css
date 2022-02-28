@@ -32,10 +32,6 @@ body{
 	color:#fff!important;
 }
 
-.dropdown:hover .dropdown-menu{
-    display:block;
-}
-
 /* Stats */
 .stat-row{
     margin-bottom:2em;

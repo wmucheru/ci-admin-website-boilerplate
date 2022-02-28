@@ -92,7 +92,7 @@
                         ?>
                     </ul>
                     <?php
-                        $user = $this->auth_model->get_user_data();
+                        $user = user_data();
                         # var_dump($user);
 
                         if(isset($user->id)){
@@ -105,7 +105,8 @@
                                 ?> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php
+                                <?php 
+                                    nav_link('admin/dashboard', 'Dashboard');
                                     nav_link('logout', 'Log Out');
                                 ?>
                             </ul>
