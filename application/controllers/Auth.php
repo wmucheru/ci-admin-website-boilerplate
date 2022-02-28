@@ -39,7 +39,7 @@ class Auth extends CI_Controller {
             else if($this->aauth->login($email, $password, $remember)){
 
                 # Redirect to the page you were in before session expired
-                $referrer = $this->session->userdata('referrer');
+                # $referrer = $this->session->userdata('referrer');
                 $uri = !empty($referrer) ? $referrer : 'admin/dashboard';
 
                 $this->session->unset_userdata('referrer');
