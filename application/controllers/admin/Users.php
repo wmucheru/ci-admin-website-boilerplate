@@ -34,8 +34,6 @@ class Users extends CI_Controller {
     }
 
     function saveUser(){
-        # var_dump($this->input->post()); exit();
-
         $userId = $this->input->post('id');
         $name = $this->input->post('fname');
         $email = $this->input->post('email');
@@ -94,7 +92,7 @@ class Users extends CI_Controller {
 
     /*
      * 
-     * Profile
+     * User Profile
      *
      */
     function profile(){
@@ -278,9 +276,9 @@ class Users extends CI_Controller {
         render_admin('admin/users/suspended-users', 'Suspended Accounts', 'user-bd', $data);
     }
 
-    function suspend_user($userId){
+    function suspendUser($userId){
         if($this->aauth->ban_user($userId)){
-            $this->session->set_flashdata('users_success', 'User has been suspended');
+            $this->session->set_flashdata('users_success', 'User suspended');
         }
         else{
             $this->session->set_flashdata('users_fail', 'Could not suspend user');
@@ -289,7 +287,7 @@ class Users extends CI_Controller {
         redirect('admin/users');
     }
 
-    function revoke_suspension($userId){
+    function restoreUser($userId){
         if($this->aauth->unban_user($userId)){
             $this->session->set_flashdata('users_fail', 'Suspension was successfully revoked');
         }

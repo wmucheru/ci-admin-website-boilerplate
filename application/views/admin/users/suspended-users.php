@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="page-content clearfix">
+    <div class="col-sm-9 page-content">
         <?php
             $this->site_model->setFlashdataMessages('users');
 
@@ -40,15 +40,13 @@
                 <td><?php echo $u->mobile ?></td>
                 <td style="width:10em;">
                     <?php
-                        echo anchor("admin/users/revoke_suspension/$u->id", 'Restore', ' class="btn btn-warning btn-xs"');
+                        echo anchor("admin/users/restoreUser/$u->id", 'Restore', ' class="btn btn-warning btn-xs"');
                     ?>
                 </td>
             </tr>
             <?php } ?>
             </tbody>
         </table>
-        <?php
-            }
-        ?>
+        <?php } ?>
     </div>
 </div>

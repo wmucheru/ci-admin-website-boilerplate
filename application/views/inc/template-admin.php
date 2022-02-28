@@ -58,11 +58,12 @@
                                     'url'=>'',
                                     'title'=>'Users',
                                     'lclass'=>'user-lnk',
-                                    'sublinks'=>array(
-                                        array('url'=>'admin/users', 'title'=>'Users'),
-                                        array('url'=>'admin/users/permissions', 'title'=>'Groups & Permissions'),
-                                        array('url'=>'admin/users/suspended-users', 'title'=>'Suspended Accounts')
-                                    ),
+                                    'sublinks'=>[
+                                        ['url'=>'admin/users', 'title'=>'Users'],
+                                        ['url'=>'admin/users/permissions', 'title'=>'Groups & Permissions'],
+                                        ['divider'=>''],
+                                        ['url'=>'admin/users/suspended', 'title'=>'Suspended Accounts']
+                                    ],
                                     'perm'=>PERM_USER_MANAGEMENT
                                 ]
                             ];
