@@ -28,7 +28,7 @@
 
             $editMode = !empty($id);
 
-            echo form_open('admin/user/save', 'class="form-horizontal col-sm-8 col-md-6"');
+            echo form_open('admin/user/saveUser', 'class="form-horizontal col-sm-8 col-md-6"');
 
             $this->site_model->setFlashdataMessages('users');
 
@@ -71,7 +71,7 @@
                         }
                     ?>
                 </select>
-                <?php echo form_error('groupid'); ?>
+                <?php echo form_error('groupid') ?>
             </div>
         </div>
 

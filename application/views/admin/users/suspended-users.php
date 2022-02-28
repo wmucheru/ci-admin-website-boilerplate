@@ -5,7 +5,7 @@
             <ol class="breadcrumb">
                 <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
                 <li><a href="<?php echo site_url('admin/users') ?>">Users</a></li>
-                <li class="active"><?php echo isset($page_title) ? $page_title : ''; ?></li>
+                <li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
             </ol>
         </div>
     </div>
@@ -15,7 +15,7 @@
             $this->site_model->setFlashdataMessages('users');
 
             if(empty($suspended)){
-                blank_state('No suspended users', 'alert-info');
+                blank_state('No suspended users');
             }
             else{
         ?>

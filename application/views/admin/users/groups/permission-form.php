@@ -1,6 +1,6 @@
 <div class="clearfix">
 	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#apModal">
-		<i class="fa fa-plus"></i> Add Permission
+		<i class="ion-md-add"></i> New Permission
 	</button>
 
 	<div class="modal" id="apModal" tabindex="-1" role="dialog">

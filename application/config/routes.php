@@ -80,10 +80,7 @@ $route['logout'] = 'auth/logout';
 # Users
 $route['admin/users'] = 'admin/users/index';
 $route['admin/users/new'] = 'admin/users/userForm';
-// $route['admin/users/edit/(:any)'] = 'admin/users/userForm/$1';
 $route['admin/users/edit/(:any)'] = 'admin/users/userForm/$1';
-$route['admin/user/save'] = 'admin/users/saveUser';
-$route['admin/user/perm'] = 'admin/users/set_perms';
 $route['admin/user/suspend/(:any)'] = 'admin/users/suspend_user/$1';
 $route['admin/suspended-users'] = 'admin/users/suspended';
 

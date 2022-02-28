@@ -56,6 +56,16 @@ if(!function_exists('render_admin')){
     }
 }
 
+if(!function_exists('render_header')){
+
+    function render_header($pageTitle){
+        $title = isset($pageTitle) ? $pageTitle : '-';
+        echo "<div class=\"page-header\">
+                <h1>$title</h1>
+            </div>";
+    }
+}
+
 if(!function_exists('blank_state')){
 
     function blank_state($text, $class=''){

@@ -180,192 +180,97 @@ class Users extends CI_Controller {
      * 
     */
     function permissions($method='', $groupId=''){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        $data['body_class'] = 'user-bd';
-
-        $pageTitle = 'Group Permissions';
-        $pageContent = 'admin/users/permissions/permissions';
-
-        # Include corporates in the groups list
         $data['groups'] = $this->auth_model->list_groups();
         $data['perms'] = $this->auth_model->list_perms();
 
-        $perm_id = $this->input->post('perm_id');
-        $name = $this->input->post('permname');
-        $desc = $this->input->post('permdescription');
-        // $moduleId = $this->input->post('moduleid');
-        $type = $this->input->post('permtype');
-
-        if($method == 'add'){
-
-            if($type == 'update'){
-                if(isset($perm_id)){
-                    $edit_role = $this->auth_model->update_perm($perm_id, $name, $desc);
-                    if($edit_role == false){
-                        $this->session->set_flashdata('perm_fail', 'Permission could not be updated');
-                    }
-                    else{
-                        $this->session->set_flashdata('perm_success', 'Permission updated successfully');
-                    }
-                }
-            }
-            else{
-
-                $add_role = $this->auth_model->create_perm($name, $desc);
-
-                if($add_role == false){
-                    $this->session->set_flashdata('perm_fail', 'Permission could not be added');
-                }
-                else{
-                    $this->session->set_flashdata('perm_success', 'Permission added successfully');
-                }
-            }
-
-            redirect('admin/users/permissions');
-        }
-
         if($method == 'group' && $groupId != ''){
-            $group_name = $this->auth_model->get_group_name($groupId);
+            $data['group'] = $this->auth_model->getGroup($groupId);
+            $data['groupPerms'] = $this->auth_model->getGroupPerms($groupId);
 
-            $pageTitle = 'Group Permissions: ' . $group_name;
-            $pageContent = 'admin/users/permissions/group-permissions';
-
-            $data['gid'] = $groupId;
-            $data['group_perms'] = $this->auth_model->getGroupPerms($groupId);
-        }
-
-        if($method == 'delete'){
-            $this->auth_model->delete_perm();
-            redirect('admin/users/permissions');
-        }
-
-        render_admin($pageContent, $pageTitle, 'user-bd', $data);
-    }
-
-    function editGroup($groupId){
-        $groupName = $this->auth_model->get_group_name($groupId);
-
-        $data['gid'] = $groupId;
-        $data['edit_mode'] = TRUE;
-        $data['group_details'] = $this->auth_model->getGroups($groupId);
-
-        render_admin('admin/users/groups/edit-group', "Group Permissions: $groupName", 'user-bd', $data);
-    }
-
-    /*
-     * Add permissions to a specific group
-     */
-    function set_perms(){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        $perm = $this->input->post('perm');
-        $groupId = $this->input->post('group_id');
-
-        if(!empty($perm) && !empty($groupId)){
-
-            $group_perms = $this->auth_model->get_group_perm($groupId,$perm);
-
-            if(!empty($group_perms)){
-                foreach($group_perms as $pms){
-                    $this->aauth->deny_group($groupId, $pms);
-                }
-            }else{
-                $this->aauth->allow_group($groupId, $perm);
-            }
-
-            $response = array(
-                'status' => 'success',
-                'message' => "Permission successfully updated"
-            );
+            render_admin('admin/users/groups/group-permissions', 'Group Permissions', 'user-bd', $data);
         }
         else{
-            $response = array(
-                'status' => 'fail',
-                'message' => "Permission could not be updated"
-            );
+            render_admin('admin/users/groups/permissions', 'Group Permissions', 'user-bd', $data);
         }
-
-        $this->site_model->returnJSON($response);
     }
 
-    function delete_perm($perm_id){
+    function saveGroup(){
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $definition = $this->input->post('definition');
 
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
+        $editMode = !empty($id);
 
-        $this->auth_model->delete_perm($perm_id);
-        redirect('admin/users/permissions');
-    }
-
-    # @method: create, delete, allow
-    function groups($method='', $groupId=''){
-
-        /* Control user access: 2 is control parameter for User access in aauth_perms table */
-        $this->auth_model->control(2, true);
-
-        #var_dump($this->input->post());#exit();
-        $groupId = $this->input->post('group_id');
-        $group_name = $this->input->post('group_name');
-        $group_definition = $this->input->post('group_definition');
-        $type = $this->input->post('type');
-        #$moduleid=$this->input->post('moduleid');
-
-        $this->form_validation->set_rules('group_name', 'Group Name', 'trim|required');
+        $this->form_validation->set_rules('name', 'Group Name', 'trim|required');
+        $this->form_validation->set_rules('definition', 'Definition', 'trim|required');
 
         if($this->form_validation->run() == FALSE){
             $this->permissions();
         }
         else{
-            if($method == 'create'){
-                $add_group = '';
-                $update_group = '';
 
-                if($type == 'update'){
-                    if(isset($groupId)){
-                        $update_group = $this->auth_model->update_group($groupId, $group_name, $group_definition);
-                        # var_dump(); exit();
-                        if($update_group == false){
-                            $this->session->set_flashdata('group_fail', 'Group could not be updated');
-                        }
-                        else{
-                            $this->session->set_flashdata('group_success', 'Group updated successfully');
-                        }
-                    }
+            if($editMode){
+
+                if($this->auth_model->update_group($id, $name, $definition)){
+                    $this->session->set_flashdata('group_success', 'Group updated');
                 }
                 else{
-                    $add_group=$this->auth_model->create_group($group_name, $group_definition);
-
-                    if($add_group == false){
-                        $this->session->set_flashdata('group_fail', 'Group could not be added');
-                    }
-                    else{
-                        $this->session->set_flashdata('group_success', 'Group added successfully');
-                    }
+                    $this->session->set_flashdata('group_fail', 'Could not update group');
+                }
+            }
+            else{
+                if($this->auth_model->create_group($name, $definition) !== FALSE){
+                    $this->session->set_flashdata('group_success', 'Group created');
+                }
+                else{
+                    $this->session->set_flashdata('group_fail', 'Could not create group');
                 }
             }
 
-            if($method == 'allow'){
-
-            }
-
-            redirect('admin/users/groups');
+            redirect('admin/permissions');
         }
     }
 
-    function delete_group($groupId){
-        if(!$this->auth_model->delete_group($groupId)){
-            $this->session->set_flashdata('group_fail', 'Group could not be deleted');
-        }
-        else{
+    function deleteGroup($groupId){
+        if($this->auth_model->delete_group($groupId)){
             $this->session->set_flashdata('group_success', 'Group deleted');
         }
+        else{
+            $this->session->set_flashdata('group_fail', 'Could not delete group');
+        }
 
-        redirect('admin/users/groups');
+        redirect('admin/users/permissions');
+    }
+
+    /**
+     * 
+     * Add permissions to a specific group
+     * 
+    */
+    function setPerms(){
+        $permId = $this->input->post('pid');
+        $groupId = $this->input->post('gid');
+        $active = $this->input->post('active') == 'true';
+
+        if(empty($permId) && empty($groupId)){
+            $response = [
+                'error'=>true,
+                'message'=>'Could not update permission'
+            ];
+        }
+        else{
+
+            if($active){
+                $this->aauth->allow_group($groupId, $permId);
+            }
+            else{
+                $this->aauth->deny_group($groupId, $permId);
+            }
+
+            $response = ['message'=>'Permission saved'];
+        }
+
+        $this->site_model->returnJSON($response);
     }
 
     function suspended(){

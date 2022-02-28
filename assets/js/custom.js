@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var dt = $('.dt'),
+    const dt = $('.dt'),
         datePicker = $('.datepicker'),
         homeSlider = $('.home-slider');
 
@@ -35,30 +35,10 @@ $(document).ready(function () {
                     exportOptions: {
                         columns: ':visible'
                     }
-                }/*,{
-                    extend: 'colvis',
-                    className: 'hidden-print',
-                    text: '<i class="fa fa-columns"></i>',
-                    titleAttr: 'Hide Columns'
-                }*/
+                }
             ]
         })
     }
-
-    $('.no-enter input, .no-enter textarea').keydown(function (e) {
-        if (e.keyCode == 13) {
-            e.preventDefault()
-            return false
-        }
-    })
-
-    /* Password toggle */
-    $('#password-toggle').change(function (e) {
-        var target = document.getElementById('signup-pwd')
-        target.type = target.type === "password"
-            ? "text"
-            : "password"
-    })
 
     /*  Datepicker  */
     if (datePicker.length > 0) {
@@ -82,4 +62,26 @@ $(document).ready(function () {
             autoplaySpeed: 2000
         })
     }
-})
+
+    $('.no-enter input, .no-enter textarea').keydown(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    /* Password toggle */
+    $('.password-toggle').change(function (e) {
+        const target = document.getElementById('signup-pwd');
+        target.type = target.type === 'password' ? 'text' : 'password';
+    });
+
+    // Delete buttons
+    $('.btn-delete').click(function (e) {
+        e.preventDefault();
+
+        if (confirm('Delete this item?')) {
+            window.location.href = $(this).attr('href');
+        }
+    });
+});

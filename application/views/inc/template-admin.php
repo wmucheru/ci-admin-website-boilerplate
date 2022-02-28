@@ -110,7 +110,7 @@
 
             # Datatables
             'assets/plugins/DataTables/datatables.min.js',
-            'assets/js/custom.js'
+            'assets/js/custom.js?t='. date('Hi')
         );
         
         foreach($scripts as $s){

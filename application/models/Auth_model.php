@@ -6,6 +6,25 @@ class Auth_model extends CI_Model{
         parent::__construct();
     }
 
+    /**
+     * 
+     * Limit pages to authorized users
+     *
+     * @param permParam: Control parameter
+     * @param redirect: Redirect to 404 page when perm not allowed, otherwise return boolean
+     *
+     */
+    function control($permParam, $redirect=TRUE){
+        $permId = $this->aauth->get_perm_id($permParam);
+        $this->aauth->update_activity();
+
+        if(!$this->aauth->is_allowed($permId) OR !$this->aauth->is_group_allowed($permId)){
+            if($redirect){
+                show_404();
+            }
+        }
+    }
+
     /*
      * 
      * User Functions
@@ -217,7 +236,7 @@ class Auth_model extends CI_Model{
      *
      */
     function create_group($groupName, $definition) {
-        $a = $this->aauth->create_group($groupName, $definition);
+        return $this->aauth->create_group($groupName, $definition);
     }
 
     function delete_group($groupPar){
@@ -225,11 +244,41 @@ class Auth_model extends CI_Model{
     }
 
     function update_group($groupPar, $groupName, $definition=FALSE){
-        $a = $this->aauth->update_group($groupPar, $groupName, $definition);
+        return $this->aauth->update_group($groupPar, $groupName, $definition);
     }
 
     function add_member($userId, $groupPar){
         return $this->aauth->add_member($userId, $groupPar);
+    }
+
+    function getGroup($id){
+        return $this->db
+            ->select('*')
+            ->where('id', $id)
+            ->get('aauth_groups')
+            ->row();
+    }
+
+    /**
+     * 
+     * Return a group's permissions as an ID array
+     * 
+    */
+    function getGroupPerms($groupId){
+        $perms = $this->db
+            ->select('perm_id')
+            ->from('aauth_perm_to_group')
+            ->where('group_id', $groupId)
+            ->get()
+            ->result();
+
+        $permsArr = array();
+
+        foreach($perms as $p){
+            array_push($permsArr, $p->perm_id);
+        }
+
+        return $permsArr;
     }
 
     /**
@@ -246,25 +295,6 @@ class Auth_model extends CI_Model{
             'aauth_user_to_group', 
             ['user_id'=>$userId, 'group_id'=>$groupId]
         );
-    }
-
-    /**
-     * 
-     * Limit pages to authorized users
-     *
-     * @param permParam: Control parameter
-     * @param redirect: Redirect to 404 page when perm not allowed, otherwise return boolean
-     *
-     */
-    function control($permParam, $redirect=TRUE){
-        $permId = $this->aauth->get_perm_id($permParam);
-        $this->aauth->update_activity();
-
-        if(!$this->aauth->is_allowed($permId) OR !$this->aauth->is_group_allowed($permId)){
-            if($redirect){
-                show_404();
-            }
-        }
     }
 
     /**
@@ -290,27 +320,5 @@ class Auth_model extends CI_Model{
 
     function is_group_allowed($permParam, $userId=FALSE){
         return $this->aauth->is_group_allowed($permParam, $userId);
-    }
-
-    /**
-     * 
-     * Return a group's permissions as an ID array
-     * 
-    */
-    function getGroupPerms($groupId){
-        $perms = $this->db
-            ->select('perm_id')
-            ->from('aauth_perm_to_group')
-            ->where('group_id', $groupId)
-            ->get()
-            ->result();
-
-        $permsArr = array();
-
-        foreach($perms as $p){
-            array_push($permsArr, $p->perm_id);
-        }
-
-        return $permsArr;
     }
 }
