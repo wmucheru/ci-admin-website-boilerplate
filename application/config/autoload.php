@@ -26,7 +26,8 @@ $autoload['helper'] = array(
     'render', 
     'settings', 
     'permissions',
-    'user'
+    'user',
+    'site'
 );
 
 $autoload['config'] = array();
