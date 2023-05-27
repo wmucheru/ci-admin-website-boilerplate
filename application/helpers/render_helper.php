@@ -17,7 +17,7 @@ if(!function_exists('og_tag')){
  * Render helper: Helps simplify page rendering process
  * 
  */
-function render_base($template, $pageContent, $pageTitle='', $bodyClass='', $pageData=array()){
+function render_base($template, $pageContent, $pageTitle='', $bodyClass='', $pageData=[]){
     $CI =& get_instance();
 
     $data['page_title'] = $pageTitle;
@@ -37,21 +37,21 @@ function render_base($template, $pageContent, $pageTitle='', $bodyClass='', $pag
 
 if(!function_exists('render_page')){
 
-    function render_page($pageContent, $pageTitle='', $bodyClass='', $pageData=array()){
+    function render_page($pageContent, $pageTitle='', $bodyClass='', $pageData=[]){
         render_base('inc/template', $pageContent, $pageTitle, $bodyClass, $pageData);
     }
 }
 
 if(!function_exists('render_auth')){
 
-    function render_auth($pageContent, $pageTitle='', $bodyClass='', $pageData=array()){
+    function render_auth($pageContent, $pageTitle='', $bodyClass='', $pageData=[]){
         render_base('inc/template', $pageContent, $pageTitle, $bodyClass, $pageData);
     }
 }
 
 if(!function_exists('render_admin')){
 
-    function render_admin($pageContent, $pageTitle='', $bodyClass='', $pageData=array()){
+    function render_admin($pageContent, $pageTitle='', $bodyClass='', $pageData=[]){
         render_base('inc/template-admin', $pageContent, $pageTitle, $bodyClass, $pageData);
     }
 }
@@ -187,7 +187,7 @@ if (!function_exists('build_link')){
 
         $title = !empty($title) ? $title : ucwords(strtolower($segment));
 
-        return array('url'=>$url, 'title'=>$title, 'perm'=>$permission);
+        return ['url'=>$url, 'title'=>$title, 'perm'=>$permission];
     }
 }
 
@@ -203,7 +203,7 @@ if(!function_exists('quick_filter')){
      * @param includeDates: By default show date filters (to & from)
      * 
     */
-    function quick_filter($filters=array(), $includeDates=TRUE){
+    function quick_filter($filters=[], $includeDates=TRUE){
         $CI =& get_instance();
 
         echo form_open('', 'class="form-inline" method="get"');
@@ -315,7 +315,7 @@ if(!function_exists('form_box_label')){
     * @param obj: Array of type, name, label, value, class, attr 
     *
     */
-    function form_box_label($obj=array()){
+    function form_box_label($obj=[]){
         $obj = (object) $obj;
 
         $name = isset($obj->name) ? $obj->name : '';
@@ -323,14 +323,22 @@ if(!function_exists('form_box_label')){
         $type = isset($obj->type) ? $obj->type : 'text';
         $value = isset($obj->value) ? $obj->value : '';
 
+        $placeholder = isset($obj->placeholder) ? $obj->placeholder : '';
+        $placeholderStr = $placeholder ? "placeholder=\"$placeholder\"" : '';
+
         $required = isset($obj->required) ? $obj->required : FALSE;
         $requiredStr = $required ? 'required' : '';
+
+        $disabled = isset($obj->disabled) ? $obj->disabled : FALSE;
+        $disabledStr = $disabled ? 'disabled' : '';
 
         $str = '';
         $str .= !empty($name) ? " name=\"$name\" " : '';
         $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
         $str .= isset($obj->attrs) ? " $obj->attrs " : '';
-        $str .= $requiredStr;
+        $str .= " $placeholderStr";
+        $str .= " $requiredStr";
+        $str .= " $disabledStr";
         $str = trim($str);
 
         echo '<div class="form-group">';
@@ -340,7 +348,58 @@ if(!function_exists('form_box_label')){
 
         switch($type){
             case 'textarea':
-                echo "<textarea $str>$value</textarea>";
+                echo "<textarea $str>". set_value($name, $value) ."</textarea>";
+                break;
+
+            case 'select':
+                $select = "<select $str>";
+                $select .= !empty($placeholder) ? 
+                    "<option>$placeholder</option>" : '<option>Select</option>';
+
+                if(isset($obj->options)){
+                    foreach($obj->options as $o){
+                        /**
+                         * 
+                         * Check option type to handle value/label assignment
+                         * 
+                        */
+                        $optionType = gettype($o);
+
+                        if($optionType == 'object'){
+                            $o = (array) $o;
+                            $optLabel = !empty($obj->optLabelKey) ? $o[$obj->optLabelKey] : "";
+                            $optValue = !empty($obj->optValueKey) ? $o[$obj->optValueKey] : "";
+                            $isSelected = $optValue === $value;
+
+                            $select .= "<option value=\"$optValue\" ". 
+                                set_select($name, $optValue, $isSelected) .">$optLabel</option>";
+                        }
+                        else{
+                            $isSelected = $o === $value;
+
+                            $select .= "<option value=\"$o\" ". 
+                                set_select($name, $o, $isSelected) .">$o</option>";
+                        }
+                    }
+                }
+
+                $select .= "</select>";
+
+                echo $select;
+                break;
+
+            # Renders special radio button with Yes/No options 
+            case 'yes_no':
+                $opts = ['1'=>'Yes', '0'=>'No'];
+
+                foreach($opts as $v => $optLabel){
+                    $isChecked = $value == $v;
+
+                    echo "<label class=\"radio-inline\">
+                        <input type=\"radio\" name=\"$name\" value=\"$v\"". 
+                            set_radio($name, $value, $isChecked) ." $requiredStr /> $optLabel
+                    </label>";
+                }
                 break;
 
             case 'file':
@@ -357,15 +416,17 @@ if(!function_exists('form_box_label')){
                 break;
 
             default:
-                $str .= isset($obj->value) ? " value=\"$obj->value\" " : '';
+                $str .= isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
                 $str .= !empty($type) ? " type=\"$type\" " : '';
                 echo "<input $str />";
                 break;
         }
+
+        echo !empty($obj->hint) ? "<small class=\"text-info\"><em>$obj->hint</em></small>" : '';
+
         echo form_error($name);
 
         echo '</div>';
-
         echo '</div>';
     }
 }
@@ -456,7 +517,7 @@ if(!function_exists('quick_validate')){
     */
     function quick_validate($vars, $keys){
         $vars = (object) $vars;
-        $errors = array();
+        $errors = [];
 
         foreach($vars as $key => $value){
             $value = $vars->$key;
@@ -466,10 +527,24 @@ if(!function_exists('quick_validate')){
             }
         }
 
-        return empty($errors) ? TRUE : (object) array(
+        return empty($errors) ? TRUE : (object) [
             'error'=>true,
             'errorStr'=>join(', ', $errors)
-        );
+        ];
+    }
+}
+
+if(!function_exists('yes_no_label')){
+
+    /**
+     * 
+     * Render yes/no label
+     * 
+    */
+    function yes_no_label($value){
+        return isset($value) && $value == '1' ? 
+            '<label class="label label-success">Yes</label>' :
+            '<label class="label label-danger">No</label>';
     }
 }
 
