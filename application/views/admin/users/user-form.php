@@ -28,7 +28,7 @@
 
             $editMode = !empty($id);
 
-            echo form_open('admin/user/saveUser', 'class="form-horizontal col-sm-8 col-md-6"');
+            echo form_open('admin/users/saveUser', 'class="form-horizontal col-sm-8 col-md-6"');
 
             $this->site_model->setFlashdataMessages('users');
 
