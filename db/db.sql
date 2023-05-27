@@ -235,27 +235,25 @@ ALTER TABLE `sys_logs`
   ADD PRIMARY KEY (`id`);
 
 CREATE TABLE `sys_settings` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `setting` varchar(45) NOT NULL,
   `description` text NOT NULL,
   `value` text,
-  `tag` varchar(64) DEFAULT NULL
+  `tag` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE `sys_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 INSERT INTO `sys_settings` (`id`, `setting`, `description`, `value`, `tag`) VALUES
 (1, 'SMS Username', 'Username used for SMS API calls', '', 'sms'),
 (2, 'SMS API Key', 'API Key used SMS API Calls', '', 'sms'),
 (3, 'SMS Shortcode', 'Shortcode is the name of the sender e.g. senderID', '', 'sms'),
-(4, 'Mailgun API URL', 'Mailgun URL provides access to the Mailgun API', 'mailgun');
-(5, 'Mailgun API Key', 'Format api:API_KEY', 'mailgun');
-(6, 'Email Sender Name', 'Name of sender', 'email');
-(7, 'Email Sender Email', 'Email of sender', 'email');
-(8, 'Email protocol', 'mail, sendmail or smtp', 'email');
-(9, 'SMTP Host', 'SMTP Server Address', 'email');
-(10, 'SMTP User', 'SMTP Username', 'email');
-(11, 'SMTP Password', 'SMTP Password', 'email');
-(12, 'SMTP Port', '25, 465, 587 or 2525', 'email');
-(13, 'SMTP Crypto', 'tls or ssl', 'email');
+(4, 'Mailgun API URL', 'Mailgun URL provides access to the Mailgun API', '', 'mailgun'),
+(5, 'Mailgun API Key', 'Format api:API_KEY', '', 'mailgun'),
+(6, 'Email Sender Name', 'Name of sender', '', 'email'),
+(7, 'Email Sender Email', 'Email of sender', '', 'email'),
+(8, 'Email protocol', 'mail, sendmail or smtp', '', 'email'),
+(9, 'SMTP Host', 'SMTP Server Address', '', 'email'),
+(10, 'SMTP User', 'SMTP Username', '', 'email'),
+(11, 'SMTP Password', 'SMTP Password', '', 'email'),
+(12, 'SMTP Port', '25, 465, 587 or 2525', '', 'email'),
+(13, 'SMTP Crypto', 'tls or ssl', '', 'email');
