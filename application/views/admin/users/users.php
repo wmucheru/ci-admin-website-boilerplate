@@ -49,10 +49,16 @@
 				<td>
 					<?php 
 						if(PERM_USER_MANAGEMENT){
-							echo anchor("admin/users/edit/$u->id", '<i class="ion-md-create"></i> Edit', 'class="btn btn-xs btn-warning"');
+							echo anchor("admin/users/edit/$u->id", '<i class="ion-md-create"></i> Edit', 
+								'class="btn btn-xs btn-warning"');
 
 							if($u->banned == '0'){
-								echo anchor("admin/user/suspendUser/$u->id", '<i class="ion-md-alert"></i> Suspend', 'class="btn btn-xs btn-danger"');
+								echo anchor("admin/users/suspendUser/$u->id", '<i class="ion-md-alert"></i> Suspend', 
+									'class="btn btn-xs btn-danger"');
+							}
+							else{
+								echo anchor("admin/users/restoreUser/$u->id", '<i class="ion-md-alert"></i> Reinstate', 
+									'class="btn btn-xs btn-primary"');
 							}
 						}
 					?>

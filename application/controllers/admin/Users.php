@@ -289,12 +289,12 @@ class Users extends CI_Controller {
 
     function restoreUser($userId){
         if($this->aauth->unban_user($userId)){
-            $this->session->set_flashdata('users_fail', 'Suspension was successfully revoked');
+            $this->session->set_flashdata('users_success', 'Suspension was successfully revoked');
         }
         else{
             $this->session->set_flashdata('users_fail', 'Suspension could not be revoked');
         }
 
-        redirect('admin/users/suspended/' . $userId);
+        redirect('admin/users');
     }
 }
