@@ -127,7 +127,9 @@
         </div>
     </footer>
     <?php
-        # $this->output->enable_profiler(TRUE);
+        if(is_localhost()){
+            $this->output->enable_profiler(TRUE);
+        }
 
         $scripts = array(
             'assets/js/jquery.min.js',

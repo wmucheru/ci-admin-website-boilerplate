@@ -11,10 +11,14 @@
 <?php
     echo link_tag('favicon.png', 'shortcut icon', 'image/png');
 
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400,700&display=swap" rel="stylesheet">';
+
     $styles = array(
-        'assets/css/bootstrap.min.css',
+        'assets/plugins/bootstrap/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
-        'assets/plugins/DataTables/datatables.min.css',
+        'assets/plugins/datatables/datatables.min.css',
         'assets/css/style.css?t='.date('His'),
         'assets/css/admin.css?t='.date('His')
     );
@@ -30,22 +34,18 @@
 <![endif]-->
 <script src="<?php echo base_url('assets/js/jquery.min.js') ?>"></script>
 </head>
-<body class="admin-bd <?php echo isset($body_class) ? $body_class : ''; ?>">
+<body class="admin-bd <?php echo isset($body_class) ? $body_class : '' ?>">
     <div class="clearfix wrapper">
-        <nav class="navbar navbar-inverse" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" 
-                        data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <?php nav_brand('admin/dashboard') ?>
-                </div>
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <?php nav_brand('admin/dashboard') ?>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <?php
                             $mainMenu = [
                                 [
@@ -85,9 +85,10 @@
                             nav_menu($mainMenu);
                         ?>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <ul class="navbar-nav mb-2">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
+                                aria-expanded="false">
                                 <?php 
                                     $user = $this->auth_model->get_user_data();
                                     # var_dump($user);
@@ -96,7 +97,7 @@
 
                                 ?> <b class="caret"></b>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <?php echo nav_link('logout', 'Log Out') ?>
                             </ul>
                         </li>
@@ -116,18 +117,18 @@
     <?php
         echo '<script>const siteURL = "'. site_url() .'"</script>';
 
-        if($this->site_model->isLocalhost()){
+        if(is_localhost()){
             $this->output->enable_profiler(TRUE);
         }
-        
+
         $scripts = array(
-            'assets/js/bootstrap.min.js',
+            'assets/plugins/bootstrap/js/bootstrap.min.js',
 
             # Datatables
-            'assets/plugins/DataTables/datatables.min.js',
+            'assets/plugins/datatables/datatables.min.js',
             'assets/js/custom.js?t='. date('Hi')
         );
-        
+
         foreach($scripts as $s){
             echo '<script src="' . base_url($s) . '"></script>';
         }

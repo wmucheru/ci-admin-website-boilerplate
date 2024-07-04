@@ -51,7 +51,7 @@ class Site_model extends CI_Model{
     function setGoogleAnalytics(){
         $gaCode = $this->config->item('ga_code');
         
-        if(!$this->site_model->isLocalhost() && !empty($gaCode)){
+        if(!is_localhost() && !empty($gaCode)){
             echo "<script async src=\"https://www.googletagmanager.com/gtag/js?id=$gaCode\"></script>
             <script>
             window.dataLayer = window.dataLayer || [];

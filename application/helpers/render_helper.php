@@ -99,9 +99,21 @@ if(!function_exists('nav_link')){
      * Build navbar url with link 
      * 
     */
-    function nav_link($url, $text, $class=''){
-        $class = !empty($class) ? "class=\"$class\"" : '';
-        echo '<li>'. anchor($url, $text, $class) .'<li>';
+    function nav_link($url, $text, $class=""){
+        $class = !empty($class) ? "class=\"nav-link $class\"" : '';
+        echo '<li class="nav-item">'. anchor($url, $text, $class) .'</li>';
+    }
+}
+
+if(!function_exists('dropdown_link')){
+
+    /**
+     * 
+     * Build dropdown link 
+     * 
+    */
+    function dropdown_link($url, $text){
+        echo '<li>'. anchor($url, $text, 'class="dropdown-item"') .'</li>';
     }
 }
 
@@ -113,7 +125,7 @@ if(!function_exists('nav_divider')){
      * 
     */
     function nav_divider($text=''){
-        echo "<li class=\"divider\">$text</li>";
+        echo "<li class=\"dropdown-divider\">$text</li>";
     }
 }
 
@@ -135,10 +147,11 @@ if(!function_exists('nav_menu')){
                 # Do not show anything
             }
             else if(isset($m->sublinks)){
-                echo "<li class=\"dropdown\">
-                    <a href=\"#\" class=\"dropdown-toggle $class\" 
-                        data-toggle=\"dropdown\">$m->title <b class=\"caret\"></b>
-                    </a><ul class=\"dropdown-menu\">";
+                echo "<li class=\"nav-item dropdown\">
+                    <a href=\"#\" class=\"nav-link dropdown-toggle $class\" role=\"button\" 
+                        data-bs-toggle=\"dropdown\" aria-expanded=\"false\">
+                        $m->title <b class=\"caret\"></b>
+                    </a><ul class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">";
 
                 foreach($m->sublinks as $s){
                     $s = (object) $s;
@@ -150,7 +163,7 @@ if(!function_exists('nav_menu')){
                         nav_divider($s->divider);
                     }
                     else{
-                        nav_link($s->url, $s->title);
+                        dropdown_link($s->url, $s->title);
                     }
                 }
 
