@@ -74,8 +74,25 @@ if(!function_exists('blank_state')){
     }
 }
 
-if(!function_exists('nav_brand')){
+if(!function_exists('breadcrumb_link')){
+    function breadcrumb_link($url, $text){
+        echo '<li class="breadcrumb-item">'. anchor($url, $text) .'</li>';
+    }
+}
 
+if(!function_exists('breadcrumb_active')){
+    function breadcrumb_active($text){
+        echo '<li class="breadcrumb-item active">'. $text .'</li>';
+    }
+}
+
+if(!function_exists('dropdown_link')){
+    function dropdown_link($url, $text){
+        echo '<li>'. anchor($url, $text, 'class="dropdown-item"') .'</li>';
+    }
+}
+
+if(!function_exists('nav_brand')){
     /**
      * 
      * Build nav brand link
@@ -102,18 +119,6 @@ if(!function_exists('nav_link')){
     function nav_link($url, $text, $class=""){
         $class = !empty($class) ? "class=\"nav-link $class\"" : '';
         echo '<li class="nav-item">'. anchor($url, $text, $class) .'</li>';
-    }
-}
-
-if(!function_exists('dropdown_link')){
-
-    /**
-     * 
-     * Build dropdown link 
-     * 
-    */
-    function dropdown_link($url, $text){
-        echo '<li>'. anchor($url, $text, 'class="dropdown-item"') .'</li>';
     }
 }
 

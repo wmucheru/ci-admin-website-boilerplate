@@ -1,58 +1,49 @@
 /*.admin-bdadmin.css */
-body{
-    background:#eee;
+body {
+  background: #eee;
 }
 
-.container{
-    max-width:1200px;
-    width:100%;
+.container {
+  max-width: 1200px;
+  width: 100%;
 }
 
-.breadcrumb{
-    background:#fff;
+.action-bar {
+  padding-bottom: 1em;
 }
 
-.action-bar{
-    padding-bottom:1em;
+.page-content {
+  background: #fff;
+  min-height: 50vh;
+  padding: 1em;
 }
 
-.page-content{
-    background:#fff;
-    min-height:50vh;
-    padding:1em;
+.navbar-brand img {
+  max-height: 1.5em;
 }
 
-.navbar-brand img{
-    max-height:1.5em;
-}
-
-.navbar-nav>li>a{
-    color:#dedede!important;
-    font-size:0.95em;
-    padding:10px 12px;
-}
-
-.navbar-nav>li>a:active,
-.navbar-nav>li>a:focus,
-.navbar-nav>li>a:hover,
-.navbar-nav>li:hover>a,
-.navbar-nav>.open>a,
-.dash-bd .dash-lnk, .user-bd .user-lnk, 
+.navbar-nav > li > a:active,
+.navbar-nav > li > a:focus,
+.navbar-nav > li > a:hover,
+.navbar-nav > li:hover > a,
+.navbar-nav > .open > a,
+.dash-bd .dash-lnk,
+.user-bd .user-lnk,
 .tools-bd .tools-lnk {
-    background:#555!important;
-	color:#fff!important;
+  background: #555 !important;
+  color: #fff !important;
 }
 
 /* Stats */
-.stat-row{
-    margin-bottom:2em;
+.stat-row {
+  margin-bottom: 2em;
 }
-.stat-box > div{
-    background:#fff;
-    padding:1em 1em 0.34em;
-    text-align:center;
+.stat-box > div {
+  background: #fff;
+  padding: 1em 1em 0.34em;
+  text-align: center;
 }
-.stat-box h3{
-    margin-bottom:2px;
-    margin-top:0;
+.stat-box h3 {
+  margin-bottom: 2px;
+  margin-top: 0;
 }

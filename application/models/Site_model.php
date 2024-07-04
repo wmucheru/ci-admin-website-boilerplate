@@ -14,7 +14,7 @@ class Site_model extends CI_Model{
         date_default_timezone_set('Africa/Nairobi');
 
         # Validation config
-        $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
+        $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
         $this->form_validation->set_message('required', '{field} field is required');
     }
 

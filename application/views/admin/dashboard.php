@@ -1,13 +1,18 @@
 <div class="clearfix">
     <div class="page-header">
-        <h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
-        <ol class="breadcrumb">
-            <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
-            <li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
-        </ol>
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <?php
+                        breadcrumb_link('admin/dashboard', 'Home');
+                        breadcrumb_active($page_title);
+                    ?>
+                </ol>
+            </nav>
+            <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
+        </div>
     </div>
-
-    <div class="clearfix">
+    <div class="container">
         <div class="row stat-row">
             <?php
                 # var_dump($stats);

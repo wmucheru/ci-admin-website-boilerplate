@@ -42,10 +42,12 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
                     aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar navbar-nav me-auto">
                         <?php
                             $mainMenu = [
                                 [
@@ -85,7 +87,7 @@
                             nav_menu($mainMenu);
                         ?>
                     </ul>
-                    <ul class="navbar-nav mb-2">
+                    <ul class="navbar navbar-nav">
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
                                 aria-expanded="false">
@@ -93,8 +95,7 @@
                                     $user = $this->auth_model->get_user_data();
                                     # var_dump($user);
 
-                                    echo isset($user->name) ? $user->name : '-'; 
-
+                                    echo isset($user->name) ? $user->name : '-';
                                 ?> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -105,7 +106,7 @@
                 </div>
             </div>
         </nav>
-        <div class="page-wrapper clearfix container">
+        <div class="page-wrapper clearfix">
             <?php $this->load->view($page_content) ?>
         </div>
     </div>
