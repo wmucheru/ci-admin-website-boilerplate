@@ -257,7 +257,7 @@ class Users_model extends CI_Model{
                     'name'=>$name,
                     'email'=>$email,
                     'phone'=>'',
-                    'password'=>$this->site_model->generateRef(4)
+                    'password'=>generate_ref(4)
                 ];
 
                 $user = $this->users_model->createUser($userObj);
@@ -285,7 +285,7 @@ class Users_model extends CI_Model{
             ];
         }
         else{
-            $resetCode = $this->site_model->generateRef(16);
+            $resetCode = generate_ref(16);
 
             $this->db->update('aauth_users', 
                 ['forgot_exp'=>$resetCode],
@@ -322,11 +322,7 @@ class Users_model extends CI_Model{
         $code = rand(100000, 999999);
         $message = "Your verification code is $code";
 
-        $this->db->update(
-            'aauth_users',
-            ['verification_code'=>$code],
-            ['id'=>$userId]
-        );
+        $this->db->update('aauth_users', ['verification_code'=>$code], ['id'=>$userId]);
 
         $user = $this->auth_model->get_user_data($userId);
 

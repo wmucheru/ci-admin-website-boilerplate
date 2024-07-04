@@ -76,13 +76,19 @@ if(!function_exists('blank_state')){
 
 if(!function_exists('nav_brand')){
 
-    function nav_brand($uri='/', $logo=''){
+    /**
+     * 
+     * Build nav brand link
+     * 
+    */
+    function nav_brand($url=''){
         $CI =& get_instance();
 
         $siteName = $CI->config->item('site_name');
-        $logo = empty($logo) ? $CI->config->item('site_logo') : $logo;
-        $img = img("assets/img/$logo", $siteName, 'class="img-responsive"');
-        echo anchor($uri, $img, 'class="navbar-brand"');
+        $logoUrl = $CI->config->item('site_logo');
+        $siteLogo = img('assets/img/'. $logoUrl, $siteName);
+
+        echo anchor($url, $siteLogo, 'class="navbar-brand"');
     }
 }
 
@@ -95,7 +101,7 @@ if(!function_exists('nav_link')){
     */
     function nav_link($url, $text, $class=''){
         $class = !empty($class) ? "class=\"$class\"" : '';
-        echo '<li>'. anchor($url, $text, $class) .'</li>';
+        echo '<li>'. anchor($url, $text, $class) .'<li>';
     }
 }
 
@@ -137,7 +143,10 @@ if(!function_exists('nav_menu')){
                 foreach($m->sublinks as $s){
                     $s = (object) $s;
 
-                    if(isset($s->divider)){
+                    if(!empty($s->perm) && !$s->perm){
+                        # Hide item
+                    }
+                    else if(isset($s->divider)){
                         nav_divider($s->divider);
                     }
                     else{
@@ -213,10 +222,11 @@ if(!function_exists('quick_filter')){
             $to = $CI->input->get('to');
 
             $filters['from'] = !empty($from) ? $from : today();
-            $filters['to'] =  !empty($to) ? $to : today();
+            $filters['to'] = !empty($to) ? $to : today();
         }
 
         foreach($filters as $k => $v){
+            
             echo '<div class="form-group">';
 
             if(is_array($v)){
@@ -249,14 +259,14 @@ if(!function_exists('quick_form')){
         echo form_open($url, 'class="form-horizontal"');
 
         foreach($obj as $k => $v){
-
+            
             if($k == 'id'){
                 echo form_hidden($k, $v);
             }
             else{
                 echo '<div class="form-group">';
                 echo '<label class="control-label col-sm-3">'. ucwords($k) .'</label>';
-
+                
                 echo '<div class="col-sm-9">';
 
                 echo form_input($k, $v, 'class="form-control"');
@@ -323,22 +333,17 @@ if(!function_exists('form_box_label')){
         $type = isset($obj->type) ? $obj->type : 'text';
         $value = isset($obj->value) ? $obj->value : '';
 
-        $placeholder = isset($obj->placeholder) ? $obj->placeholder : '';
-        $placeholderStr = $placeholder ? "placeholder=\"$placeholder\"" : '';
+        # Show custom content
+        $customContent = isset($obj->content) ? $obj->content : '';
 
         $required = isset($obj->required) ? $obj->required : FALSE;
         $requiredStr = $required ? 'required' : '';
-
-        $disabled = isset($obj->disabled) ? $obj->disabled : FALSE;
-        $disabledStr = $disabled ? 'disabled' : '';
 
         $str = '';
         $str .= !empty($name) ? " name=\"$name\" " : '';
         $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
         $str .= isset($obj->attrs) ? " $obj->attrs " : '';
-        $str .= " $placeholderStr";
-        $str .= " $requiredStr";
-        $str .= " $disabledStr";
+        $str .= $requiredStr;
         $str = trim($str);
 
         echo '<div class="form-group">';
@@ -347,39 +352,27 @@ if(!function_exists('form_box_label')){
         echo '<div class="col-sm-8">';
 
         switch($type){
+            case 'custom':
+                echo $customContent;
+                break;
+
             case 'textarea':
                 echo "<textarea $str>". set_value($name, $value) ."</textarea>";
                 break;
 
             case 'select':
                 $select = "<select $str>";
-                $select .= !empty($placeholder) ? 
-                    "<option>$placeholder</option>" : '<option>Select</option>';
+                $select .= isset($obj->hint) ? "<option>$obj->hint</option>" : '';
 
                 if(isset($obj->options)){
                     foreach($obj->options as $o){
-                        /**
-                         * 
-                         * Check option type to handle value/label assignment
-                         * 
-                        */
-                        $optionType = gettype($o);
+                        $o = (array) $o;
+                        $optLabel = $o[$obj->optLabelKey];
+                        $optValue = $o[$obj->optValueKey];
+                        $isSelected = $optValue === $value;
 
-                        if($optionType == 'object'){
-                            $o = (array) $o;
-                            $optLabel = !empty($obj->optLabelKey) ? $o[$obj->optLabelKey] : "";
-                            $optValue = !empty($obj->optValueKey) ? $o[$obj->optValueKey] : "";
-                            $isSelected = $optValue === $value;
-
-                            $select .= "<option value=\"$optValue\" ". 
-                                set_select($name, $optValue, $isSelected) .">$optLabel</option>";
-                        }
-                        else{
-                            $isSelected = $o === $value;
-
-                            $select .= "<option value=\"$o\" ". 
-                                set_select($name, $o, $isSelected) .">$o</option>";
-                        }
+                        $select .= "<option value=\"$optValue\" ". 
+                            set_select($name, $optValue, $isSelected) .">$optLabel</option>";
                     }
                 }
 
@@ -412,7 +405,7 @@ if(!function_exists('form_box_label')){
                         style="margin-bottom:10px; max-width:150px;"');
                 }
 
-                echo "<input type=\"file\" name=\"name\" accept=\"$accept\" />";
+                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" />";
                 break;
 
             default:
@@ -421,9 +414,6 @@ if(!function_exists('form_box_label')){
                 echo "<input $str />";
                 break;
         }
-
-        echo !empty($obj->hint) ? "<small class=\"text-info\"><em>$obj->hint</em></small>" : '';
-
         echo form_error($name);
 
         echo '</div>';
@@ -490,17 +480,39 @@ if(!function_exists('stat_box')){
      * 
      * Return stat box
      * 
-     * 
     */
     function stat_box($number, $label, $perm=TRUE){
+
+        if($perm){
+            echo "<div class=\"col-sm-2 col-xs-6 stat-box\">
+                    <div>
+                        <h3>$number</h3>
+                        <p class=\"ellipsis\">$label</p>
+                    </div>
+                </div>";
+        }
+    }
+}
+
+if(!function_exists('stat_box_link')){
+
+    /**
+     * 
+     * Return stat box
+     * 
+     * 
+    */
+    function stat_box_link($number, $label, $uri, $perm=TRUE){
         $number = empty($number) ? 0 : $number;
 
         if($perm){
             echo "<div class=\"col-sm-2 col-xs-4 stat-box\">
-                    <div>
-                        <h3>$number</h3>
-                        <p>$label</p>
-                    </div>
+                    <a href=". site_url($uri) .">
+                        <div>
+                            <h3>$number</h3>
+                            <p>$label</p>
+                        </div>
+                    </a>
                 </div>";
         }
     }

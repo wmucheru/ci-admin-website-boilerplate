@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('SMS_UNIT_COST', 1);
+
 class Messages_model extends CI_Model{
     var $username;
     var $apikey;
@@ -92,10 +94,10 @@ class Messages_model extends CI_Model{
                 $response['message'] = 'E-mail sent to '. $email; 
             }
             else{
-                $response = array(
+                $response = [
                     'error'=>true,
-                    'message'=>$this->email->print_debugger(),
-                ); 
+                    'message'=>$this->email->print_debugger()
+                ]; 
             }
         }
 
@@ -117,10 +119,10 @@ class Messages_model extends CI_Model{
         $email = isset($params->email) ? $params->email : '-';
         $subject = isset($params->subject) ? $params->subject : '-';
         $body = isset($params->body) ? $this->_emailTemplate($params->body) : '';
-        $attachments = isset($params->attachments) ? $params->attachments : array();
+        $attachments = isset($params->attachments) ? $params->attachments : [];
 
         $url = SETTING_EMAIL_MG_URL .'/messages';
-        $post = array(
+        $post = [
             'from'=>SETTING_EMAIL_SENDER_NAME. ' <'. SETTING_EMAIL_SENDER_EMAIL .'>',
             'to'=>$email,
             'subject'=>$subject,
@@ -128,7 +130,7 @@ class Messages_model extends CI_Model{
 
             # Tracking
             'o:tracking'=>true
-        );
+        ];
 
         $curl = curl_init();
 
@@ -210,30 +212,119 @@ class Messages_model extends CI_Model{
         }
     }
 
-	/*
-     * 
-     * Send SMS from MTech
-     * 
+    /**
      *
-     **/
-    function sendSMS($recipients, $message){
-        $recipients = $this->formatPhoneNumber($recipients);
+     * https://developers.africastalking.com/docs/sms/sending/premium
+     *
+     * @var recipients: An array of recipients
+     * @var message: Message to be sent
+     * receipients are the number sent for messages
+     */
+    function sendSMS($recipients, $message, $sendFromLocal=FALSE){
+        $response = [];
+        $recipients = is_array($recipients) ? join(',', $recipients) : $recipients;
+        $post = [
+            "from"=>$this->shortCode,
+            "username"=>$this->username,
+            "apikey"=>$this->apikey,
+            "to"=>$recipients,
+            "message"=>$message,
+            # "enqueue"=>1
+        ];
 
-        $url = 'https://smsapi.mtechcomm.co.ke/';
-        $params = array(
-            'user'=>$this->username,
-            'pass'=>$this->apikey,
-            'shortCode'=>$this->shortCode,
-            'msisdn'=>$recipients,
+        $curl = curl_init();
 
-            # Include new lines to space out our message
-            'message'=>"$message \n\n"
-        );
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://api.africastalking.com/version1/messaging',
+            CURLOPT_HTTPHEADER => [
+                "apikey:$this->apikey",
+                'Accept:application/json',
+                'Content-Type: application/x-www-form-urlencoded'
+            ],
+            CURLOPT_POST=>1,
+            CURLOPT_POSTFIELDS=>http_build_query($post)
+        ]);
 
-        return $this->site_model->makeCURLRequest('GET_STRING', $url, $params);
+        if(is_localhost() && !$sendFromLocal){
+            $response = [
+                'message'=>'No sending from local'
+            ];
+        }
+        else{
+            $result = curl_exec($curl);
+            curl_close($curl);
+
+            $response = json_decode($result);
+        }
+
+        return $response;
     }
 
-    /*
+    /**
+     *
+     * http://docs.africastalking.com/userdata/balance
+     *
+     * Check no. of SMS tokens remaining. Get balance and divide by unit cost
+     *
+    */
+    function checkRemainingSMSes(){
+        $unitCost = SMS_UNIT_COST;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => "https://api.africastalking.com/version1/user?username=". $this->username,
+            CURLOPT_HTTPHEADER => [
+                "Apikey:$this->apikey",
+                "Accept:application/json"
+            ]
+        ]);
+
+        $result = curl_exec($curl);
+
+        curl_close($curl);
+
+        $response = json_decode($result);
+        $result = isset($response->UserData) ? $response->UserData->balance : 0;
+
+        $balance = str_replace('KES ', '', $result);
+
+        # return $result;
+        # return $balance;
+        return [
+            'balance'=>floor($balance),
+            'unitCost'=>$unitCost
+        ];
+    }
+
+    /**
+     *
+     * Get SMS logs
+     *
+    */
+    function getSMSLogs($ref=''){
+        $this->db
+            ->select('
+                j.id, j.ref, j.message, j.response, j.createdon,
+
+                u.name AS sender'
+            )
+            ->from('sms_jobs j')
+            ->join('aauth_users u', 'u.id = j.createdby', 'left')
+            ->order_by('j.id', 'desc');
+
+        if($ref != ''){
+            $this->db->where('j.ref', $ref);
+        }
+
+        $q = $this->db->get();
+
+        return $ref != '' ? $q->row() : $q->result();
+    }
+
+    /**
      *
      * https://firebase.google.com/docs/cloud-messaging/http-server-ref
      * https://gist.github.com/MohammadaliMirhamed/7384b741a5c979eb13633dc6ea1269ce
@@ -241,16 +332,15 @@ class Messages_model extends CI_Model{
      *
      * @var recipients - Array of individual user registration tokens
      */
-    function sendPushNotifications($to, $title, $message, $data=array()){
-
-        $fields = array(
-            'notification'=>array(
+    function sendPushNotifications($to, $title, $message, $data=[]){
+        $fields = [
+            'notification'=>[
                 'body'=>$message,
                 'title'=>$title,
                 'color'=>'#ffffff'
-            ),
+            ],
             'data'=>$data
-        );
+        ];
 
         if(is_array($to)){
             # To multiple users: array of registration IDs
@@ -262,13 +352,14 @@ class Messages_model extends CI_Model{
             $fields['to'] = $to;
         }
 
-        $headers = array(
+        $headers = [
             'Authorization: key=' . $this->fcmKey,
             'Content-Type: application/json'
-        );
+        ];
 
         # Send Reponse To FireBase Server
         $ch = curl_init();
+
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

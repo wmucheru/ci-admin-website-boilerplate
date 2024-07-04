@@ -41,10 +41,6 @@ class Site_model extends CI_Model{
         return $id != '' ? $q->row() : $q->result();
     }
 
-    function isProduction(){
-        return $this->config->item('debug') == '0';
-    }
-
     function writeLog($string){
         $file = realpath(FCPATH .'/logs/log.txt');
         $current = file_get_contents($file);
@@ -66,36 +62,7 @@ class Site_model extends CI_Model{
         }
     }
 
-    function generateRef(){
-        return bin2hex(openssl_random_pseudo_bytes(8));
-    }
-
-    function setFlashdataMessages($flashdataKey){
-        $success = $this->session->flashdata($flashdataKey . '_success');
-        $fail = $this->session->flashdata($flashdataKey . '_fail');
-        $status = $this->session->flashdata($flashdataKey . '_status');
-
-        if($success != ''){
-            echo '<div class="alert alert-success">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $success . '
-                </div>';
-        }
-
-        if($fail != ''){
-            echo '<div class="alert alert-danger">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $fail . '
-                </div>';
-        }
-
-        if($status != ''){
-            echo '<div class="alert alert-info">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $status . '
-                </div>';
-        }
-    }
+    
 
     /**
      * 
@@ -103,6 +70,8 @@ class Site_model extends CI_Model{
      * 
      * This module is responsible for handling file uploads and/or processing of files. Any 
      * module making use of this function can set the options required.
+     * 
+     * @param obj: Key value object with upload options
      * 
      * GENERAL
      * - upload_path: Path to upload file (required)
@@ -125,13 +94,10 @@ class Site_model extends CI_Model{
      * - watermark: Boolean to allow watermarking. Default FALSE
      * - watermark_image: Path to watermark image from `assets/img` folder (for images)
      * 
-     * 
-     * @param obj: Key value object with upload options
-     * 
     */
     function uploadFile($obj){
         $obj = (object) $obj;
-        $response = array();
+        $response = [];
 
         if(empty($obj->field_name)){
             $response['error'] = 'Field name is required';
@@ -143,17 +109,32 @@ class Site_model extends CI_Model{
             $response['error'] = 'Allowed types is required';
         }
         else{
-            $fileName = !empty($obj->file_name) ? $obj->file_name : $this->generateRef();
+            $fileName = !empty($obj->file_name) ? $obj->file_name : generate_ref();
             $maxSize = !empty($obj->max_size) ? $obj->max_size : UPLOADS_MAX_SIZE;
             $uploadPath = "$this->uploads_root/$obj->upload_path";
 
-            $config = array(
+            # Make folder writable if available
+            if(file_exists($uploadPath)){
+
+                if(!is_writable($uploadPath)){
+
+                    # Update owner to default web server user (Apache/Nginx)
+                    # NOTE: Will only work as root user: 
+                    chown($uploadPath, 'www-data');
+                    chmod($uploadPath, 0755);
+                }
+            }
+            else{
+                $response['error'] = "Could not locate upload path: ". $uploadPath;
+            }
+
+            $config = [
                 'upload_path' => $uploadPath,
                 'allowed_types' => $obj->allowed_types,
                 'file_name' => $fileName,
                 'overwrite' => TRUE,
                 'max_size' => $maxSize
-            );
+            ];
 
             # Max dimensions
             $config['max_height'] = isset($obj->max_height) ? $obj->max_height : 0;
@@ -166,7 +147,7 @@ class Site_model extends CI_Model{
 
                 # Resizing options
                 if(isset($obj->resize) && $obj->resize === TRUE){
-                    $dimensions = array();
+                    $dimensions = [];
 
                     if(!empty($obj->resize_height)){
                         $dimensions['height'] = $obj->resize_height;
@@ -204,14 +185,14 @@ class Site_model extends CI_Model{
      * Resizing for images
      * 
     */
-    function resizeImage($fileName, $filePath, $dimensions=array('height'=>400)){
-        $config = array(
+    function resizeImage($fileName, $filePath, $dimensions=['height'=>400]){
+        $config = [
             'source_image' => $filePath . $fileName,
             'new_image' => $filePath,
             'maintain_ratio' => TRUE,
             'thumb_marker' => '_thumb',
             'quality' => 100
-        );
+        ];
 
         if(isset($dimensions['height'])){
             $config['height'] = $dimensions['height'];
@@ -247,14 +228,14 @@ class Site_model extends CI_Model{
     function watermarkImage($imagePath, $watermarkImage=''){
         $watermark = $watermarkImage != '' ? $watermarkImage : 'assets/img/watermark.png';
 
-        $config = array(
+        $config = [
             'source_image'=>$imagePath,
             'wm_type'=>'overlay',
             'wm_overlay_path'=>$watermark,
             'wm_vrt_alignment'=>'middle',
             'wm_hor_alignment'=>'center',
             'new_image'=>$imagePath
-        );
+        ];
 
         $this->image_lib->clear();
         $this->image_lib->initialize($config);
@@ -271,30 +252,17 @@ class Site_model extends CI_Model{
         return $response;
     }
 
-    /* Check if on local or live server */
-    function isLocalhost(){
-        $domain = $_SERVER['SERVER_NAME'];
-        return ($domain == 'localhost') ? true : false;
-    }
-
-    # JSON responses
-    function returnJSON($data){
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($data));
-    }
-
     /**
      *
      * CURL REQUESTS
      * http://hayageek.com/php-curl-post-get/
      * 
      */
-    function makeCURLRequest($method, $url, $array_params='', $headers=FALSE){
+    function makeCURLRequest($method, $url, $params=[], $headers=FALSE){
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
 
-        $params = empty($params) ? array() : $params;
+        $params = empty($params) ? [] : $params;
         $postFields = json_encode($params);
 
         switch($method){
@@ -353,7 +321,7 @@ class Site_model extends CI_Model{
 
         curl_setopt( $ch, CURLOPT_URL, $url);
         curl_setopt( $ch, CURLOPT_POST, true);
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:text/xml'));
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, ['Content-Type:text/xml']);
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $soap_body);
 

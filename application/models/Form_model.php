@@ -56,12 +56,12 @@ class Form_model extends CI_Model{
             $fieldName = $f->field;
             $label = isset($f->label) ? $f->label : '';
 
-            $data = array(
+            $data = [
                 'name' => $f->field,
                 'id' => $f->field,
                 'value' => isset($f->value) && !empty($f->value) ? $f->value : set_value($fieldName),
                 'class' => 'form-control'
-            );
+            ];
 
             # Add attributes
             if(isset($f->placeholder) && $f->placeholder == true){
@@ -160,9 +160,9 @@ class Form_model extends CI_Model{
         $params = $formObj->fields;
         $sessionKey = $formObj->sessionKey;
 
-        $validations = array();
-        $uploads = array();
-        $tableObj = array();
+        $validations = [];
+        $uploads = [];
+        $tableObj = [];
 
         # Update fields
         $isUpdate = false;
@@ -209,19 +209,19 @@ class Form_model extends CI_Model{
             );
         }
         else{
-            $uploadStatus = array();
+            $uploadStatus = [];
             $uploadsCount = count($uploads);
-            $uploadedFiles = array();
-            $uploadFails = array();
+            $uploadedFiles = [];
+            $uploadFails = [];
 
             foreach($uploads as $u){
                 $u = (object) $u;
 
                 if(!empty($_FILES[$u->field]['name'])){
                     $fieldName = $u->field;
-                    $fileName = !empty($u->fileName) ? $u->fileName : $this->site_model->generateRef();
+                    $fileName = !empty($u->fileName) ? $u->fileName : generate_ref();
                     $uploadType = isset($u->uploadType) ? $u->uploadType : 'image';
-                    $dimensions = isset($u->dimensions) ? explode(',', $u->dimensions) : array();
+                    $dimensions = isset($u->dimensions) ? explode(',', $u->dimensions) : [];
 
                     if(count($dimensions) == 2){
                         $dimensions = array(
@@ -246,7 +246,7 @@ class Form_model extends CI_Model{
                     # Don't have to upload non-required files
                 }
             }
-            
+
             # var_dump($_FILES);
             # var_dump($uploads);
             # var_dump($tableObj);
@@ -273,7 +273,7 @@ class Form_model extends CI_Model{
             # Update entry if applies
             else if($isUpdate){
 
-                # remove empty fields
+                # Remove empty fields
                 foreach(array_keys($tableObj) as $f){
 
                     if(empty($tableObj[$f])){

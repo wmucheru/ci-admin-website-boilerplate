@@ -24,9 +24,11 @@ function get_all_settings(){
 function get_setting($settingId){
     $ci =& get_instance();
     $ci->load->database();
-    $q = $ci->db->query("SELECT value FROM sys_settings WHERE id=$settingId");
+    $result = $ci->db
+        ->query("SELECT value FROM sys_settings WHERE id=$settingId")
+        ->row();
 
-    return $q->num_rows() > 0 ? trim($q->row()->value) : '';
+    return !empty($result->value) ? trim($result->value) : '';
 }
 
 # SMS settings

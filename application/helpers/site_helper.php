@@ -1,5 +1,18 @@
 <?php if( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+if(!function_exists('is_production')){
+
+    /**
+     *
+     * Return TRUE if app is running in production
+     *
+     */
+    function is_production(){
+        $ci =& get_instance();
+        return $ci->config->item('debug') == '0';
+    }
+}
+
 if(!function_exists('is_localhost')){
 
     /**
@@ -55,24 +68,24 @@ if(!function_exists('flash_messages')){
         $status = $ci->session->flashdata($flashdataKey . '_status');
 
         if($success != ''){
-            echo '<div class="alert alert-success">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $success . '
-                </div>';
+            echo '<div class="alert alert-success">'.
+                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+                    $success .
+                '</div>';
         }
 
         if($fail != ''){
-            echo '<div class="alert alert-danger">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $fail . '
-                </div>';
+            echo '<div class="alert alert-danger">'.
+                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+                    $fail .
+                '</div>';
         }
 
         if($status != ''){
-            echo '<div class="alert alert-info">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    ' . $status . '
-                </div>';
+            echo '<div class="alert alert-info">'.
+                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+                    $status .
+                '</div>';
         }
     }
 }
@@ -111,7 +124,17 @@ if(!function_exists('date_str')){
      * Date formatting
      *
      */
-    function date_str($date, $format='M jS, Y'){
+    function date_str($date, $format='mini'){
+        if($format == 'mini'){
+            $format = 'Y-m-d';
+        }
+        elseif($format == 'long'){
+            $format = 'Y-m-d H:i:s';
+        }
+        else{
+            $format = 'M jS, Y';
+        }
+
         return date($format, strtotime($date));
     }
 }
