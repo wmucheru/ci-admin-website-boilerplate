@@ -26,7 +26,7 @@
                 $tag = $setting->tag;
             }
 
-            $this->site_model->setFlashdataMessages('settings');
+            flash_messages('settings');
 
             echo form_open('admin/tools/setting/save', 'class="form-horizontal"');
 
@@ -36,8 +36,8 @@
                 echo form_hidden('id', $id);
             }
         ?>
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Setting</label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Setting</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="setting" required
                     value="<?php echo set_value('setting', $settingName); ?>" <?php echo $editMode ? 'disabled' : '' ?> />
@@ -45,8 +45,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Description</label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Description</label>
             <div class="col-sm-8">
                 <textarea name="description" class="form-control" rows="3" 
                     required><?php echo set_value('description', $description); ?></textarea>
@@ -54,8 +54,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Value</label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Value</label>
             <div class="col-sm-8">
                 <input type="text" name="value" class="form-control" 
                     value="<?php echo set_value('value', $value); ?>" required />
@@ -63,8 +63,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Tag</label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Tag</label>
             <div class="col-sm-8">
                 <?php
                     $tags = array(
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
             <div class="col-sm-offset-4 col-sm-8">
                 <hr/>
                 <button type="submit" class="btn btn-lg btn-block btn-success">Save</button>

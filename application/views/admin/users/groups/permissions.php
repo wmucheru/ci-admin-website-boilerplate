@@ -10,8 +10,8 @@
 
     <div class="clearfix">
         <?php
-            $this->site_model->setFlashdataMessages('group');
-            $this->site_model->setFlashdataMessages('perm');
+            flash_messages('group');
+            flash_messages('perm');
         ?>
         <div class="row">
             <div class="col-sm-6">

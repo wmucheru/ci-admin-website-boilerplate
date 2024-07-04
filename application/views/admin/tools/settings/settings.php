@@ -18,7 +18,7 @@
                 echo '</div>';
             }
 
-            $this->site_model->setFlashdataMessages('setting');
+            flash_messages('setting');
 
             if(empty($settings)){
                 blank_state('No settings found');

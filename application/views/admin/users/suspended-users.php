@@ -12,7 +12,7 @@
 
     <div class="col-sm-9 page-content">
         <?php
-            $this->site_model->setFlashdataMessages('users');
+            flash_messages('users');
 
             if(empty($suspended)){
                 blank_state('No suspended users');

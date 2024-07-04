@@ -244,14 +244,13 @@ if(!function_exists('quick_filter')){
         }
 
         foreach($filters as $k => $v){
-            
-            echo '<div class="form-group">';
+            echo '<div class="row mb-3">';
 
             if(is_array($v)){
                 echo form_dropdown($k, $v);
             }
             else{
-                echo '<label class="control-label">'. ucwords($k) .'</label>';
+                echo '<label class="col-form-label">'. ucwords($k) .'</label>';
                 echo form_input($k, $v, 'class="form-control" style="margin:0 5px;"');    
             }
 
@@ -282,8 +281,8 @@ if(!function_exists('quick_form')){
                 echo form_hidden($k, $v);
             }
             else{
-                echo '<div class="form-group">';
-                echo '<label class="control-label col-sm-3">'. ucwords($k) .'</label>';
+                echo '<div class="row mb-3">';
+                echo '<label class="col-form-label col-sm-3">'. ucwords($k) .'</label>';
                 
                 echo '<div class="col-sm-9">';
 
@@ -307,7 +306,7 @@ if(!function_exists('form_box')){
 
     /**
      * 
-     * Generate form box with input & validation. Contained in form-group
+     * Generate form box with input & validation. Contained in row mb-3
      * 
      * 
     */
@@ -315,7 +314,7 @@ if(!function_exists('form_box')){
         $attrs .= " type=\"$type\" ";
         $attrs .= ' class="form-control" ';
 
-        echo '<div class="form-group">';
+        echo '<div class="row mb-3">';
 
         switch($type){
             case 'password':
@@ -338,7 +337,7 @@ if(!function_exists('form_box_label')){
 
     /**
     * 
-    * Generate labeled form box with input & validation. Contained in form-group
+    * Generate labeled form box with input & validation. Contained in row mb-3
     * 
     * @param obj: Array of type, name, label, value, class, attr 
     *
@@ -364,8 +363,8 @@ if(!function_exists('form_box_label')){
         $str .= $requiredStr;
         $str = trim($str);
 
-        echo '<div class="form-group">';
-        echo "<label class=\"control-label col-sm-4 $requiredStr\">$label</label>";
+        echo '<div class="row mb-3">';
+        echo "<label class=\"col-form-label col-sm-4 $requiredStr\">$label</label>";
 
         echo '<div class="col-sm-8">';
 
@@ -449,7 +448,7 @@ if(!function_exists('form_box_large')){
     function form_box_large($name, $value, $attrs=''){
         $attrs .= ' class="form-control" rows="3"';
 
-        echo '<div class="form-group">';
+        echo '<div class="row mb-3">';
 
         echo form_textarea($name, $value, $attrs);
         echo form_error($name);
@@ -484,9 +483,9 @@ if(!function_exists('form_box_button')){
      * 
     */
     function form_box_button($text, $attrs='class="btn btn-lg btn-block btn-primary"'){
-        echo '<div class="form-group">
-            <div class="col-sm-offset-4 col-sm-8">';
-        echo "<hr/><button $attrs >$text</button>";
+        echo '<div class="row mb-3">
+            <div class="offset-sm-4 col-sm-8">';
+        echo "<button $attrs >$text</button>";
         echo '</div>
             </div>';
     }

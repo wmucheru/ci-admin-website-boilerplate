@@ -80,10 +80,10 @@ class Form_model extends CI_Model{
                 $data['disabled'] = '';
             }
 
-            $form .= '<div class="form-group">';
+            $form .= '<div class="row mb-3">';
             
             if(!empty($f->label)){
-                $form .= "<label for=\"$fieldName\" class=\"col-sm-4 control-label\">$label</label>";
+                $form .= "<label for=\"$fieldName\" class=\"col-sm-4 col-form-label\">$label</label>";
             }
 
             $form .= '<div class="col-sm-8">';

@@ -4,18 +4,11 @@ body {
 }
 
 .container {
-  max-width: 1200px;
-  width: 100%;
+  max-width: 1440px;
 }
 
 .action-bar {
   padding-bottom: 1em;
-}
-
-.page-content {
-  background: #fff;
-  min-height: 50vh;
-  padding: 1em;
 }
 
 .navbar-brand img {

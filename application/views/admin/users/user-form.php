@@ -1,14 +1,20 @@
 <div class="clearfix">
     <div class="page-header">
-		<h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
-		<ol class="breadcrumb">
-            <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
-            <li><a href="<?php echo site_url('admin/users') ?>">Users</a></li>
-			<li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
-		</ol>
+        <div class="container">
+			<nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <?php
+                        breadcrumb_link('admin/dashboard', 'Home');
+                        breadcrumb_link('admin/users', 'Users');
+                        breadcrumb_active($page_title);
+                    ?>
+                </ol>
+            </nav>
+            <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
+		</div>
 	</div>
 
-    <div class="clearfix page-content">
+    <div class="container page-content">
         <?php
             # var_dump($user);
 
@@ -28,9 +34,9 @@
 
             $editMode = !empty($id);
 
-            echo form_open('admin/users/saveUser', 'class="form-horizontal col-sm-8 col-md-6"');
+            echo form_open('admin/users/saveUser', 'class="form-horizontal col-md-6"');
 
-            $this->site_model->setFlashdataMessages('users');
+            flash_messages('users');
 
             echo form_hidden('id', $id);
 
@@ -58,9 +64,8 @@
                 'required'=>true
             ]);
         ?>
-
-        <div class="form-group">
-            <label class="col-sm-4 control-label">User Group</label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">User Group</label>
             <div class="col-sm-8">
                 <select class="form-control" name="groupid" required>
                     <option value="">Select a Group</option>
@@ -75,8 +80,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Password </label>
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Password </label>
             <div class="col-sm-8">
                 <input type="password" name="password" class="form-control" 
                     minlength="6" autocomplete="new-password" />

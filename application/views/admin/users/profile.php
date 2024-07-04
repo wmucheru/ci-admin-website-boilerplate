@@ -5,7 +5,6 @@
 
     <div class="row">
         <?php
-            
             $name = $user->name;
             $email = $user->email;
             $mobile = $user->mobile;
@@ -23,7 +22,7 @@
                 <div class="panel-body">
                     <div class="col-md-7">
                         <?php
-                            $this->site_model->setFlashdataMessages('profile');
+                            flash_messages('profile');
 
                             echo form_label('Full Name');
                             form_box('name', $name, '', 'required');
@@ -90,9 +89,9 @@
                 </div>
                 <div class="panel-body">
                     <?php
-                        $this->site_model->setFlashdataMessages('password');
-
                         echo form_open_multipart('users/updatePassword');
+
+                        flash_messages('password');
 
                         echo form_label('Old Password');
                         form_box('opassword', '', 'password', 'minlength="6"');
