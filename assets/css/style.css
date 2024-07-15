@@ -51,6 +51,11 @@ h6 {
   font-weight: 700;
 }
 
+a,
+a:active {
+  color: var(--color-primary);
+}
+
 ul,
 ol {
   margin: 0;
@@ -111,6 +116,7 @@ table tr td .btn {
   box-shadow: none;
   color: #333;
   cursor: pointer;
+  font-size: var(--default-font-size);
 }
 .form-control:is(:active, :focus) {
   box-shadow: none;
@@ -118,6 +124,19 @@ table tr td .btn {
 }
 .form-control:hover {
   border-color: #ccc !important;
+}
+.form-floating {
+  overflow: hidden;
+}
+.form-floating > label {
+  background: var(--white);
+  height: auto;
+  padding: 0 0.75rem;
+  top: 0.9rem;
+  transition: none;
+}
+.form-floating > .form-control {
+  padding: 2rem 0.75rem 1rem !important;
 }
 
 .modal-header {
@@ -136,8 +155,13 @@ table tr td .btn {
 .btn {
   border-radius: 2px !important;
   font-size: 11px;
-  font-weight: bold;
   text-transform: uppercase;
+}
+.btn > i {
+  margin-right: 4px;
+}
+.btn:is(:focus, :active) {
+  box-shadow: none;
 }
 .btn + .btn {
   margin-left: 4px !important;
@@ -272,8 +296,8 @@ input.datepicker {
 
 .page-header {
   border-bottom: 0;
-  margin: 0 0 1em;
-  padding: 0.5em 0 0;
+  margin: 0 0 2rem;
+  padding: 0;
 }
 .page-header h1 {
   font-size: 1.6em;
@@ -292,12 +316,18 @@ input.datepicker {
   content: "";
 }
 
+.jumbotron {
+  background: var(--lighter-gray);
+  padding: 5em 1em;
+  text-align: center;
+}
+
 .navbar {
   padding: 0;
 }
 
 .navbar-brand img {
-  max-height: 1.8em;
+  max-height: 1.6em;
 }
 
 .navbar-toggler {
@@ -393,22 +423,20 @@ input.datepicker {
 
 /* Auth */
 .auth-bd {
-  background: #fafafa;
+  background: var(--lighter-gray);
 }
 .login-form {
-  background: #fff;
+  background: var(--white);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   margin: 5% auto;
   padding: 1em 3em;
   width: 25em;
 }
-.login-form h4 {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1em;
-  text-transform: uppercase;
+.login-form h1 {
+  margin-bottom: 1em;
 }
-.login-form .checkbox-inline {
-  color: #555;
+.login-form .form-label {
+  margin-bottom: 2px;
 }
 
 footer {

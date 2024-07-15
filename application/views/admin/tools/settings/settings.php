@@ -17,15 +17,6 @@
         <div class="col-sm-9">
             <div class="page-content">
                 <?php
-                    if(PERM_IS_ADMIN){
-                        echo '<div class="action-bar">';
-
-                        echo anchor('admin/tools/setting/new', '<i class="fa fa-plus"></i> Add Setting', 
-                            'class="btn btn-success btn-sm"');
-
-                        echo '</div>';
-                    }
-
                     flash_messages('setting');
 
                     if(empty($settings)){
@@ -55,8 +46,10 @@
                         <td><?php echo !empty($s->value) ? $s->value : '-' ?></td>
                         <td><?php echo "<span class=\"badge bg-primary\">$s->tag</span>" ?></td>
                         <td><?php 
-                            echo anchor('admin/tools/settings/'. $s->id, 'View', 
-                                'class="btn btn-xs btn-outline-warning"')
+                            if(PERM_IS_ADMIN){
+                                echo anchor('admin/tools/settings/'. $s->id, 'View', 
+                                    'class="btn btn-xs btn-outline-warning"');
+                            }
                         ?></td>
                     </tr>
                     <?php } ?>

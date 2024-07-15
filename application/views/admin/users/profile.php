@@ -56,7 +56,7 @@
                         ?>
                     </div>
 
-                    <div class="col-sm-offset-1 col-md-4 hidden">
+                    <div class="offset-md-1 col-md-4 hidden">
                         <img src="<?php echo base_url($photo) ?>" class="img-responsive" />
                         <br/>
                         <p>

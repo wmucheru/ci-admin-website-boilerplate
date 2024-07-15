@@ -24,23 +24,23 @@
      * - https://css-tricks.com/essential-meta-tags-social-media/
      * 
      */
-    $seoMeta = array(
+    $seoMeta = [
 
         # Basic Meta
-        array('name'=>'viewport', 'content'=>'width=device-width, initial-scale=1'), # For responsive layouts
-        array('name'=>'Content-type', 'content'=>'text/html; charset=utf-8', 'type'=>'equiv'),
+        ['name'=>'viewport', 'content'=>'width=device-width, initial-scale=1'], # For responsive layouts
+        ['name'=>'Content-type', 'content'=>'text/html; charset=utf-8', 'type'=>'equiv'],
 
         # Page Meta
-        array('name'=>'description', 'content'=>$pageDescription),
-        array('name'=>'keywords', 'content'=>$pageKeywords),
-        array('name'=>'author', 'content'=>$pageAuthor),
+        ['name'=>'description', 'content'=>$pageDescription],
+        ['name'=>'keywords', 'content'=>$pageKeywords],
+        ['name'=>'author', 'content'=>$pageAuthor],
 
         # Twitter
-        array('name' => 'twitter:title', 'content' => $pageTitle),
-        array('name' => 'twitter:description', 'content' => $pageDescription),
-        array('name' => 'twitter:image', 'content' => $pageImage),
-        array('name' => 'twitter:card', 'content' => $pageImage)
-    );
+        ['name' => 'twitter:title', 'content' => $pageTitle],
+        ['name' => 'twitter:description', 'content' => $pageDescription],
+        ['name' => 'twitter:image', 'content' => $pageImage],
+        ['name' => 'twitter:card', 'content' => $pageImage]
+    ];
 
     echo meta($seoMeta);
 
@@ -52,11 +52,11 @@
 
     echo link_tag('favicon.png', 'shortcut icon', 'image/png');
 
-    $styles = array(
-        'assets/css/bootstrap.min.css',
+    $styles = [
+        'assets/plugins/bootstrap/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
         'assets/css/style.css?t='.date('His')
-    );
+    ];
 
     foreach($styles as $s){
         echo link_tag($s);
@@ -71,48 +71,25 @@
 </head>
 <body class="<?php echo isset($body_class) ? $body_class : ''; ?>">
     <div class="clearfix wrapper">
-        <nav class="navbar navbar-default" role="navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" 
-                        data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <?php nav_brand() ?>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
+                <?php nav_brand('/') ?>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar navbar-nav me-auto">
                         <?php
                             nav_link('', 'Home', 'home-lnk');
                             nav_link('about', 'About', 'about-lnk');
                             nav_link('contact', 'Contact', 'contact-lnk');
                         ?>
                     </ul>
-                    <?php
-                        $user = user_data();
-                        # var_dump($user);
-
-                        if(isset($user->id)){
-                    ?>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <?php
-                                    echo isset($user->name) ? $user->name : '-'; 
-                                ?> <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <?php 
-                                    nav_link('admin/dashboard', 'Dashboard');
-                                    nav_link('logout', 'Log Out');
-                                ?>
-                            </ul>
-                        </li>
-                    </ul>
-                    <?php } ?>
+                    <?php nav_auth() ?>
                 </div>
             </div>
         </nav>
@@ -131,11 +108,11 @@
             $this->output->enable_profiler(TRUE);
         }
 
-        $scripts = array(
+        $scripts = [
             'assets/js/jquery.min.js',
             'assets/js/bootstrap.min.js',
             'assets/js/custom.js'
-        );
+        ];
 
         foreach($scripts as $s){
             echo '<script src="' . base_url($s) . '"></script>';

@@ -81,7 +81,7 @@
         </div>
 
         <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">Password </label>
+            <label class="col-sm-4 col-form-label">Password</label>
             <div class="col-sm-8">
                 <input type="password" name="password" class="form-control" 
                     minlength="6" autocomplete="new-password" />

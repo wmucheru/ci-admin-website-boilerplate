@@ -17,7 +17,7 @@ class Tools extends CI_Controller {
 
         if($id != ''){
             $data['setting'] = $s;
-            render_admin('admin/tools/settings/settings-form', "Setting: $s->setting", 'tools-bd', $data);
+            render_admin('admin/tools/settings/settings-form', $s->setting, 'tools-bd', $data);
         }
         else{
             $data['settings'] = $s;

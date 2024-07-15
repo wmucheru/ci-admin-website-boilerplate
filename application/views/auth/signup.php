@@ -10,7 +10,7 @@
         flash_messages('signup');
     ?>
     <div class="row mb-3">
-        <div class="col-sm-offset-4 col-sm-8">
+        <div class="offset-sm-4 col-sm-8">
             <p class="text-danger">
                 Fill in the required fields marked with an asterisk (*)
             </p>
@@ -66,7 +66,7 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-sm-offset-4 col-sm-8">
+        <div class="offset-sm-4 col-sm-8">
             <p>
                 By signing up, you agree to the 
                 <?php echo anchor('terms', 'Terms and Conditions'); ?>
@@ -76,6 +76,5 @@
             </p>
         </div>
     </div>
-
-    <?php echo form_close(); ?>
+    <?php echo form_close() ?>
 </div>

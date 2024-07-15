@@ -138,7 +138,7 @@ class Form_model extends CI_Model{
             $form .= '</div>';
         }
 
-        $form .= '<div class="col-sm-offset-4 col-sm-8"><hr/>';
+        $form .= '<div class="offset-sm-4 col-sm-8"><hr/>';
         $form .= "<button class=\"btn btn-lg btn-block btn-success\">$formObj->submitLabel</button>";
         $form .= '</div>';
 
@@ -203,10 +203,10 @@ class Form_model extends CI_Model{
         }
 
         if(!$this->form_validation->run() == FALSE){
-            return array(
+            return [
                 'error'=>true,
                 'message'=>'Validation failed'
-            );
+            ];
         }
         else{
             $uploadStatus = [];
@@ -224,10 +224,10 @@ class Form_model extends CI_Model{
                     $dimensions = isset($u->dimensions) ? explode(',', $u->dimensions) : [];
 
                     if(count($dimensions) == 2){
-                        $dimensions = array(
+                        $dimensions = [
                             'width'=>$dimensions[0],
                             'height'=>$dimensions[1]
-                        );
+                        ];
                     }
 
                     $status = $this->site_model->uploadDocument($fieldName, $fileName, $uploadType, $dimensions);
@@ -265,9 +265,7 @@ class Form_model extends CI_Model{
 
                 $this->session->set_flashdata($sessionKey.'_fail', 'Could not upload files');
 
-                return array(
-                    'status'=>$uploadStatus
-                );
+                return ['status'=>$uploadStatus];
             }
 
             # Update entry if applies
@@ -286,28 +284,24 @@ class Form_model extends CI_Model{
                 $this->db->update($formObj->table, $tableObj, ['id'=>$updateId]);
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
-                return (object) array(
-                    'message'=>'Successfully saved'
-                );
+                return (object) ['message'=>'Successfully saved'];
             }
 
             # Save new entry
             else if($this->db->insert($formObj->table, $tableObj)){
                 $this->session->set_flashdata($sessionKey.'_success', ucfirst($sessionKey).' saved');
 
-                return (object) array(
-                    'message'=>'Successfully saved'
-                );
+                return (object) ['message'=>'Successfully saved'];
             }
 
             # Else; fail
             else{
                 $this->session->set_flashdata($sessionKey.'_fail', 'Could not save ' . ucfirst($sessionKey));
 
-                return (object) array(
+                return (object) [
                     'error'=>true,
                     'message'=>'Could not save details'
-                );
+                ];
             }
         }
     }

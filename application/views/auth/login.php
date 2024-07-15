@@ -1,24 +1,25 @@
 <div class="clearfix">
     <?php 
-        echo form_open('auth/login_proc', 'class="form-horizontal login-form"');
+        echo form_open('auth/login_proc', 'class="login-form"');
 
         flash_messages('login')
     ?>
-    <div class="row mb-3">
-        <h4>Log In</h4>
+    <div class="mb-3">
+        <h1 class="display-6 text-center">Log In</h1>
     </div>
 
-    <div class="row mb-3">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="email" autofocus required
+            value="<?php echo set_value('email') ?>" />
         <label>Email</label>
-        <input type="text" class="form-control" name="email" value="<?php echo set_value('email') ?>" autofocus />
     </div>
 
-    <div class="row mb-3">
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" name="password" required minlength="6" />
         <label>Password</label>
-        <input type="password" class="form-control" name="password" />
     </div>
 
-    <div class="row mb-3">
+    <div class="d-grid mb-3 mt-4">
         <button class="btn btn-lg btn-block btn-danger">Log In</button>
     </div>
     <?php echo form_close() ?>

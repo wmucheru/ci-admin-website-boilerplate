@@ -16,7 +16,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <div class="page-content">
                 <table class="table table-bordered table-striped dt">
                     <thead>

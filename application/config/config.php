@@ -30,6 +30,8 @@ $config['site_logo'] = env_var('sitelogo');
 $config['site_theme'] = env_var('sitetheme');
 $config['sms_shortcode'] = env_var('smsshortcode');
 $config['ga_code'] = env_var('gacode');
+$config['recaptcha_key'] = env_var('recaptchakey');
+$config['map_embed_url'] = env_var('mapembedurl');
 
 # 0 = Production, 1 = Dedbug
 $config['debug'] = env_var('debug');

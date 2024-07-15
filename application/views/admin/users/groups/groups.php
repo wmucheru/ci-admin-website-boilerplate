@@ -20,7 +20,7 @@
             flash_messages('perm');
         ?>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
                         Groups
@@ -84,7 +84,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">Permissions</div>
                     <div class="card-body">

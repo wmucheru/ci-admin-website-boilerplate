@@ -15,13 +15,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400,700&display=swap" rel="stylesheet">';
 
-    $styles = array(
+    $styles = [
         'assets/plugins/bootstrap/css/bootstrap.min.css',
         'assets/css/ionicons.min.css',
         'assets/plugins/datatables/datatables.min.css',
         'assets/css/style.css?t='.date('His'),
         'assets/css/admin.css?t='.date('His')
-    );
+    ];
 
     foreach($styles as $s){
         echo link_tag($s);
@@ -87,22 +87,7 @@
                             nav_menu($mainMenu);
                         ?>
                     </ul>
-                    <ul class="navbar navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
-                                aria-expanded="false">
-                                <?php 
-                                    $user = $this->auth_model->get_user_data();
-                                    # var_dump($user);
-
-                                    echo isset($user->name) ? $user->name : '-';
-                                ?> <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <?php echo dropdown_link('logout', 'Log Out') ?>
-                            </ul>
-                        </li>
-                    </ul>
+                    <?php nav_auth() ?>
                 </div>
             </div>
         </nav>

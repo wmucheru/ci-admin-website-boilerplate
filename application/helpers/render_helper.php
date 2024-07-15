@@ -187,6 +187,40 @@ if(!function_exists('nav_menu')){
     }
 }
 
+if(!function_exists('nav_auth')){
+
+    /**
+     * 
+     * Render auth nav menu
+     * 
+    */
+    function nav_auth(){
+        $CI =& get_instance();
+        $user = $CI->auth_model->get_user_data();
+
+        if(!empty($user->name)){
+            echo '<ul class="navbar navbar-nav">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
+                        aria-expanded="false">'. $user->name .'<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
+
+            dropdown_link('admin/dashboard', 'Dashboard');
+            dropdown_link('logout', 'Log Out');
+
+            echo '</ul>
+                </li>
+            </ul>';
+        }
+        else{
+            echo anchor('auth', '<i class="ion-md-person"></i> Login', 
+                'class="btn btn-outline-danger"');
+        }
+    }
+}
+
+
 if(!function_exists('tab_link')){
 
     /**
@@ -300,7 +334,7 @@ if(!function_exists('quick_form')){
             }
         }
 
-        echo '<div class="col-sm-offset-3 col-sm-9">';
+        echo '<div class="offset-sm-3 col-sm-9">';
         echo '<hr/><button class="btn btn-block btn-success">Update</button>';
         echo '</div>';
 
