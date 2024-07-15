@@ -68,6 +68,7 @@
         <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 <![endif]-->
 <?php $this->site_model->setGoogleAnalytics() ?>
+<script src="<?php echo base_url('assets/js/jquery.min.js') ?>"></script>
 </head>
 <body class="<?php echo isset($body_class) ? $body_class : ''; ?>">
     <div class="clearfix wrapper">
@@ -109,8 +110,7 @@
         }
 
         $scripts = [
-            'assets/js/jquery.min.js',
-            'assets/js/bootstrap.min.js',
+            'assets/plugins/bootstrap/js/bootstrap.min.js',
             'assets/js/custom.js'
         ];
 
