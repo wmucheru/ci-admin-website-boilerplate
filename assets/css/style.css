@@ -3,8 +3,9 @@
   --default-font-size: 14px;
   --default-font-weight: 400;
 
-  --color-primary: #0a3968;
+  --color-primary: #1662d2;
   --color-accent: #f5b333;
+  --color-warning: #cd8e29;
 
   --link-color: #337ab7;
 
@@ -111,10 +112,23 @@ table tr td .btn {
   color: #333;
   cursor: pointer;
 }
+.form-control:is(:active, :focus) {
+  box-shadow: none;
+  outline: none;
+}
 .form-control:hover {
   border-color: #ccc !important;
 }
 
+.modal-header {
+  padding: 0.5rem 1rem;
+}
+.modal-header .btn-close {
+  margin-right: 0.25rem;
+}
+.modal-backdrop {
+  z-index: 1000;
+}
 .modal-open .modal {
   z-index: 10000;
 }
@@ -126,25 +140,32 @@ table tr td .btn {
   text-transform: uppercase;
 }
 .btn + .btn {
-  margin-left: 3px !important;
+  margin-left: 4px !important;
 }
-
-.btn-warning {
-  background: #fbac2b;
-}
-
-.btn-social {
-  display: block;
-  margin: 0 auto;
-  max-width: 240px;
-}
-
 .btn-group .btn + .btn {
   margin-left: 0 !important;
 }
 
-.modal-backdrop {
-  z-index: 1000;
+.btn-primary {
+  background: var(--color-primary);
+}
+.btn-outline-primary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.btn-outline-primary:is(:hover, :active) {
+  background: var(--color-primary);
+}
+.btn-warning {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+}
+.btn-outline-warning {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+.btn-outline-warning:is(:hover, :active) {
+  background: var(--color-warning);
 }
 
 .tab-pane {
@@ -156,8 +177,14 @@ table tr td .btn {
 
 .alert {
   border-radius: 0;
+  font-size: 0.95em;
   margin-bottom: 10px;
-  padding: 4px 15px;
+  padding: 6px 15px;
+  position: relative;
+}
+.alert-dismissible .btn-close {
+  margin-top: 3px;
+  padding: 1rem;
 }
 
 .panel,
@@ -246,7 +273,7 @@ input.datepicker {
 .page-header {
   border-bottom: 0;
   margin: 0 0 1em;
-  padding: 0.5em 0;
+  padding: 0.5em 0 0;
 }
 .page-header h1 {
   font-size: 1.6em;
@@ -256,7 +283,7 @@ input.datepicker {
 .page-content {
   background: var(--white);
   max-width: 100%;
-  min-height: 40vh;
+  min-height: 25vh;
   padding: 1em;
 }
 .page-content::after {

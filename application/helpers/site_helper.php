@@ -68,23 +68,23 @@ if(!function_exists('flash_messages')){
         $status = $ci->session->flashdata($flashdataKey . '_status');
 
         if($success != ''){
-            echo '<div class="alert alert-success">'.
-                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+            echo '<div class="alert alert-success alert-dismissible">'.
                     $success .
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'.
                 '</div>';
         }
 
         if($fail != ''){
-            echo '<div class="alert alert-danger">'.
-                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+            echo '<div class="alert alert-dange alert-dismissible">'.
                     $fail .
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'.
                 '</div>';
         }
 
         if($status != ''){
-            echo '<div class="alert alert-info">'.
-                '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.
+            echo '<div class="alert alert-info alert-dismissible">'.
                     $status .
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'.
                 '</div>';
         }
     }

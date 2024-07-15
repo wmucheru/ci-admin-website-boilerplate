@@ -42,8 +42,8 @@
 			<?php 
 				foreach($users as $u){
 					$status = $u->banned == '0' ? 
-						'<span class="label label-success">ACTIVE</span>' :
-						'<span class="label label-warning">SUSPENDED</span>'
+						'<span class="badge bg-success">ACTIVE</span>' :
+						'<span class="badge bg-warning">SUSPENDED</span>'
 			?>
 			<tr>
 				<td><?php echo $u->id ?></td>

@@ -99,7 +99,7 @@
                                 ?> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <?php echo nav_link('logout', 'Log Out') ?>
+                                <?php echo dropdown_link('logout', 'Log Out') ?>
                             </ul>
                         </li>
                     </ul>

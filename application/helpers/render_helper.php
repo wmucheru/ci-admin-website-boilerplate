@@ -80,6 +80,12 @@ if(!function_exists('breadcrumb_link')){
     }
 }
 
+if(!function_exists('breadcrumb_text')){
+    function breadcrumb_text($text){
+        echo '<li class="breadcrumb-item">'. $text .'</li>';
+    }
+}
+
 if(!function_exists('breadcrumb_active')){
     function breadcrumb_active($text){
         echo '<li class="breadcrumb-item active">'. $text .'</li>';
@@ -572,8 +578,8 @@ if(!function_exists('yes_no_label')){
     */
     function yes_no_label($value){
         return isset($value) && $value == '1' ? 
-            '<label class="label label-success">Yes</label>' :
-            '<label class="label label-danger">No</label>';
+            '<label class="badge bg-success">Yes</label>' :
+            '<label class="badge bg-danger">No</label>';
     }
 }
 

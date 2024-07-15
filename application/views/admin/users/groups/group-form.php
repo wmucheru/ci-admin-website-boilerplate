@@ -1,6 +1,6 @@
 <div class="clearfix">
-	<button class="btn btn-success btn-sm btn-new-group"
-		data-toggle="modal" data-target="#agModal">
+	<button type="button" class="btn btn-success btn-sm btn-new-group"
+		data-bs-toggle="modal" data-bs-target="#agModal">
 		<i class="ion-md-add"></i> New Group
 	</button>
 
@@ -8,8 +8,8 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="modal-title-group">New Group</h4>
+					<h5 class="modal-title" id="modal-title-group">New Group</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
 				</div>
 				<div class="modal-body clearfix">
 					<?php

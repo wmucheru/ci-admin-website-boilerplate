@@ -58,14 +58,14 @@ class Users extends CI_Controller {
                 }
                 else{
                     $userId = $this->auth_model->create_user($email, $password);
-                    $update = array(
+                    $update = [
                         'name'=>$name,
                         'mobile'=>$mobile,
 
                         # Automatically activate users added by ADMIN
                         'banned'=>'0',
                         'mobile_verified'=>'1'
-                    );
+                    ];
 
                     $this->db->update('aauth_users', $update, ['id'=>$userId]);
 
@@ -90,7 +90,7 @@ class Users extends CI_Controller {
         }
     }
 
-    /*
+    /**
      * 
      * User Profile
      *
@@ -121,13 +121,13 @@ class Users extends CI_Controller {
             # $upload = $this->site_model->uploadDocument('ppic', '', 'avatar');
 
             $this->db->update('aauth_users', 
-                array(
+                [
                     'name'=>$name,
                     'email'=>$email,
                     'mobile'=>$mobile,
                     'address'=>$address
-                ),
-                array('id'=>$userId)
+                ],
+                ['id'=>$userId]
             );
 
             $this->session->set_flashdata('profile_success', 'Profile updated');
@@ -157,11 +157,11 @@ class Users extends CI_Controller {
         }
 
         else{
-            $userObj = array(
+            $userObj = [
                 'pass'=>$this->aauth->hash_password($password, $userId)
-            );
+            ];
 
-            $this->db->update('aauth_users', $userObj, array('id'=>$userId));
+            $this->db->update('aauth_users', $userObj, ['id'=>$userId]);
 
             $this->session->set_flashdata('password_success', 'Password updated');
 
@@ -182,13 +182,15 @@ class Users extends CI_Controller {
         $data['perms'] = $this->auth_model->list_perms();
 
         if($method == 'group' && $groupId != ''){
-            $data['group'] = $this->auth_model->getGroup($groupId);
+            $group = $this->auth_model->getGroup($groupId);
+
+            $data['group'] = $group;
             $data['groupPerms'] = $this->auth_model->getGroupPerms($groupId);
 
-            render_admin('admin/users/groups/group-permissions', 'Group Permissions', 'user-bd', $data);
+            render_admin('admin/users/groups/view-group', 'Group: '. $group->name, 'user-bd', $data);
         }
         else{
-            render_admin('admin/users/groups/permissions', 'Group Permissions', 'user-bd', $data);
+            render_admin('admin/users/groups/groups', 'Groups & Permissions', 'user-bd', $data);
         }
     }
 

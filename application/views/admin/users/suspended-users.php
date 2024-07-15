@@ -1,52 +1,62 @@
 <div class="clearfix">
     <div class="page-header">
-        <h1><?php echo isset($page_title) ? $page_title : ''; ?></h1>
-        <div class="top-navigation">
-            <ol class="breadcrumb">
-                <li><a href="<?php echo site_url('admin/dashboard') ?>">Home</a></li>
-                <li><a href="<?php echo site_url('admin/users') ?>">Users</a></li>
-                <li class="active"><?php echo isset($page_title) ? $page_title : '' ?></li>
-            </ol>
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <?php
+                        breadcrumb_link('admin/dashboard', 'Home');
+                        breadcrumb_text('Users');
+                        breadcrumb_active($page_title);
+                    ?>
+                </ol>
+            </nav>
+            <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
         </div>
     </div>
 
-    <div class="col-sm-9 page-content">
-        <?php
-            flash_messages('users');
-
-            if(empty($suspended)){
-                blank_state('No suspended users');
-            }
-            else{
-        ?>
-        <table id="example" class="table table-bordered table-striped dt">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php 
-                foreach($suspended as $u){
-            ?>
-            <tr>
-                <td><?php echo $u->id ?></td>
-                <td><?php echo $u->name ?></td>
-                <td><?php echo $u->email ?></td>
-                <td><?php echo $u->mobile ?></td>
-                <td style="width:10em;">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="page-content">
                     <?php
-                        echo anchor("admin/users/restoreUser/$u->id", 'Restore', ' class="btn btn-warning btn-xs"');
+                        flash_messages('users');
+
+                        if(empty($suspended)){
+                            blank_state('No suspended users');
+                        }
+                        else{
                     ?>
-                </td>
-            </tr>
-            <?php } ?>
-            </tbody>
-        </table>
-        <?php } ?>
+                    <table id="example" class="table table-bordered table-striped dt">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php 
+                            foreach($suspended as $u){
+                        ?>
+                        <tr>
+                            <td><?php echo $u->id ?></td>
+                            <td><?php echo $u->name ?></td>
+                            <td><?php echo $u->email ?></td>
+                            <td><?php echo $u->mobile ?></td>
+                            <td style="width:10em;">
+                                <?php
+                                    echo anchor("admin/users/restoreUser/$u->id", 'Restore', ' class="btn btn-warning btn-xs"');
+                                ?>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

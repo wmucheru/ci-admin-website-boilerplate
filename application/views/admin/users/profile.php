@@ -15,11 +15,9 @@
             echo form_open_multipart('users/updateProfile');
         ?>
         <div class="col-sm-7">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Account Info</h3>
-                </div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-header">Account Info</div>
+                <div class="card-body">
                     <div class="col-md-7">
                         <?php
                             flash_messages('profile');
@@ -80,13 +78,11 @@
                 </div>
             </div>    
         </div>
-        <?php echo form_close(); ?>
+        <?php echo form_close() ?>
 
         <div class="col-sm-5">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Change Password</h3>
-                </div>
+            <div class="card">
+                <div class="card-header">Change Password</div>
                 <div class="panel-body">
                     <?php
                         echo form_open_multipart('users/updatePassword');
@@ -105,7 +101,7 @@
                             'class'=>'btn btn-lg btn-block btn-primary'
                         ]);
 
-                        echo form_close();
+                        echo form_close()
                     ?>
                 </div>
             </div>
