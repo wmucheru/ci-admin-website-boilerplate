@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-$autoload['packages'] = array();
+$autoload['packages'] = [];
 
-$autoload['libraries'] = array(
+$autoload['libraries'] = [
     'aauth', 
     'database', 
     'session', 
@@ -12,11 +12,11 @@ $autoload['libraries'] = array(
     'image_lib', 
     'pagination', 
     'upload'
-);
+];
 
-$autoload['drivers'] = array();
+$autoload['drivers'] = [];
 
-$autoload['helper'] = array(
+$autoload['helper'] = [
     'cookie', 
     'file', 
     'form', 
@@ -28,17 +28,17 @@ $autoload['helper'] = array(
     'permissions',
     'user',
     'site'
-);
+];
 
-$autoload['config'] = array();
+$autoload['config'] = [];
 
-$autoload['language'] = array();
+$autoload['language'] = [];
 
-$autoload['model'] = array(
+$autoload['model'] = [
     'site_model', 
     'auth_model', 
     'form_model',
     'reports_model',
     'users_model',
     'messages_model'
-);
+];
