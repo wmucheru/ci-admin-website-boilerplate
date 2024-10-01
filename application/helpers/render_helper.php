@@ -220,7 +220,6 @@ if(!function_exists('nav_auth')){
     }
 }
 
-
 if(!function_exists('tab_link')){
 
     /**
@@ -462,7 +461,7 @@ if(!function_exists('form_box_label')){
                         style="margin-bottom:10px; max-width:150px;"');
                 }
 
-                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" />";
+                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" $requiredStr />";
                 break;
 
             default:
