@@ -389,21 +389,37 @@ if(!function_exists('form_box_label')){
         $type = isset($obj->type) ? $obj->type : 'text';
         $value = isset($obj->value) ? $obj->value : '';
 
+        $hint = isset($obj->hint) ? $obj->hint : '';
+
+        # Rows for textarea
+        $rowStr = isset($obj->rows) ? "rows=\"$obj->rows\"" : '';
+
+        # Custom labels for `yes_no` type
+        $labelYes = isset($obj->labelYes) ? $obj->labelYes : 'Yes';
+        $labelNo = isset($obj->labelNo) ? $obj->labelNo : 'No';
+
+        # Options for `radio` type
+        $options = isset($obj->options) ? $obj->options : [];
+
         # Show custom content
         $customContent = isset($obj->content) ? $obj->content : '';
 
         $required = isset($obj->required) ? $obj->required : FALSE;
         $requiredStr = $required ? 'required' : '';
 
+        $attrStr = isset($obj->attrs) ? " $obj->attrs " : '';
+
         $str = '';
         $str .= !empty($name) ? " name=\"$name\" " : '';
         $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
         $str .= isset($obj->attrs) ? " $obj->attrs " : '';
+        $str .= $rowStr;
         $str .= $requiredStr;
+        $str .= $attrStr;
         $str = trim($str);
 
-        echo '<div class="row mb-3">';
-        echo "<label class=\"col-form-label col-sm-4 $requiredStr\">$label</label>";
+        echo '<div class="form-group">';
+        echo "<label class=\"control-label col-sm-4 $requiredStr\">$label</label>";
 
         echo '<div class="col-sm-8">';
 
@@ -418,10 +434,10 @@ if(!function_exists('form_box_label')){
 
             case 'select':
                 $select = "<select $str>";
-                $select .= isset($obj->hint) ? "<option>$obj->hint</option>" : '';
+                $select .= isset($obj->placeholder) ? "<option>$obj->placeholder</option>" : '';
 
-                if(isset($obj->options)){
-                    foreach($obj->options as $o){
+                if(!empty($options)){
+                    foreach($options as $o){
                         $o = (array) $o;
                         $optLabel = $o[$obj->optLabelKey];
                         $optValue = $o[$obj->optValueKey];
@@ -437,18 +453,53 @@ if(!function_exists('form_box_label')){
                 echo $select;
                 break;
 
+            case 'radio':
+                echo '<div class="clearfix">';
+
+                foreach($options as $option){
+                    $option = (array) $option;
+
+                    $optLabel = $option[$obj->optLabelKey];
+                    $optValue = $option[$obj->optValueKey];
+                    $checked = $optValue == $value ? 'checked' : '';
+
+                    echo "<div class=\"clearfix\">
+                        <label class=\"radio-inline package-radio\">
+                            <input type=\"radio\" name=\"$name\" value=\"$optValue\" $checked 
+                                required /> $optLabel
+                        </label>
+                    </div>";
+                }
+
+                echo '</div>';
+                break;
+
             # Renders special radio button with Yes/No options 
             case 'yes_no':
-                $opts = ['1'=>'Yes', '0'=>'No'];
+                $opts = ['1'=>$labelYes, '0'=>$labelNo];
 
                 foreach($opts as $v => $optLabel){
-                    $isChecked = $value == $v;
+                    $checked = set_radio($name, $value, $v == $value);
 
                     echo "<label class=\"radio-inline\">
-                        <input type=\"radio\" name=\"$name\" value=\"$v\"". 
-                            set_radio($name, $value, $isChecked) ." $requiredStr /> $optLabel
+                        <input type=\"radio\" name=\"$name\" value=\"$v\" ". $checked ." $requiredStr /> $optLabel
                     </label>";
                 }
+                break;
+
+            case 'country':
+                $select = "<select $str>";
+                $select .= isset($obj->placeholder) ? "<option>$obj->placeholder</option>" : '';
+
+                $countries = get_country_list();
+
+                foreach($countries as $c){
+                    $selected = set_select($name, $value, $c->id == $value);
+                    $select .= "<option value=\"$c->id\" $selected>$c->name</option>";
+                }
+
+                $select .= '</select>';
+                echo $select;
                 break;
 
             case 'file':
@@ -456,12 +507,24 @@ if(!function_exists('form_box_label')){
                 $fileUrl = isset($obj->fileUrl) ? $obj->fileUrl : '';
                 $uploadType = isset($obj->uploadType) ? $obj->uploadType : '';
 
-                if($uploadType == 'image'){
+                echo '<div style="clear:both; padding:5px; background:#efefef;">';
+
+                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" $str />";
+
+                if(empty($fileUrl)){
+                    # Show nothing
+                }
+                else if($uploadType == 'image'){
                     echo img($fileUrl, $label, 'class="img-responsive" 
-                        style="margin-bottom:10px; max-width:150px;"');
+                        style="margin:10px 0; max-width:270px;"');
+                }
+                else{
+                    echo anchor($fileUrl, 
+                        '<strong style="display:block; padding-top:10px;">Click to View file</strong>', 
+                        'target="_blank"');
                 }
 
-                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" $requiredStr />";
+                echo '</div>';
                 break;
 
             default:
@@ -471,6 +534,12 @@ if(!function_exists('form_box_label')){
                 break;
         }
         echo form_error($name);
+
+        if(!empty($hint)){
+            echo "<div class=\"text-info\">
+                <small>$hint</small>
+            </div>";
+        }
 
         echo '</div>';
         echo '</div>';

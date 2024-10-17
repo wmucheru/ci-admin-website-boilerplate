@@ -52,6 +52,21 @@ if(!function_exists('return_json')){
     }
 }
 
+if(!function_exists('get_country_list')){
+
+    /**
+     *
+     * Get list of countries: {'id': 1, 'name': 'Aruba'}
+     *
+     */
+    function get_country_list(){
+        $CI =& get_instance();
+        return $CI->db
+            ->get('sys_countries')
+            ->result();
+    }
+}
+
 if(!function_exists('flash_messages')){
 
     /**
