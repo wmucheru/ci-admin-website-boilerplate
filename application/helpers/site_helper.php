@@ -90,7 +90,7 @@ if(!function_exists('flash_messages')){
         }
 
         if($fail != ''){
-            echo '<div class="alert alert-dange alert-dismissible">'.
+            echo '<div class="alert alert-danger alert-dismissible">'.
                     $fail .
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'.
                 '</div>';
