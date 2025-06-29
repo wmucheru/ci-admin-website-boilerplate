@@ -232,9 +232,6 @@ CREATE TABLE `sys_logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `sys_logs`
-  ADD PRIMARY KEY (`id`);
-
 CREATE TABLE `sys_settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `setting` varchar(45) NOT NULL,
