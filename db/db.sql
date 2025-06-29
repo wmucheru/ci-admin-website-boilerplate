@@ -221,14 +221,15 @@ ALTER TABLE `aauth_user_variables`
 --
 
 CREATE TABLE `sys_logs` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `tag` varchar(64) DEFAULT NULL,
   `description` text NOT NULL,
   `ipaddress` varchar(16) DEFAULT NULL,
   `reference` varchar(32) DEFAULT NULL,
   `status` varchar(32) DEFAULT NULL,
   `createdon` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `createdby` int(10) UNSIGNED NOT NULL
+  `createdby` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `sys_logs`

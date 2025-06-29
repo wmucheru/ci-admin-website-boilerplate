@@ -22,7 +22,6 @@ class Auth extends CI_Controller {
     function login_proc(){
         $email = $this->input->post('email');
         $password = $this->input->post('password');
-        $remember = $this->input->post('remember') === 'on';
 
         $this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
         $this->form_validation->set_rules('password', 'Password', 'required');
@@ -36,7 +35,7 @@ class Auth extends CI_Controller {
                 $this->session->set_flashdata('login_fail', 'Account is inactive');
                 $this->index();
             }
-            else if($this->aauth->login($email, $password, $remember)){
+            else if($this->aauth->login($email, $password, TRUE)){
 
                 # Redirect to the page you were in before session expired
                 # $referrer = $this->session->userdata('referrer');

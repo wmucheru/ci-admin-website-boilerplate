@@ -4,8 +4,8 @@ class Users extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->auth_model->setLoginRedirect();
 
+        $this->auth_model->setLoginRedirect();
         $this->auth_model->control(PERM_USER_MANAGEMENT);
     }
 
@@ -17,15 +17,15 @@ class Users extends CI_Controller {
      *
      */
     function index(){
-        $data['users'] = $this->auth_model->getSystemUsers();
+        $data['users'] = $this->users_model->getUsers();
         render_admin('admin/users/users', 'Users', 'user-bd', $data);
     }
 
     function userForm($userId=''){
-        $data['groups'] = $this->auth_model->getSystemGroups();
+        $data['groups'] = $this->users_model->getUserGroups();
 
         if($userId != ''){
-            $data['user'] = $this->users_model->getUserInfo($userId);
+            $data['user'] = $this->users_model->getUserById($userId);
             render_admin('admin/users/user-form', 'Edit User', 'user-bd', $data);
         }
         else{

@@ -1,72 +1,107 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+# System User
+define('SYSTEM_USER_ID', 1);
+
+# User Groups
 define('USER_GROUP_ADMIN', 1);
-define('USER_GROUP_PUBLIC', 2);
-define('USER_GROUP_DEFAULT', 3);
-define('USER_GROUP_CUSTOMER', 4);
+define('USER_GROUP_MANAGER', 2);
+define('USER_GROUP_EDITOR', 3);
+define('USER_GROUP_DEFAULT_USER', 4);
 
 class Users_model extends CI_Model{
 
     /**
-    * 
-    * Get list of users
-    * 
-    * @param id: User ID
-    * @param groupPar: Group ID or name
-    * 
+     * 
+     * USERS
+     * 
     */
-    function getUsers($id='', $groupPar=''){
+
+    /**
+     * 
+     * Get users
+     * 
+    */
+    function getUsers($filter=[]){
+        $filter = (object) $filter;
+
+        $id = !empty($filter->id) ? $filter->id : '';
+        $groupId = !empty($filter->groupId) ? $filter->groupId : '';
+        $email = !empty($filter->email) ? $filter->email : '';
+
         $this->db
             ->select('
-                u.id, u.email, u.name, u.mobile, u.mobile_verified AS verified, 
-                u.address, u.photo, u.date_created AS regdate, u.banned, 
+                u.*,
 
-                g.name AS group, g.id AS group_id'
+                utg.*, 
+
+                g.name AS group'
             )
             ->from('aauth_users u')
-            ->join('aauth_user_to_group ug', 'ug.user_id = u.id', 'left')
-            ->join('aauth_groups g', 'g.id = ug.group_id', 'left');
+            ->join('aauth_user_to_group utg', 'utg.user_id = u.id', 'left')
+            ->join('aauth_groups g', 'g.id = utg.group_id', 'left');
+
+            # List only system users
+            // ->where('autg.group_id !=', USER_GROUP_CUSTOMER);
 
         if($id != ''){
             $this->db->where('u.id', $id);
         }
 
-        if($groupPar != ''){
-            $this->db
-                ->where('g.id', $groupPar)
-                ->or_where('g.name', $groupPar);
+        if($groupId != ''){
+            $this->db->where('u.groupid', $groupId);
+        }
+
+        if($email != ''){
+            $this->db->where('u.email', $email);
         }
 
         $q = $this->db->get();
 
-        return $id != '' ? $q->row() : $q->result();
+        return $id != '' || $email != '' ? $q->row() : $q->result();
     }
 
-    function getUserInfo($id){
-        return $this->getUsers($id);
+    function getUserById($id){
+        return $this->getUsers(['id'=>$id]);
     }
 
-    function getCustomers($id=''){
-        return $this->getUsers($id, USER_GROUP_CUSTOMER);
+    function getUserByEmail($email){
+        return $this->getUsers(['email'=>$email]);
     }
+
+
 
     /**
      * 
-     * Get user using provided email
+     * GROUPS
      * 
     */
-    function getByEmail($email){
+    function getUserGroups(){
         return $this->db
             ->select('*')
-            ->where('email', $email)
-            ->get('aauth_users')
-            ->row();
+            ->from('aauth_groups')
+
+            # List only system users
+            // ->where('id !=', USER_GROUP_CUSTOMER)
+
+            ->get()
+            ->result();
     }
 
-    function userExists($email){
-        return $this->db
-            ->get_where('aauth_users', ['email'=>$email])
-            ->num_rows() > 0;
+    function getUserGroup($userId){
+        $q = $this->db
+            ->select('
+                u.id,
+
+                g.id, g.name'
+            )
+            ->from('aauth_users u')
+            ->join('aauth_user_to_group autg', 'autg.user_id = u.id', 'left')
+            ->join('aauth_groups g', 'g.id = autg.group_id', 'left')
+            ->where('au.id', $userId)
+            ->get();
+
+        return $q->num_rows() > 0 ? $q->row()->name : FALSE;
     }
 
     /**
@@ -129,7 +164,7 @@ class Users_model extends CI_Model{
      * 
      * 
     */
-    function createUser($user, $groupId=USER_GROUP_CUSTOMER){
+    function createUser($user, $groupId=USER_GROUP_DEFAULT_USER){
         $response = ['error'=>true];
 
         $user = (object) $user;
@@ -274,8 +309,8 @@ class Users_model extends CI_Model{
      * Process password reset email
      * 
     */
-    function sendResetEmail($email){
-        $user = $this->getByEmail($email);
+    function sendAccountResetEmail($email){
+        $user = $this->getUserByEmail($email);
 
         # Does user exist?
         if(empty($user->id)){

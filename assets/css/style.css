@@ -367,8 +367,18 @@ input.datepicker {
 .dropdown-item {
   font-size: var(--default-font-size);
 }
-.dropdown-divider {
+.dropdown-item {
+  font-size: var(--default-font-size);
+}
+.dropdown-divider:not(:empty) {
+  background-color: #eee;
+  border: 0;
+  font-size: 10px;
+  font-weight: bold;
+  height: auto;
   margin: 0;
+  padding: 2px 15px;
+  text-transform: uppercase;
 }
 
 /* .navbar-nav > li > a {

@@ -63,6 +63,15 @@
                                 ],
                                 [
                                     'url'=>'',
+                                    'title'=>'Tools',
+                                    'lclass'=>'tools-lnk',
+                                    'sublinks'=>[
+                                        ['url'=>'admin/tools/settings', 'title'=>'Settings']
+                                    ],
+                                    'perm'=>PERM_IS_ADMIN
+                                ],
+                                [
+                                    'url'=>'',
                                     'title'=>'Users',
                                     'lclass'=>'user-lnk',
                                     'sublinks'=>[
@@ -72,15 +81,6 @@
                                         ['url'=>'admin/users/suspended', 'title'=>'Suspended Accounts']
                                     ],
                                     'perm'=>PERM_USER_MANAGEMENT
-                                ],
-                                [
-                                    'url'=>'',
-                                    'title'=>'Tools',
-                                    'lclass'=>'tools-lnk',
-                                    'sublinks'=>[
-                                        ['url'=>'admin/tools/settings', 'title'=>'Settings']
-                                    ],
-                                    'perm'=>PERM_IS_ADMIN
                                 ]
                             ];
 

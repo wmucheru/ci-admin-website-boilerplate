@@ -32,13 +32,25 @@ body {
 }
 
 /* Stats */
+
 .stat-row {
   margin-bottom: 2em;
 }
-.stat-box > div {
-  background: #fff;
+.stat-box > div,
+.stat-box > a {
+  background: var(--white);
+  border-radius: 3px;
+  color: #222;
+  margin-bottom: 1em;
   padding: 1em 1em 0.34em;
   text-align: center;
+}
+.stat-box > div:hover {
+  outline: var(--color-accent);
+}
+.stat-box a {
+  display: block;
+  text-decoration: none;
 }
 .stat-box h3 {
   margin-bottom: 2px;

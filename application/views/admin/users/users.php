@@ -1,19 +1,17 @@
-<div class="clearfix">
+<div class="container">
     <div class="page-header">
-		<div class="container">
-			<nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <?php
-                        breadcrumb_link('admin/dashboard', 'Home');
-                        breadcrumb_active($page_title);
-                    ?>
-                </ol>
-            </nav>
-            <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
-		</div>
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<?php
+					breadcrumb_home();
+					breadcrumb_active($page_title);
+				?>
+			</ol>
+		</nav>
+		<h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
 	</div>
 
-    <div class="container page-content">
+    <div class="clearfix page-content">
 		<div class="action-bar">
 			<?php echo anchor('admin/users/new', '<i class="ion-md-add"></i> New User', 'class="btn btn-success btn-sm"') ?>
 		</div>
@@ -35,7 +33,7 @@
 				<th>Telephone</th>
 				<th>User Type</th>
 				<th>Status</th>
-				<th width="180px">Actions</th>
+				<th class="text-nowrap">Actions</th>
 			</tr>
 			</thead>
 			<tbody>

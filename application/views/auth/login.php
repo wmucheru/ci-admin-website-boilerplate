@@ -1,4 +1,4 @@
-<div class="clearfix">
+<div class="clearfix" style="padding-top:5%;">
     <?php 
         echo form_open('auth/login_proc', 'class="login-form"');
 

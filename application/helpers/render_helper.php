@@ -1,5 +1,7 @@
 <?php
 
+define('ARRAY_VALUE_SEPARATOR', ', ');
+
 /**
  * 
  * Output Open Graph meta tags for Facebook
@@ -69,7 +71,7 @@ if(!function_exists('render_header')){
 if(!function_exists('blank_state')){
 
     function blank_state($text, $class=''){
-        $class = !empty($class) ? $class : 'alert-warning';
+        $class = !empty($class) ? $class : 'alert-info';
         echo "<div class=\"alert $class\">$text</div>";
     }
 }
@@ -77,6 +79,20 @@ if(!function_exists('blank_state')){
 if(!function_exists('breadcrumb_link')){
     function breadcrumb_link($url, $text){
         echo '<li class="breadcrumb-item">'. anchor($url, $text) .'</li>';
+    }
+}
+
+if(!function_exists('breadcrumb_home')){
+
+    /**
+     * 
+     * Breadcrumb home link with icon
+     * 
+    */
+    function breadcrumb_home(){
+        echo '<li class="breadcrumb-item">'. 
+            anchor('admin/dashboard', '<i class="ion-md-home"></i>') .
+        '</li>';
     }
 }
 
@@ -204,9 +220,9 @@ if(!function_exists('nav_auth')){
                     <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
                         aria-expanded="false">'. $user->name .'<b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
+                    <ul class="dropdown-menu dropdown-menu-end">';
 
-            dropdown_link('admin/dashboard', 'Dashboard');
+            dropdown_link('/', 'Website');
             dropdown_link('logout', 'Log Out');
 
             echo '</ul>
@@ -341,6 +357,18 @@ if(!function_exists('quick_form')){
     }
 }
 
+if(!function_exists('form_legend')){
+
+    /**
+     * 
+     * Add legend to form
+     * 
+    */
+    function form_legend($label){
+        echo '<legend>'. $label .'</legend>';
+    }
+}
+
 if(!function_exists('form_box')){
 
     /**
@@ -372,24 +400,28 @@ if(!function_exists('form_box')){
     }
 }
 
-if(!function_exists('form_box_label')){
+if(!function_exists('form_box_input')){
 
     /**
     * 
-    * Generate labeled form box with input & validation. Contained in row mb-3
+    * Generate form input
     * 
-    * @param obj: Array of type, name, label, value, class, attr 
+    * @param obj: Input attributes i.e. type, name, label, value, class, attr
     *
     */
-    function form_box_label($obj=[]){
+    function form_box_input($obj=[]){
         $obj = (object) $obj;
 
         $name = isset($obj->name) ? $obj->name : '';
+        $nameStr = !empty($name) ? " name=\"$name\" " : '';
+
         $label = isset($obj->label) ? $obj->label : '';
         $type = isset($obj->type) ? $obj->type : 'text';
         $value = isset($obj->value) ? $obj->value : '';
+        $class = isset($obj->class) ? $obj->class : '';
 
-        $hint = isset($obj->hint) ? $obj->hint : '';
+        # Placeholder
+        $placeholder = isset($obj->placeholder) ? $obj->placeholder : '';
 
         # Rows for textarea
         $rowStr = isset($obj->rows) ? "rows=\"$obj->rows\"" : '';
@@ -401,27 +433,29 @@ if(!function_exists('form_box_label')){
         # Options for `radio` type
         $options = isset($obj->options) ? $obj->options : [];
 
+        # Vertical orientation for `radio` type
+        $vertical = isset($obj->vertical) ? $obj->vertical : false;
+
         # Show custom content
         $customContent = isset($obj->content) ? $obj->content : '';
 
+        $classStr = empty($class) ? 'class="form-control"' : '';
+
         $required = isset($obj->required) ? $obj->required : FALSE;
-        $requiredStr = $required ? 'required' : '';
+        $requiredStr = $required ? ' required ' : '';
+
+        $disabled = isset($obj->disabled) ? $obj->disabled : FALSE;
+        $disabledStr = $disabled ? ' disabled ' : '';
 
         $attrStr = isset($obj->attrs) ? " $obj->attrs " : '';
 
-        $str = '';
-        $str .= !empty($name) ? " name=\"$name\" " : '';
-        $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
-        $str .= isset($obj->attrs) ? " $obj->attrs " : '';
+        $str = $nameStr;
         $str .= $rowStr;
+        $str .= $classStr;
         $str .= $requiredStr;
+        $str .= $disabledStr;
         $str .= $attrStr;
         $str = trim($str);
-
-        echo '<div class="form-group">';
-        echo "<label class=\"control-label col-sm-4 $requiredStr\">$label</label>";
-
-        echo '<div class="col-sm-8">';
 
         switch($type){
             case 'custom':
@@ -432,16 +466,36 @@ if(!function_exists('form_box_label')){
                 echo "<textarea $str>". set_value($name, $value) ."</textarea>";
                 break;
 
+            case 'richtext':
+                echo "<textarea $str data-type=\"richtext\">". 
+                    set_value($name, $value) ."</textarea>";
+                break;
+
             case 'select':
-                $select = "<select $str>";
-                $select .= isset($obj->placeholder) ? "<option>$obj->placeholder</option>" : '';
+            case 'multiselect':
+                $classStr = ' class="form-select '. $class .'" ';
+
+                $typeStr = $type == 'multiselect' ? ' multiple' : '';
+
+                $select = "<select $nameStr $typeStr $requiredStr $attrStr $disabledStr $classStr>";
+                $select .= !empty($placeholder) ? "<option value=\"\">$placeholder</option>" : '';
 
                 if(!empty($options)){
                     foreach($options as $o){
-                        $o = (array) $o;
-                        $optLabel = $o[$obj->optLabelKey];
-                        $optValue = $o[$obj->optValueKey];
-                        $isSelected = $optValue === $value;
+                        if(is_array($o) || is_object($o)){
+                            $o = (array) $o;
+
+                            $optLabel = $o[$obj->optLabelKey];
+                            $optValue = $o[$obj->optValueKey];
+                        }
+                        else{
+                            $optLabel = $o;
+                            $optValue = $o;
+                        }
+
+                        $isSelected = $type == 'multiselect' ? 
+                            in_array($optValue, $value) : 
+                            $optValue === $value;
 
                         $select .= "<option value=\"$optValue\" ". 
                             set_select($name, $optValue, $isSelected) .">$optLabel</option>";
@@ -454,7 +508,7 @@ if(!function_exists('form_box_label')){
                 break;
 
             case 'radio':
-                echo '<div class="clearfix">';
+                echo '<div class="d-block clearfix">';
 
                 foreach($options as $option){
                     $option = (array) $option;
@@ -463,33 +517,74 @@ if(!function_exists('form_box_label')){
                     $optValue = $option[$obj->optValueKey];
                     $checked = $optValue == $value ? 'checked' : '';
 
-                    echo "<div class=\"clearfix\">
-                        <label class=\"radio-inline package-radio\">
-                            <input type=\"radio\" name=\"$name\" value=\"$optValue\" $checked 
-                                required /> $optLabel
-                        </label>
-                    </div>";
+                    $block = "<div class=\"form-check\">
+                            <input type=\"radio\" class=\"form-check-input\" name=\"$name\" 
+                                value=\"$optValue\" $checked $requiredStr $disabledStr />
+                            <label class=\"form-check-label\">$optLabel</label>
+                        </div>";
+
+                    $inlineClass = $vertical ? '' : 'form-check-inline';
+
+                    echo "<div class=\"form-check $inlineClass\">$block</div>";
                 }
 
                 echo '</div>';
+                break;
+
+            case 'checkbox':
+                echo '<div class="clearfix">';
+
+                foreach($options as $option){
+                    $option = (array) $option;
+                    $optLabel = $option[$obj->optLabelKey];
+                    $optValue = $option[$obj->optValueKey];
+
+                    $valueArray = is_array($value) ? $value : explode(ARRAY_VALUE_SEPARATOR, $value);
+                    $checked = in_array($optValue, $valueArray) ? ' checked ' : '';
+
+                    $block = "<div class=\"form-check\">
+                            <input type=\"checkbox\" class=\"form-check-input\" name=\"$name\" 
+                                value=\"$optValue\" $checked $requiredStr $disabledStr />
+                            <label class=\"form-check-label\">$optLabel</label>
+                        </div>";
+
+                    $inlineClass = $vertical ? '' : 'form-check-inline';
+
+                    echo "<div class=\"form-check $inlineClass\">$block</div>";
+                }
+
+                echo '</div>';
+                break;
+
+            case 'phone':
+                $valueStr = isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+
+                echo "<input type=\"tel\" class=\"form-control intl-phone\" data-name=\"$name\"
+                    style=\"max-width:32rem;\" $attrStr $valueStr $requiredStr />";
                 break;
 
             # Renders special radio button with Yes/No options 
             case 'yes_no':
                 $opts = ['1'=>$labelYes, '0'=>$labelNo];
 
+                echo '<div class="clearfix">';
+
                 foreach($opts as $v => $optLabel){
                     $checked = set_radio($name, $value, $v == $value);
 
-                    echo "<label class=\"radio-inline\">
-                        <input type=\"radio\" name=\"$name\" value=\"$v\" ". $checked ." $requiredStr /> $optLabel
-                    </label>";
+                    echo "<div class=\"form-check form-check-inline\">
+                            <input type=\"radio\" class=\"form-check-input\" name=\"$name\" value=\"$v\" ". 
+                                $checked ." $requiredStr />
+                            <label class=\"form-check-label\">$optLabel</label>
+                        </div>";
                 }
+
+                echo '</div>';
                 break;
 
             case 'country':
                 $select = "<select $str>";
-                $select .= isset($obj->placeholder) ? "<option>$obj->placeholder</option>" : '';
+                $select .= !empty($placeholder) ? "<option value=\"\">$placeholder</option>" : '';
 
                 $countries = get_country_list();
 
@@ -506,43 +601,138 @@ if(!function_exists('form_box_label')){
                 $accept = isset($obj->accept) ? $obj->accept : '';
                 $fileUrl = isset($obj->fileUrl) ? $obj->fileUrl : '';
                 $uploadType = isset($obj->uploadType) ? $obj->uploadType : '';
+                $types = !empty($uploadType) ? explode('|', UPLOAD_TYPES_IMAGE) : [];
 
-                echo '<div style="clear:both; padding:5px; background:#efefef;">';
+                # Override `accept` if document type is available
+                $acceptStr = !empty($uploadType) ? (".". join(",.", $types)) : $accept;
 
-                echo "<input type=\"file\" name=\"$name\" accept=\"$accept\" $str />";
+                $uploadStr = '<div style="clear:both; padding:5px 0;">';
+                $uploadStr .= "<input type=\"file\" name=\"$name\" 
+                    accept=\"$acceptStr\" $requiredStr />";
 
                 if(empty($fileUrl)){
                     # Show nothing
                 }
                 else if($uploadType == 'image'){
-                    echo img($fileUrl, $label, 'class="img-responsive" 
-                        style="margin:10px 0; max-width:270px;"');
+                    $uploadStr .= "<br/>";
+                    $uploadStr .= img($fileUrl, $label, 'class="img-fluid" 
+                        style="margin:5px 0 0; max-width:270px;"');
                 }
                 else{
-                    echo anchor($fileUrl, 
+                    $uploadStr .= "<br/>";
+                    $uploadStr .= anchor($fileUrl, 
                         '<strong style="display:block; padding-top:10px;">Click to View file</strong>', 
                         'target="_blank"');
                 }
 
-                echo '</div>';
+                $uploadStr .= '</div>';
+                echo $uploadStr;
+                break;
+
+            case 'date':
+                $str .= isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+                $str .= !empty($type) ? " type=\"$type\" " : '';
+                echo "<input $str style=\"max-width:12em;\" />";
+                break;
+
+            case 'range':
+                $str = isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+                $str .= ' class="form-range '. $class .'" ';
+
+                echo "<input type=\"$type\" $str $requiredStr $disabledStr $attrStr />";
                 break;
 
             default:
                 $str .= isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
                 $str .= !empty($type) ? " type=\"$type\" " : '';
+                $str .= !empty($placeholder) ? " placeholder=\"$placeholder\" " : '';
+
                 echo "<input $str />";
                 break;
         }
-        echo form_error($name);
+    }
+}
 
-        if(!empty($hint)){
-            echo "<div class=\"text-info\">
-                <small>$hint</small>
-            </div>";
+if(!function_exists('form_box_label')){
+
+    /**
+    * 
+    * Generate labeled form box with input & validation. Contained in form-group
+    * 
+    * @param obj: Array of type, name, label, value, class, attr 
+    *
+    */
+    function form_box_label($obj=[]){
+        $obj = (object) $obj;
+
+        $name = isset($obj->name) ? $obj->name : '';
+        $label = isset($obj->label) ? $obj->label : '';
+
+        $hint = isset($obj->hint) ? $obj->hint : '';
+
+        # Rows for textarea
+        $rowStr = isset($obj->rows) ? "rows=\"$obj->rows\"" : '';
+
+        # Floating form boxes
+        $floating = isset($obj->floating) ? $obj->floating : FALSE;
+
+        # Holder class
+        $holderClass = isset($obj->holderClass) ? $obj->holderClass : '';
+
+        $required = isset($obj->required) ? $obj->required : FALSE;
+        $requiredStr = $required ? ' required ' : '';
+
+        $disabled = isset($obj->disabled) ? $obj->disabled : FALSE;
+        $disabledStr = $disabled ? ' disabled ' : '';
+
+        $attrStr = isset($obj->attrs) ? " $obj->attrs " : '';
+
+        $str = '';
+        $str .= !empty($name) ? " name=\"$name\" " : '';
+        $str .= ' class="form-control '. (isset($obj->class) ? "$obj->class\" " : '') .'" ';
+        $str .= $rowStr;
+        $str .= $requiredStr;
+        $str .= $disabledStr;
+        $str .= $attrStr;
+        $str = trim($str);
+
+        if($floating){
+            echo '<div class="mb-3 form-floating'. $holderClass .'">';
+
+            form_box_input($obj);
+
+            echo "<label class=\"$requiredStr\">$label</label>";
+
+            if(!empty($hint)){
+                echo "<div class=\"text-info\">
+                    <small>$hint</small>
+                </div>";
+            }
+
+            echo form_error($name);
+
+            echo '</div>';
         }
+        else{
+            echo '<div class="row mb-4 '. $holderClass .'">';
+            echo "<label class=\"col-md-4 col-form-label text-end $requiredStr\">$label</label>";
 
-        echo '</div>';
-        echo '</div>';
+            echo '<div class="col-md-8">';
+
+            form_box_input($obj);
+
+            echo form_error($name);
+
+            if(!empty($hint)){
+                echo "<div class=\"text-info\">
+                    <small>$hint</small>
+                </div>";
+            }
+
+            echo '</div>';
+
+            echo '</div>';
+        }
     }
 }
 
@@ -564,7 +754,6 @@ if(!function_exists('form_box_large')){
         echo '</div>';
     }
 }
-
 
 if(!function_exists('form_radio_inline')){
 
@@ -590,12 +779,13 @@ if(!function_exists('form_box_button')){
      * Return form submit button markup in form box
      * 
     */
-    function form_box_button($text, $attrs='class="btn btn-lg btn-block btn-primary"'){
-        echo '<div class="row mb-3">
-            <div class="offset-sm-4 col-sm-8">';
-        echo "<button $attrs >$text</button>";
-        echo '</div>
-            </div>';
+    function form_box_button($text, $attrs='class="btn btn-lg btn-primary"'){
+        echo '<div class="offset-md-4 mb-3">
+            <hr class="border border-light-subtle" />
+            <button '. $attrs .'>
+                <i class="ion-md-checkmark"></i> '. $text .
+            '</button>
+        </div>';
     }
 }
 
@@ -609,10 +799,10 @@ if(!function_exists('stat_box')){
     function stat_box($number, $label, $perm=TRUE){
 
         if($perm){
-            echo "<div class=\"col-sm-2 col-xs-6 stat-box\">
+            echo "<div class=\"col-xs-6 col stat-box\">
                     <div>
                         <h3>$number</h3>
-                        <p class=\"ellipsis\">$label</p>
+                        <p class=\"text-truncate\">$label</p>
                     </div>
                 </div>";
         }
@@ -631,7 +821,7 @@ if(!function_exists('stat_box_link')){
         $number = empty($number) ? 0 : $number;
 
         if($perm){
-            echo "<div class=\"col-sm-2 col-xs-4 stat-box\">
+            echo "<div class=\"col-xs-6 col stat-box\">
                     <a href=". site_url($uri) .">
                         <div>
                             <h3>$number</h3>
@@ -682,6 +872,42 @@ if(!function_exists('yes_no_label')){
         return isset($value) && $value == '1' ? 
             '<label class="badge bg-success">Yes</label>' :
             '<label class="badge bg-danger">No</label>';
+    }
+}
+
+if(!function_exists('status_label')){
+
+    /**
+     * 
+     * Render status label
+     * 
+    */
+    function status_label($status){
+        $label = '';
+
+        switch(strtolower($status)){
+            case 'pending':
+                $label = "<span class=\"badge bg-warning text-uppercase\">$status</span>";
+                break;
+
+            case 'active':
+                $label = "<span class=\"badge bg-success text-uppercase\">$status</span>";
+                break;
+
+            case 'complete':
+                $label = "<span class=\"badge bg-primary text-uppercase\">$status</span>";
+                break;
+
+            case 'cancelled':
+                $label = "<span class=\"text-warning text-uppercase\">$status</span>";
+                break;
+
+            default:
+                $label = "<span class=\"text-info text-uppercase\">$status</span>";
+                break;
+        }
+
+        return $label;
     }
 }
 

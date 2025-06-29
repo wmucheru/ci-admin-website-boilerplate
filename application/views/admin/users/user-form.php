@@ -1,40 +1,31 @@
-<div class="clearfix">
+<div class="container">
     <div class="page-header">
-        <div class="container">
-			<nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <?php
-                        breadcrumb_link('admin/dashboard', 'Home');
-                        breadcrumb_link('admin/users', 'Users');
-                        breadcrumb_active($page_title);
-                    ?>
-                </ol>
-            </nav>
-            <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
-		</div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <?php
+                    breadcrumb_home();
+                    breadcrumb_link('admin/users', 'Users');
+                    breadcrumb_active($page_title);
+                ?>
+            </ol>
+        </nav>
+        <h1><?php echo isset($page_title) ? $page_title : '' ?></h1>
 	</div>
 
-    <div class="container page-content">
+    <div class="page-content">
         <?php
             # var_dump($user);
 
-            $id = '';
-            $name = '';
-            $email = '';
-            $mobile = '';
-            $groupId = '';
+            $id = isset($user->id) ? $user->id : '';
+            $name = isset($user->name) ? $user->name : '';
+            $email = isset($user->email) ? $user->email : '';
+            $mobile = isset($user->mobile) ? $user->mobile : '';
+            $groupId =  isset($user->group_id) ? $user->group_id : '';
 
-            if(!empty($user->id)){
-                $id = $user->id;
-                $name = $user->name;
-                $email = $user->email;
-                $mobile = $user->mobile;
-                $groupId = $user->group_id;
-            }
+            $isEditMode = !empty($id);
 
-            $editMode = !empty($id);
-
-            echo form_open('admin/users/saveUser', 'class="form-horizontal col-md-6"');
+            echo form_open('admin/users/saveUser', 
+                'class="form-horizontal container-xs m-0"');
 
             flash_messages('users');
 
@@ -57,47 +48,37 @@
             ]);
 
             form_box_label([
+                'type'=>'phone',
                 'name'=>'mobile',
                 'label'=>'Mobile',
-                'type'=>'text',
                 'value'=>$mobile,
                 'required'=>true
             ]);
-        ?>
-        <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">User Group</label>
-            <div class="col-sm-8">
-                <select class="form-control" name="groupid" required>
-                    <option value="">Select a Group</option>
-                    <?php
-                        foreach($groups as $g){
-                            $selected = $g->id == $groupId ? ' selected' : '';
-                            echo "<option value=\"$g->id\" $selected>$g->name</option>";
-                        }
-                    ?>
-                </select>
-                <?php echo form_error('groupid') ?>
-            </div>
-        </div>
 
-        <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">Password</label>
-            <div class="col-sm-8">
-                <input type="password" name="password" class="form-control" 
-                    minlength="6" autocomplete="new-password" />
-                <?php
-                    echo form_error('password');
+            form_box_label([
+                'type'=>'select',
+                'name'=>'groupid',
+                'label'=>'User Group',
+                'options'=>$groups,
+                'optLabelKey'=>'name',
+                'optValueKey'=>'id',
+                'value'=>$groupId,
+                'required'=>true
+            ]);
 
-                    if($editMode){
-                        echo '<em class="text-info">Leave password fields blank to retain old password(s)</em>';
-                    }
-                ?>
-            </div>
-        </div>
-        <?php
+            form_box_label([
+                'type'=>'password',
+                'name'=>'password',
+                'label'=>'Password',
+                'attrs'=>'minlength="6" autocomplete="new-password"',
+                'hint'=>$isEditMode ? 
+                    'Leave password fields blank to retain old password(s)' : '',
+                'required'=>!$isEditMode
+            ]);
+
             form_box_button('Save');
 
-            echo form_close()
+            echo form_close();
         ?>
     </div>
 </div>

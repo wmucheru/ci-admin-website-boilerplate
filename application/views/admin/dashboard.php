@@ -16,7 +16,16 @@
         <div class="row stat-row">
             <?php
                 # var_dump($stats);
-                stat_box($stats->users, 'Users');
+
+                if(is_default_user()){
+                    stat_box_link($stats->words, 'My Words', 'admin/account/words');
+                    stat_box_link($stats->phrases, 'My Phrases', 'admin/account/phrases');
+                    stat_box_link($stats->quizzes, 'My Quizzes', 'admin/account/quizzes');
+                }
+
+                if(PERM_USER_MANAGEMENT){
+                    stat_box_link($stats->users, 'Users', 'admin/users');
+                }
             ?>
         </div>
     </div>
