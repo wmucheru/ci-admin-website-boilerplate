@@ -7,11 +7,15 @@ define('UPLOAD_TYPES_IMAGE', 'jpg|png|jpeg');
 define('UPLOAD_TYPES_DOCUMENT', 'pdf|doc|docx|xls|xlsx');
 
 class Site_model extends CI_Model{
+    var $uploads_root;
 
 	function __construct(){
         parent::__construct();
 
         date_default_timezone_set('Africa/Nairobi');
+
+        # Vars
+		$this->uploads_root = realpath(FCPATH . '/content/uploads/');
 
         # Validation config
         $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
@@ -120,8 +124,8 @@ class Site_model extends CI_Model{
 
                     # Update owner to default web server user (Apache/Nginx)
                     # NOTE: Will only work as root user: 
-                    chown($uploadPath, 'www-data');
-                    chmod($uploadPath, 0755);
+                    // chown($uploadPath, 'www-data');
+                    // chmod($uploadPath, 0755);
                 }
             }
             else{
