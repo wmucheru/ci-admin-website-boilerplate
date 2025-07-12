@@ -33,7 +33,7 @@ function render_base($template, $pageContent, $pageTitle='', $bodyClass='', $pag
             $data[$d] = $pageData[$d];
         }
     }
-    
+
     $CI->load->view($template, $data);
 }
 
@@ -406,7 +406,7 @@ if(!function_exists('form_box_input')){
     * 
     * Generate form input
     * 
-    * @param obj: Input attributes i.e. type, name, label, value, class, attr
+    * @param obj: Array of type, name, label, value, class, attr 
     *
     */
     function form_box_input($obj=[]){
@@ -630,20 +630,29 @@ if(!function_exists('form_box_input')){
                 break;
 
             case 'date':
-                $str .= isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+                $str .= isset($obj->value) ? ' value="'. set_value($name, $value) ."\" " : '';
                 $str .= !empty($type) ? " type=\"$type\" " : '';
                 echo "<input $str style=\"max-width:12em;\" />";
                 break;
 
             case 'range':
-                $str = isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+                $str = isset($obj->value) ? ' value="'. set_value($name, $value) ."\" " : '';
                 $str .= ' class="form-range '. $class .'" ';
 
                 echo "<input type=\"$type\" $str $requiredStr $disabledStr $attrStr />";
                 break;
 
+            case 'password':
+                $str .= isset($obj->value) ? ' value="'. set_value($name, $value) ."\" " : '';
+                $str .= !empty($type) ? " type=\"$type\" " : '';
+                echo "<input $str />";
+
+                // TODO: Add password show/hide toggler
+                echo '<script></script>';
+                break;
+
             default:
-                $str .= isset($obj->value) ? " value=\"". set_value($name, $value) ."\" " : '';
+                $str .= isset($obj->value) ? ' value="'. set_value($name, $value) ."\" " : '';
                 $str .= !empty($type) ? " type=\"$type\" " : '';
                 $str .= !empty($placeholder) ? " placeholder=\"$placeholder\" " : '';
 
