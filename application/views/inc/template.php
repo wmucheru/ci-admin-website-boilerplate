@@ -110,7 +110,7 @@
         }
 
         $scripts = [
-            'assets/plugins/bootstrap/js/bootstrap.min.js',
+            'assets/plugins/bootstrap/js/bootstrap.bundle.min.js',
             'assets/js/custom.js'
         ];
 

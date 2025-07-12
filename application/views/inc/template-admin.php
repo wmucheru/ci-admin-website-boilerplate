@@ -108,7 +108,7 @@
         }
 
         $scripts = array(
-            'assets/plugins/bootstrap/js/bootstrap.min.js',
+            'assets/plugins/bootstrap/js/bootstrap.bundle.min.js',
 
             # Datatables
             'assets/plugins/datatables/datatables.min.js',
